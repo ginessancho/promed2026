@@ -1,34 +1,17 @@
 {
-  "version": 2,
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install",
+  "outputDirectory": "dist/public",
   "framework": null,
-  "builds": [
+  "rewrites": [
     {
-      "src": "dist/index.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "dist/public/**",
-      "use": "@vercel/static"
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
     }
   ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/dist/public/assets/$1"
-    },
-    {
-      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|webp|ico|css|js))",
-      "dest": "/dist/public/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/dist/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.js"
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x"
     }
-  ]
+  }
 }
