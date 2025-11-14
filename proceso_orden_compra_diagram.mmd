@@ -1,0 +1,66 @@
+graph TB
+    subgraph KAM["👤 KAM / Inside Sale"]
+        A1[Genera oportunidad<br/>de venta]
+        A2[Cliente aprueba y<br/>genera orden de compra]
+    end
+    
+    subgraph ESP["👤 Especialista de Producto"]
+        B1[Confecciona<br/>propuesta]
+        B2[Recibe notificación<br/>de registro]
+        B3{Mercancía<br/>disponible?}
+        B4[Gestiona pre-pedido<br/>y cumple flujo]
+        B5[Completa F-007<br/>en APEX]
+    end
+    
+    subgraph ADM["👤 Administrador Servicio al Cliente"]
+        C1[Registra orden<br/>en NAF]
+        C2[Confecciona tiquete<br/>en NAF]
+        C3[Ingresa a NAF y<br/>coloca 'aprobación']
+    end
+    
+    subgraph GER["👤 Gerente de Ventas"]
+        D1{Margen<br/>< 10%?}
+        D2[Revisa tiquete<br/>generado]
+        D3{Aprueba<br/>margen?}
+        D4[Comunica decisión<br/>y motivo]
+        D5[Aprueba tiquete<br/>en NAF]
+    end
+    
+    subgraph BOD["👤 Bodega"]
+        E1[Selección, empaque<br/>y despacho]
+    end
+    
+    subgraph SYS["🖥️ Sistemas"]
+        S1[NAF envía<br/>alerta]
+        S2[NAF genera<br/>tarea en WMS]
+    end
+    
+    A1 --> B1
+    B1 --> A2
+    A2 --> C1
+    C1 --> B2
+    B2 --> B3
+    B3 -->|No| B4
+    B3 -->|Sí| B5
+    B5 --> C2
+    C2 --> D1
+    D1 -->|Sí| S1
+    S1 --> D2
+    D2 --> D3
+    D3 -->|No| D4
+    D4 --> FIN1[Fin]
+    D3 -->|Sí| D5
+    D5 --> C3
+    D1 -->|No| C3
+    C3 --> S2
+    S2 --> E1
+    E1 --> FIN2[Fin]
+    
+    style KAM fill:#e3f2fd
+    style ESP fill:#fff3e0
+    style ADM fill:#f3e5f5
+    style GER fill:#e8f5e9
+    style BOD fill:#fce4ec
+    style SYS fill:#f5f5f5
+    style FIN1 fill:#ffebee
+    style FIN2 fill:#e8f5e9

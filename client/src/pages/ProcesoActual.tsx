@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MermaidDiagram from '@/components/MermaidDiagram';
-import { asIsDiagram } from '@/data/diagrams';
+import { asIsDiagram, purchaseOrderDiagram } from '@/data/diagrams';
 
 export default function ProcesoActual() {
   const roles = [
@@ -49,8 +49,35 @@ export default function ProcesoActual() {
         </div>
 
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-foreground mb-8">Diagrama de Flujo AS-IS</h3>
+          <h3 className="text-3xl font-bold text-foreground mb-8">Diagrama de Flujo AS-IS - Facturación</h3>
           <Card><CardContent className="p-6"><MermaidDiagram id="as-is-flow" chart={asIsDiagram} /></CardContent></Card>
+          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <p className="text-sm text-blue-900 dark:text-blue-100">
+              <strong>Nota:</strong> Este diagrama muestra el flujo actual de facturación, que es nuestra preocupación principal. 
+              El análisis de marcas se enfoca especialmente en <strong>comodatos, alquileres y servicios</strong>.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-foreground mb-8">Proceso de Orden de Compra</h3>
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            El proceso de orden de compra complementa el flujo de facturación e involucra cinco roles clave coordinados 
+            a través de múltiples sistemas (Odoo, NAF, F-007 en APEX, y WMS). Este proceso ayuda a verificar nuestros 
+            análisis pero no reemplaza el enfoque principal en la facturación.
+          </p>
+          <Card><CardContent className="p-6"><MermaidDiagram id="purchase-order-flow" chart={purchaseOrderDiagram} /></CardContent></Card>
+          <div className="mt-6 space-y-4">
+            <Card className="bg-muted/50">
+              <CardHeader><CardTitle className="text-lg">Puntos Críticos del Proceso de Orden de Compra</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                <p>• <strong>Entrada manual múltiple:</strong> La orden debe registrarse manualmente en NAF después de generarse en Odoo</p>
+                <p>• <strong>F-007 como puente:</strong> El formulario F-007 en APEX conecta manualmente la orden con el sistema de facturación</p>
+                <p>• <strong>Validación de márgenes:</strong> Requiere intervención del Gerente de Ventas cuando los márgenes son menores al 10%</p>
+                <p>• <strong>Única integración automatizada:</strong> Solo la conexión NAF-WMS está automatizada en el proceso actual</p>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         <section className="mb-16">
