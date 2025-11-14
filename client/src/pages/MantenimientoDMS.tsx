@@ -5,10 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function MantenimientoDMS() {
   const capacidades = [
-    { titulo: 'Business Rules Engine', icono: Shield, descripcion: 'Centralización y versionamiento de reglas de negocio con editor visual', beneficio: 'Cambios sin código, auditoría completa' },
-    { titulo: 'Sistema de Alertas', icono: Zap, descripcion: 'Detección proactiva de anomalías con notificaciones en tiempo real', beneficio: 'Prevención de errores antes de NAF' },
-    { titulo: 'Process Mining', icono: BarChart, descripcion: 'Visualización de flujos reales e identificación de cuellos de botella', beneficio: 'Mejora continua basada en datos' },
-    { titulo: 'Tarjetas de Análisis', icono: Monitor, descripcion: 'KPIs en tiempo real con visualizaciones interactivas', beneficio: 'Visibilidad continua del estado' },
+    { titulo: 'Business Rules Engine', icono: Shield, descripcion: 'Reglas dinámicas que aprenden del comportamiento real del negocio y se ajustan automáticamente', beneficio: 'Evolución continua sin intervención manual' },
+    { titulo: 'Sistema de Alertas Proactivas', icono: Zap, descripcion: 'Alertas inteligentes que se generan antes de que ocurran problemas, basadas en patrones detectados', beneficio: 'Prevención en lugar de corrección' },
+    { titulo: 'Process Mining', icono: BarChart, descripcion: 'Análisis continuo de flujos reales para extraer conocimiento tácito y optimizar procesos', beneficio: 'Mejora automática de eficiencia' },
+    { titulo: 'Tarjetas de Análisis Conectadas', icono: Monitor, descripcion: 'KPIs que reflejan el estado real del negocio y se actualizan en tiempo real', beneficio: 'Visibilidad completa y accionable' },
   ];
 
   return (
@@ -29,8 +29,9 @@ export default function MantenimientoDMS() {
             <div><h2 className="text-4xl font-bold">Mantenimiento DMS</h2><p className="text-lg text-muted-foreground">Plataforma dms.alteridad.org</p></div>
           </div>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            El Data Management System (DMS) de Alteridad es la plataforma central que potenciará la solución de integración Odoo-NAF,
-            proporcionando capacidades de gestión de reglas de negocio, alertas, process mining y análisis continuo.
+            El Data Management System (DMS) de Alteridad no es solo una herramienta de gestión de datos, sino un sistema inteligente 
+            que <strong>aprende del negocio</strong>. Extrae conocimiento tácito de los procesos reales, lo convierte en <strong>reglas 
+            accionables</strong> y genera <strong>alertas proactivas</strong> para mejorar continuamente la eficiencia de los flujos de facturación.
           </p>
         </div>
 

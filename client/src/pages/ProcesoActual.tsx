@@ -10,7 +10,7 @@ export default function ProcesoActual() {
     { cargo: 'KAM (Key Account Manager)', responsabilidad: 'Gestión de cuentas clave, negociación con clientes', interaccion: 'Genera cotizaciones en sistema, transfiere a F-007' },
     { cargo: 'Especialista de Producto', responsabilidad: 'Configuración de productos, precios y condiciones', interaccion: 'Entrada manual de datos en formulario F-007' },
     { cargo: 'Equipo de Facturación', responsabilidad: 'Generación y validación de facturas', interaccion: 'Revisión en Odoo, transferencia manual a NAF' },
-    { cargo: 'Equipo Marketing/Comercial', responsabilidad: 'Análisis de ventas y toma de decisiones', interaccion: 'Análisis en KBOX con datos de NAF' },
+    { cargo: 'Equipo Marketing/Comercial', responsabilidad: 'Análisis de ventas y toma de decisiones', interaccion: 'Análisis de reportes con datos de NAF' },
   ];
 
   const fricciones = [

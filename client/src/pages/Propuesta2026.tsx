@@ -43,8 +43,8 @@ export default function Propuesta2026() {
           <h3 className="text-3xl font-bold mb-8 flex items-center gap-3"><DollarSign className="w-8 h-8 text-primary" />Inversión</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="border-2 border-primary"><CardHeader><CardTitle>Adelanto Inicial</CardTitle></CardHeader><CardContent><p className="text-4xl font-bold text-primary">$5,000</p><p className="text-sm text-muted-foreground mt-2">USD</p></CardContent></Card>
-            <Card><CardHeader><CardTitle>Servicio Mensual</CardTitle></CardHeader><CardContent><p className="text-4xl font-bold">$2,000</p><p className="text-sm text-muted-foreground mt-2">USD/mes × 12 meses</p></CardContent></Card>
-            <Card className="bg-primary/5"><CardHeader><CardTitle>Total</CardTitle></CardHeader><CardContent><p className="text-4xl font-bold text-primary">$29,000</p><p className="text-sm text-muted-foreground mt-2">USD (12 meses)</p></CardContent></Card>
+            <Card><CardHeader><CardTitle>Servicio Mensual</CardTitle></CardHeader><CardContent><p className="text-4xl font-bold">$3,000</p><p className="text-sm text-muted-foreground mt-2">USD/mes × 12 meses</p></CardContent></Card>
+            <Card className="bg-primary/5"><CardHeader><CardTitle>Total</CardTitle></CardHeader><CardContent><p className="text-4xl font-bold text-primary">$41,000</p><p className="text-sm text-muted-foreground mt-2">USD (12 meses)</p></CardContent></Card>
           </div>
         </section>
 

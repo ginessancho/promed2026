@@ -2,7 +2,7 @@ export const architectureDiagram = `
 graph TB
     subgraph "Capa de Presentación"
         A[Odoo Web Interface]
-        B[Dashboard KBOX]
+        B[Dashboard Analytics]
         C[CRM Interface]
     end
     
@@ -23,7 +23,7 @@ graph TB
     
     subgraph "Sistemas Externos"
         M[NAF/Oracle]
-        N[KBOX Analytics]
+        N[Analytics Dashboard]
         O[CRM System]
     end
     
@@ -43,7 +43,7 @@ graph TB
     I --> J
     J --> K
     K --> M
-    K --> N
+
     K --> O
     K --> L
     L --> M
@@ -69,8 +69,7 @@ graph LR
         A7 --> A3
         A6 --> A8[DMS: Sincronización con NAF]
         A8 --> A9[NAF: Registro de Factura]
-        A9 --> A10[KBOX: Análisis de Datos]
-        A10 --> A11[Dashboard: Reportes de Negocio]
+        A9 --> A10[Dashboard: Reportes de Negocio]
     end
     
     style A4 fill:#90EE90
@@ -120,9 +119,7 @@ graph LR
         B5 --> B6{¿Errores Detectados?}
         B6 -->|Sí| B7[Reproceso Manual]
         B7 --> B3
-        B6 -->|No| B8[KBOX: Análisis de Datos]
-        B8 --> B9[Dashboard: Reportes]
-    end
+        B6 -->|No| B8[Dashboard: Reportes de Negocio]
     
     style B1 fill:#FF6B6B
     style B3 fill:#FF6B6B
@@ -142,8 +139,7 @@ graph LR
         A7 --> A3
         A6 --> A8[DMS → NAF: Sincronización]
         A8 --> A9[NAF: Registro Automático]
-        A9 --> A10[KBOX: Análisis]
-        A10 --> A11[Dashboard: Reportes]
+        A9 --> A10[Dashboard: Reportes de Negocio]
     end
     
     style A4 fill:#90EE90

@@ -1,4 +1,4 @@
-import { ArrowLeft, Users, FileSearch, CheckCircle2, Target } from 'lucide-react';
+import { ArrowLeft, Users, FileSearch, CheckCircle2, Target, TrendingUp } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -118,6 +118,82 @@ export default function Hallazgos2025() {
           </div>
         </div>
 
+        {/* Cambio de Estrategia */}
+        <section className="mb-16">
+          <Card className="bg-gradient-to-r from-blue-500/10 to-green-500/10 border-2 border-primary/30">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-3">
+                <TrendingUp className="w-6 h-6 text-primary" />
+                Cambio de Estrategia: De Proyecto Único a Servicio Continuo
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-lg">
+                Inicialmente, Alteridad propuso un <strong>modelo de proyecto único</strong> con una inversión de <strong>$10,000 USD</strong> 
+                para análisis e implementación. Sin embargo, tras el análisis preliminar, identificamos que la naturaleza dinámica del 
+                negocio de Promed requiere un enfoque diferente.
+              </p>
+              
+              <div className="bg-background/50 p-6 rounded-lg border space-y-3">
+                <h4 className="font-bold text-lg">¿Por qué el cambio?</h4>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span><strong>Reglas de negocio cambiantes:</strong> Las reglas de facturación evolucionan constantemente según 
+                    nuevos productos, clientes y regulaciones. Un proyecto único quedaría obsoleto rápidamente.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span><strong>Aprendizaje continuo:</strong> El Data Management System (DMS) debe aprender del negocio de forma 
+                    continua, extrayendo conocimiento y convirtiéndolo en reglas accionables.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatización incremental:</strong> La automatización de flujos no es un evento único, sino un 
+                    proceso iterativo que requiere ajustes y optimizaciones constantes.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span><strong>Alertas proactivas:</strong> Generar alertas para eficiencia de procesos requiere monitoreo 
+                    continuo y ajuste de umbrales según el comportamiento real del negocio.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="bg-muted/30 p-6 rounded-lg border">
+                  <h4 className="font-bold text-lg mb-3 text-muted-foreground">❌ Modelo Anterior</h4>
+                  <p className="text-2xl font-bold text-muted-foreground mb-2">$10,000 USD</p>
+                  <p className="text-sm text-muted-foreground">Proyecto único de análisis e implementación</p>
+                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+                    <li>• Reglas estáticas</li>
+                    <li>• Sin mantenimiento continuo</li>
+                    <li>• Obsolescencia rápida</li>
+                  </ul>
+                </div>
+
+                <div className="bg-primary/5 p-6 rounded-lg border-2 border-primary">
+                  <h4 className="font-bold text-lg mb-3 text-primary">✅ Nuevo Modelo</h4>
+                  <p className="text-2xl font-bold text-primary mb-2">$5,000 USD + $3,000/mes</p>
+                  <p className="text-sm">Adelanto inicial + Servicio mensual continuo</p>
+                  <ul className="mt-4 space-y-1 text-sm">
+                    <li>• Reglas dinámicas que aprenden</li>
+                    <li>• Mantenimiento y optimización continua</li>
+                    <li>• Evolución con el negocio</li>
+                    <li>• Alertas proactivas ajustables</li>
+                  </ul>
+                </div>
+              </div>
+
+              <p className="text-lg mt-6">
+                El <strong>adelanto de $5,000 USD</strong> cubre el análisis inicial y la implementación base. El <strong>servicio 
+                mensual de $3,000 USD</strong> garantiza que el sistema evolucione con el negocio, manteniendo las reglas actualizadas, 
+                generando alertas relevantes y optimizando continuamente los flujos de automatización.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Metodología */}
         <section className="mb-16">
           <h3 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
@@ -197,23 +273,23 @@ export default function Hallazgos2025() {
               <ul className="space-y-2 ml-6">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Eliminar entrada manual duplicada de datos</span>
+                  <span>Automatizar flujos de facturación eliminando entrada manual duplicada</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Implementar validaciones automáticas en origen (Odoo)</span>
+                  <span>Implementar reglas de negocio dinámicas que aprenden del negocio</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Centralizar y documentar reglas de negocio</span>
+                  <span>Generar alertas proactivas para eficiencia de procesos</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span>Extraer conocimiento tácito y convertirlo en reglas accionables</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                   <span>Crear una base sólida para futuras migraciones</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Reducir riesgos de auditoría y mejorar calidad de datos</span>
                 </li>
               </ul>
             </CardContent>
@@ -234,7 +310,7 @@ export default function Hallazgos2025() {
                 { mes: 'Septiembre 2025', evento: 'Expansión del equipo Alteridad con expertos' },
                 { mes: 'Octubre 2025', evento: 'Análisis detallado de pantallas y procesos' },
                 { mes: 'Noviembre 2025', evento: 'Auditoría de datos y cuantificación de anomalías' },
-                { mes: 'Diciembre 2025', evento: 'Presentación de propuesta F-007' },
+                { mes: 'Diciembre 2025', evento: 'Presentación de propuesta F-007 con nuevo modelo de servicio' },
               ].map((item, index) => (
                 <div key={index} className="relative pl-16">
                   <div className="absolute left-6 top-2 w-5 h-5 rounded-full bg-primary border-4 border-background"></div>

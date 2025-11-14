@@ -210,4 +210,15 @@
 - [x] Páginas del Pilar 1 (Hallazgos, Volumen, Proceso)
 - [x] Páginas del Pilar 2 (Propuesta, Detalles, DMS)
 - [x] Página Plan de Trabajo con Gantt
-- [ ] Testing y checkpoint final
+- [x] Testing y checkpoint final
+
+
+## Correcciones Solicitadas por Usuario
+
+- [x] Eliminar placeholders de iconografía vacía
+- [x] Reorganizar logo de Alteridad (movido al footer)
+- [x] Corregir título: "Proyecto Integración de Facturación NAF-Odoo" (sin divider)
+- [x] Eliminar TODAS las menciones de KBOX en diagramas y textos
+- [x] Agregar en Hallazgos 2025: explicación del cambio de estrategia ($10K → $5K adelanto + $3K/mes)
+- [x] Actualizar inversión: $3,000/mes × 12 meses = $41,000 total
+- [x] Clarificar enfoque: automatización de flujos + DMS para reglas de negocio que aprenden y generan alertas

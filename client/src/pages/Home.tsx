@@ -35,10 +35,10 @@ export default function Home() {
     // Fila 2: SOLUCIÓN (Futuro)
     {
       title: 'Propuesta 2026',
-      description: 'Solución TO-BE, inversión de $29K, modelo de servicio mensual y beneficios esperados.',
+      description: 'Solución TO-BE, inversión de $41K, modelo de servicio mensual y beneficios esperados.',
       icon: Lightbulb,
       href: '/propuesta-2026',
-      highlight: '💼 $2,000 USD/mes × 12 meses',
+      highlight: '💼 $3,000 USD/mes × 12 meses',
       color: 'oklch(0.65 0.18 145)', // Verde
     },
     {
@@ -51,10 +51,10 @@ export default function Home() {
     },
     {
       title: 'Mantenimiento DMS',
-      description: 'Plataforma dms.alteridad.org para reglas de negocio, alertas, process mining y análisis continuo.',
+      description: 'DMS que aprende del negocio, extrae conocimiento en reglas accionables y genera alertas para eficiencia de procesos.',
       icon: Monitor,
       href: '/mantenimiento-dms',
-      highlight: '🖥️ Business Rules + Alertas + Process Mining',
+      highlight: '🖥️ Aprendizaje continuo + Reglas dinámicas',
       color: 'oklch(0.55 0.20 290)', // Púrpura
     },
   ];
@@ -65,13 +65,12 @@ export default function Home() {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <img src={APP_LOGO} alt="Alteridad" className="h-16 object-contain" />
-              <img src="/logo-promed.webp" alt="Promed" className="h-16 object-contain" />
+            <div>
+              <img src="/logo-promed.webp" alt="Promed" className="h-20 object-contain" />
             </div>
             <div className="text-right">
               <h1 className="text-2xl font-bold text-foreground">Propuesta F-007</h1>
-              <p className="text-sm text-muted-foreground">Integración Odoo-NAF | Proyecto 2026</p>
+              <p className="text-sm text-muted-foreground">Proyecto Integración de Facturación NAF-Odoo</p>
             </div>
           </div>
         </div>
@@ -85,8 +84,9 @@ export default function Home() {
             Transformación Digital de Facturación
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Una propuesta integral para automatizar y optimizar el proceso de facturación de Promed,
-            eliminando procesos manuales y reduciendo errores mediante integración Odoo-NAF.
+            Automatización de flujos de facturación mediante integración Odoo-NAF, potenciada por un 
+            Data Management System (DMS) que aprende del negocio, extrae conocimiento tácito en reglas 
+            accionables y genera alertas proactivas para eficiencia de procesos.
           </p>
         </div>
 
@@ -141,10 +141,18 @@ export default function Home() {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-16 text-center text-sm text-muted-foreground">
-          <p>Preparado por <strong className="text-foreground">Alteridad</strong> para <strong className="text-foreground">Promed, S.A.</strong></p>
-          <p className="mt-2">Ginés A. Sánchez Arias • gines@alteridad.org • +33 0664691043</p>
-          <p className="mt-1">Noviembre 2025 • Versión 4.0</p>
+        <div className="mt-16 border-t pt-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <img src={APP_LOGO} alt="Alteridad" className="h-12 object-contain mb-4" />
+              <p className="text-sm text-muted-foreground">Ginés A. Sánchez Arias</p>
+              <p className="text-sm text-muted-foreground">gines@alteridad.org • +33 0664691043</p>
+            </div>
+            <div className="text-right text-sm text-muted-foreground">
+              <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>
+              <p className="mt-1">Noviembre 2025 • Versión 4.0</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>
