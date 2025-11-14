@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MermaidDiagram from '@/components/MermaidDiagram';
 import { architectureDiagram } from '@/data/diagrams';
+import CriticalFieldsTable from '@/components/CriticalFieldsTable';
+import { facturaFields, clienteFields, productoFields } from '@/data/criticalFields';
 
 export default function DetallesTecnicos() {
   return (
@@ -263,6 +265,19 @@ export default function DetallesTecnicos() {
               </Card>
             ))}
           </div>
+        </section>
+
+        <section className="mb-10">
+          <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+            <ListOrdered className="w-7 h-7 text-green-600" />
+            Mapeo de Campos Críticos
+          </h3>
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+            A continuación se detallan los campos críticos que serán sincronizados entre Odoo y NAF para las entidades principales.
+          </p>
+          <CriticalFieldsTable title="Facturas" fields={facturaFields} />
+          <CriticalFieldsTable title="Clientes" fields={clienteFields} />
+          <CriticalFieldsTable title="Productos" fields={productoFields} />
         </section>
 
         <div className="flex justify-between pt-6 border-t">
