@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MermaidDiagram from '@/components/MermaidDiagram';
 import { comparisonDiagram } from '@/data/diagrams';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import PhaseTimeline from '@/components/PhaseTimeline';
 
 export default function Propuesta2026() {
   const beneficios = [
@@ -131,6 +132,11 @@ export default function Propuesta2026() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Visual Timeline */}
+        <section className="mb-10">
+          <PhaseTimeline />
         </section>
 
         {/* AS-IS vs TO-BE */}
