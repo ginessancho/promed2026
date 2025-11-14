@@ -1,4 +1,4 @@
-// Compact, horizontal AS-IS vs TO-BE comparison
+// Compact, horizontal AS-IS vs TO-BE comparison with enhanced colors for animation
 export const comparisonDiagram = `
 graph LR
     subgraph ASIS["❌ PROCESO ACTUAL (AS-IS)"]
@@ -23,12 +23,14 @@ graph LR
     
     style ASIS fill:#ffe6e6,stroke:#ff4444,stroke-width:2px
     style TOBE fill:#e6ffe6,stroke:#44ff44,stroke-width:2px
-    style A1 fill:#ffcccc
-    style A2 fill:#ffcccc
-    style A3 fill:#ffcccc
-    style A5 fill:#ff9999
-    style B2 fill:#ccffcc
-    style B5 fill:#ccffcc
+    style A1 fill:#ffcccc,stroke:#ff6666
+    style A2 fill:#ffcccc,stroke:#ff6666
+    style A3 fill:#ffcccc,stroke:#ff6666
+    style A5 fill:#ff9999,stroke:#ff4444
+    style A4 fill:#FFD700,stroke:#FFA500
+    style B2 fill:#90EE90,stroke:#228B22
+    style B5 fill:#90EE90,stroke:#228B22
+    style B3 fill:#FFD700,stroke:#FFA500
 `;
 
 export const architectureDiagram = `
@@ -62,10 +64,11 @@ graph LR
     F --> G
     G --> H
     
-    style D fill:#ffd700,stroke:#ff8800,stroke-width:2px
+    style D fill:#FFD700,stroke:#FF8800,stroke-width:3px
     style E fill:#90EE90,stroke:#228B22,stroke-width:2px
     style F fill:#90EE90,stroke:#228B22,stroke-width:2px
     style G fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style H fill:#87CEEB,stroke:#4682B4,stroke-width:2px
 `;
 
 export const flowDiagram = `
@@ -81,11 +84,12 @@ graph LR
     A8 --> A9[NAF:<br/>Registro]
     A9 --> A10[Dashboard]
     
-    style A4 fill:#90EE90
-    style A5 fill:#FFD700
-    style A6 fill:#90EE90
-    style A8 fill:#90EE90
-    style A9 fill:#90EE90
+    style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A5 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style A6 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A8 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A9 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
 
 export const businessRulesDiagram = `
@@ -105,15 +109,15 @@ graph LR
     E3 --> A
     E4 --> A
     
-    style B fill:#FFD700
-    style C fill:#FFD700
-    style D fill:#FFD700
-    style F fill:#FFD700
-    style G fill:#90EE90
-    style E1 fill:#FF6B6B
-    style E2 fill:#FF6B6B
-    style E3 fill:#FF6B6B
-    style E4 fill:#FF6B6B
+    style B fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style C fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style D fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style F fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style G fill:#90EE90,stroke:#228B22,stroke-width:3px
+    style E1 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E2 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E3 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E4 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
 
 export const asIsDiagram = `
@@ -127,10 +131,11 @@ graph LR
     B7 --> B3
     B6 -->|No| B8[Dashboard]
     
-    style B1 fill:#FF6B6B
-    style B3 fill:#FF6B6B
-    style B5 fill:#FF6B6B
-    style B7 fill:#FF6B6B
+    style B1 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B3 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B5 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B6 fill:#FFD700,stroke:#FFA500,stroke-width:2px
 `;
 
 export const toBeDiagram = `
@@ -146,13 +151,15 @@ graph LR
     A8 --> A9[NAF:<br/>Automático]
     A9 --> A10[Dashboard]
     
-    style A4 fill:#90EE90
-    style A6 fill:#90EE90
-    style A8 fill:#90EE90
-    style A9 fill:#90EE90
+    style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A6 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A8 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A9 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A5 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style A7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
 
-// Compact horizontal purchase order flow
+// Compact horizontal purchase order flow with enhanced colors
 export const purchaseOrderDiagram = `
 graph LR
     subgraph KAM["👤 KAM"]
@@ -188,9 +195,11 @@ graph LR
     D1 -->|No| E1
     D2 --> E1
     
-    style KAM fill:#e3f2fd
-    style ESP fill:#fff3e0
-    style ADM fill:#f3e5f5
-    style GER fill:#e8f5e9
-    style BOD fill:#fce4ec
+    style KAM fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+    style ESP fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+    style ADM fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+    style GER fill:#e8f5e9,stroke:#4CAF50,stroke-width:2px
+    style BOD fill:#fce4ec,stroke:#E91E63,stroke-width:2px
+    style D1 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style E1 fill:#90EE90,stroke:#228B22,stroke-width:2px
 `;
