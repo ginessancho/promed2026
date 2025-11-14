@@ -116,29 +116,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Barra - Plan de Trabajo */}
-        <div className="mt-12">
-          <Link href="/plan-trabajo-2026">
-            <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-2 border-primary/30 rounded-2xl p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.01] group">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Calendar className="w-8 h-8 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-1">Plan de Trabajo 2026</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Gantt de 67 tareas • Calendario de reuniones • Matriz RACI • Gestión de riesgos
-                    </p>
-                  </div>
-                </div>
-                <Button size="lg" className="group-hover:translate-x-2 transition-transform">
-                  Ver Plan Completo
-                </Button>
-              </div>
-            </div>
-          </Link>
-        </div>
+
 
         {/* Footer Info */}
         <div className="mt-12 border-t pt-6">
