@@ -7,7 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { CustomAuthProvider } from "./contexts/CustomAuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
-import Propuesta from "./pages/Propuesta";
+
 import Hallazgos2025 from "./pages/Hallazgos2025";
 import VolumenProblema from "./pages/VolumenProblema";
 import ProcesoActual from "./pages/ProcesoActual";
@@ -22,7 +22,7 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
-      <Route path={"/propuesta-original"} component={Propuesta} />
+      
       <Route path={"/hallazgos-2025"} component={Hallazgos2025} />
       <Route path={"/volumen-problema"} component={VolumenProblema} />
       <Route path={"/proceso-actual"} component={ProcesoActual} />
