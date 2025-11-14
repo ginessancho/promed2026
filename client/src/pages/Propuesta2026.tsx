@@ -1,9 +1,10 @@
-import { ArrowLeft, Lightbulb, CheckCircle2, GitBranch, Shield, Zap, DollarSign, Calendar, Layers } from 'lucide-react';
+import { ArrowLeft, Lightbulb, CheckCircle2, GitBranch, Shield, Zap, DollarSign, Calendar, Layers, ChevronDown } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MermaidDiagram from '@/components/MermaidDiagram';
 import { comparisonDiagram } from '@/data/diagrams';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export default function Propuesta2026() {
   const beneficios = [
@@ -15,6 +16,57 @@ export default function Propuesta2026() {
     'Visibilidad en tiempo real',
     'Base para futuras integraciones',
     'Mejora continua del ecosistema',
+  ];
+
+  const phases = [
+    {
+      title: 'Fase 1: Fundación y Victoria Temprana',
+      duration: 'Enero - Marzo 2026 (3 meses)',
+      color: 'blue',
+      objective: 'Establecer las bases técnicas y demostrar el valor de la integración con un caso de uso de alto impacto y complejidad controlada.',
+      deliverables: [
+        { category: 'Análisis y Diseño', items: ['Auditoría completa de campos Odoo vs. NAF', 'Mapeo de datos detallado (campo por campo)', 'Diseño técnico del \'Conector Directo v1.0\'', 'Definición de casos de uso para el piloto'] },
+        { category: 'Desarrollo', items: ['Desarrollo del módulo Python en Odoo', 'Creación de endpoint para recibir datos', 'Implementación de lógica de validación básica'] },
+        { category: 'Pruebas y Despliegue', items: ['Pruebas unitarias del conector', 'Lanzamiento del piloto para casos simples', 'Configuración del Dashboard de seguimiento'] },
+      ],
+      outcome: 'Reducción medible del tiempo de procesamiento para un segmento de facturas. Validación del enfoque técnico.',
+    },
+    {
+      title: 'Fase 2: Expansión y Eliminación de F-007',
+      duration: 'Abril - Julio 2026 (4 meses)',
+      color: 'green',
+      objective: 'Extender la automatización para cubrir la mayoría de los escenarios de facturación y retirar por completo la dependencia del formulario F-007.',
+      deliverables: [
+        { category: 'Análisis y Diseño', items: ['Análisis de casos de uso complejos (comodatos, alquileres)', 'Diseño de la lógica de negocio para casos especiales'] },
+        { category: 'Desarrollo', items: ['Evolución del Conector a v2.0', 'Implementación de lógica para comodatos y alquileres', 'Scripts para depuración del catálogo de servicios'] },
+        { category: 'Implementación', items: ['Migración progresiva de todos los tipos de facturación', 'Gestión del cambio para el retiro del F-007', 'Ceremonia de \'apagado\' del formulario F-007'] },
+      ],
+      outcome: 'Eliminación casi total de la entrada de datos duplicada. Aumento drástico de la eficiencia operativa.',
+    },
+    {
+      title: 'Fase 3: Sincronización Bidireccional',
+      duration: 'Agosto - Octubre 2026 (3 meses)',
+      color: 'purple',
+      objective: 'Crear un flujo de datos de ciclo cerrado, asegurando que Odoo no solo envíe datos, sino que también reciba actualizaciones de estado desde NAF.',
+      deliverables: [
+        { category: 'Análisis y Diseño', items: ['Diseño de la arquitectura de retroalimentación (NAF → Odoo)', 'Selección de tecnología (Webhooks vs. Polling)'] },
+        { category: 'Desarrollo', items: ['Implementación de webhooks o listener en Odoo', 'Desarrollo del panel de control de la integración'] },
+        { category: 'Optimización', items: ['Pruebas de carga y optimización de rendimiento', 'Monitoreo de la salud de la integración'] },
+      ],
+      outcome: 'Visibilidad completa del ciclo de vida de la factura desde Odoo. Sistema de integración robusto y monitoreable.',
+    },
+    {
+      title: 'Fase 4: Capacitación y Transferencia',
+      duration: 'Noviembre - Diciembre 2026 (2 meses)',
+      color: 'orange',
+      objective: 'Asegurar la adopción exitosa de los nuevos procesos y transferir el conocimiento necesario al equipo de TI de Promed.',
+      deliverables: [
+        { category: 'Documentación', items: ['Creación de manuales de usuario para el nuevo flujo', 'Elaboración de documentación técnica del conector'] },
+        { category: 'Capacitación', items: ['Sesiones de formación para equipos (Ventas, Facturación)', 'Workshops técnicos para el equipo de TI de Promed'] },
+        { category: 'Soporte', items: ['Definición del plan de soporte a largo plazo', 'Entrega formal del código fuente y documentación'] },
+      ],
+      outcome: 'Un equipo capacitado y autónomo, y una solución documentada y sostenible en el tiempo.',
+    },
   ];
 
   return (
@@ -42,7 +94,7 @@ export default function Propuesta2026() {
           </div>
         </div>
 
-        {/* Key Metrics - 3 Column */}
+        {/* Key Metrics */}
         <section className="mb-10">
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
@@ -74,223 +126,72 @@ export default function Propuesta2026() {
               <div>
                 <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Visión Estratégica</h3>
                 <p className="text-blue-800 dark:text-blue-200 leading-relaxed text-sm">
-                  Este proyecto representa una <strong>evolución natural</strong> de la inversión en Odoo realizada por Promed. 
-                  El objetivo es convertir a Odoo en el centro neurálgico del ciclo de ventas completo, desde la cotización hasta 
-                  la facturación, <strong>eliminando el formulario F-007</strong> y los procesos manuales asociados. Esto desbloqueará 
-                  un nuevo nivel de eficiencia operativa, reducirá errores significativamente y creará una base sólida para futuras 
-                  automatizaciones.
+                  Este proyecto representa una <strong>evolución natural</strong> de la inversión en Odoo. El objetivo es convertir a Odoo en el centro del ciclo de ventas, desde la cotización hasta la facturación, <strong>eliminando el formulario F-007</strong> y los procesos manuales asociados. Esto desbloqueará un nuevo nivel de eficiencia operativa y reducirá errores significativamente.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* AS-IS vs TO-BE Comparison */}
+        {/* AS-IS vs TO-BE */}
         <section className="mb-10">
           <h3 className="text-2xl font-bold mb-4">Transformación del Proceso</h3>
-          <Card>
-            <CardContent className="p-4">
-              <MermaidDiagram id="comparison-flow" chart={comparisonDiagram} />
-            </CardContent>
-          </Card>
-          
-          <div className="mt-4 grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-              <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2 text-sm">❌ Problemas Actuales</h4>
-              <ul className="text-xs text-red-800 dark:text-red-200 space-y-1">
-                <li>• Entrada manual triplicada (F-007, Odoo, NAF)</li>
-                <li>• Errores detectados tardíamente</li>
-                <li>• Reprocesos consumen tiempo valioso</li>
-                <li>• Sin validación automática</li>
-              </ul>
-            </div>
-            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
-              <h4 className="font-semibold text-green-900 dark:text-green-100 mb-2 text-sm">✅ Solución Propuesta</h4>
-              <ul className="text-xs text-green-800 dark:text-green-200 space-y-1">
-                <li>• Entrada única en Odoo</li>
-                <li>• Validación automática inmediata</li>
-                <li>• Sincronización directa con NAF</li>
-                <li>• Alertas proactivas de errores</li>
-              </ul>
-            </div>
-          </div>
+          <Card><CardContent className="p-4"><MermaidDiagram id="comparison-flow" chart={comparisonDiagram} /></CardContent></Card>
         </section>
 
-        {/* Phases - Compact Cards */}
+        {/* Phases with Detailed Deliverables */}
         <section className="mb-10">
           <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
             <GitBranch className="w-7 h-7 text-blue-600" />
             Estrategia de Implementación Incremental
           </h3>
           <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-            El proyecto se ejecutará en 4 fases diseñadas para entregar valor de manera continua. Cada fase produce resultados 
-            tangibles y medibles.
+            El proyecto se ejecutará en 4 fases diseñadas para entregar valor de manera continua. Haga clic en cada fase para ver los entregables detallados.
           </p>
           
-          <div className="space-y-4">
-            {/* Phase 1 */}
-            <Card className="border-l-4 border-l-blue-600">
-              <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base">Fase 1: Fundación y Victoria Temprana</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-0.5">Enero - Marzo 2026 (3 meses)</p>
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {phases.map((phase, index) => (
+              <AccordionItem value={`item-${index + 1}`} key={index} className={`border-l-4 border-l-${phase.color}-600 bg-card rounded-lg`}>
+                <AccordionTrigger className="p-4 text-left hover:no-underline">
+                  <div className="flex items-center justify-between w-full">
+                    <div>
+                      <CardTitle className="text-base">{phase.title}</CardTitle>
+                      <p className="text-xs text-muted-foreground mt-0.5">{phase.duration}</p>
+                    </div>
+                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                   </div>
-                  <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-2">
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Establecer las bases técnicas y demostrar el valor de la integración con un caso de uso de alto impacto y complejidad controlada.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Entregables Clave</h4>
-                  <div className="grid md:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Auditoría y mapeo de datos Odoo ↔ NAF</li>
-                      <li>Conector directo v1.0 (Python en Odoo)</li>
-                    </ul>
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Piloto para casos simples (~20% volumen)</li>
-                      <li>Dashboard de seguimiento actualizado</li>
-                    </ul>
+                </AccordionTrigger>
+                <AccordionContent className="p-4 pt-0">
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
+                      <p className="text-xs text-muted-foreground leading-snug">{phase.objective}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-sm mb-2">Entregables Detallados</h4>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
+                        {phase.deliverables.map((group, i) => (
+                          <div key={i}>
+                            <p className="font-semibold text-xs mb-1 text-foreground">{group.category}</p>
+                            <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground">
+                              {group.items.map((item, j) => <li key={j}>{item}</li>)}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={`bg-${phase.color}-50 dark:bg-${phase.color}-950 p-3 rounded border border-${phase.color}-200 dark:border-${phase.color}-800`}>
+                      <p className={`font-semibold text-${phase.color}-900 dark:text-${phase.color}-100 text-xs mb-1`}>🎯 Resultado Esperado</p>
+                      <p className={`text-xs text-${phase.color}-800 dark:text-${phase.color}-200`}>{phase.outcome}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded border border-blue-200 dark:border-blue-800">
-                  <p className="font-semibold text-blue-900 dark:text-blue-100 text-xs mb-1">🎯 Resultado Esperado</p>
-                  <p className="text-xs text-blue-800 dark:text-blue-200">
-                    Reducción medible del tiempo de procesamiento para un segmento de facturas. Validación del enfoque técnico.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Phase 2 */}
-            <Card className="border-l-4 border-l-green-600">
-              <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base">Fase 2: Expansión y Eliminación de F-007</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-0.5">Abril - Julio 2026 (4 meses)</p>
-                  </div>
-                  <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-2">
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Extender la automatización para cubrir la mayoría de los escenarios de facturación y retirar por completo la dependencia del formulario F-007.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Entregables Clave</h4>
-                  <div className="grid md:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Conector v2.0 con lógica avanzada</li>
-                      <li>Integración de comodatos y alquileres</li>
-                    </ul>
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Depuración de catálogo de servicios</li>
-                      <li>Retiro oficial del formulario F-007</li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="bg-green-50 dark:bg-green-950 p-3 rounded border border-green-200 dark:border-green-800">
-                  <p className="font-semibold text-green-900 dark:text-green-100 text-xs mb-1">🎯 Resultado Esperado</p>
-                  <p className="text-xs text-green-800 dark:text-green-200">
-                    Eliminación casi total de la entrada de datos duplicada. Aumento drástico de la eficiencia operativa.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Phase 3 */}
-            <Card className="border-l-4 border-l-purple-600">
-              <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base">Fase 3: Sincronización Bidireccional</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-0.5">Agosto - Octubre 2026 (3 meses)</p>
-                  </div>
-                  <Shield className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-2">
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Crear un flujo de datos de ciclo cerrado, asegurando que Odoo no solo envíe datos, sino que también reciba actualizaciones de estado desde NAF.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Entregables Clave</h4>
-                  <div className="grid md:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Mecanismo de webhooks o polling</li>
-                      <li>Panel de control de integración</li>
-                    </ul>
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Optimización del rendimiento</li>
-                      <li>Visibilidad en tiempo real</li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="bg-purple-50 dark:bg-purple-950 p-3 rounded border border-purple-200 dark:border-purple-800">
-                  <p className="font-semibold text-purple-900 dark:text-purple-100 text-xs mb-1">🎯 Resultado Esperado</p>
-                  <p className="text-xs text-purple-800 dark:text-purple-200">
-                    Visibilidad completa del ciclo de vida de la factura desde Odoo. Sistema de integración robusto y monitoreable.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Phase 4 */}
-            <Card className="border-l-4 border-l-orange-600">
-              <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base">Fase 4: Capacitación y Transferencia</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-0.5">Noviembre - Diciembre 2026 (2 meses)</p>
-                  </div>
-                  <Shield className="w-5 h-5 text-orange-600 flex-shrink-0" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-2">
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Asegurar la adopción exitosa de los nuevos procesos y transferir el conocimiento necesario al equipo de TI de Promed.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Entregables Clave</h4>
-                  <div className="grid md:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Manuales de usuario y técnicos</li>
-                      <li>Sesiones de capacitación</li>
-                    </ul>
-                    <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
-                      <li>Plan de soporte a largo plazo</li>
-                      <li>Transferencia de conocimiento</li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="bg-orange-50 dark:bg-orange-950 p-3 rounded border border-orange-200 dark:border-orange-800">
-                  <p className="font-semibold text-orange-900 dark:text-orange-100 text-xs mb-1">🎯 Resultado Esperado</p>
-                  <p className="text-xs text-orange-800 dark:text-orange-200">
-                    Un equipo capacitado y autónomo, y una solución documentada y sostenible en el tiempo.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </section>
 
-        {/* Benefits - 3 Column Grid */}
+        {/* Benefits */}
         <section className="mb-10">
           <h3 className="text-2xl font-bold mb-4">Beneficios Esperados</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -300,35 +201,6 @@ export default function Propuesta2026() {
                 <span className="text-sm">{b}</span>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Technical Approach */}
-        <section className="mb-10">
-          <h3 className="text-2xl font-bold mb-4">Enfoque Técnico: Conector Directo Evolutivo</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card className="border-blue-200 dark:border-blue-800">
-              <CardHeader className="p-4 pb-3">
-                <CardTitle className="text-base">Fase Inicial (Fases 1-2)</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <p className="text-sm text-muted-foreground leading-snug">
-                  Desarrollo de un módulo Python directamente en Odoo. Solución más rápida de implementar, más económica y 
-                  perfectamente adecuada para validar la integración y manejar los casos de uso iniciales.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="border-purple-200 dark:border-purple-800">
-              <CardHeader className="p-4 pb-3">
-                <CardTitle className="text-base">Evolución Futura (Post-Fase 2)</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <p className="text-sm text-muted-foreground leading-snug">
-                  Si la lógica de negocio se vuelve significativamente compleja, se re-evaluará la necesidad de migrar a una 
-                  plataforma de middleware. El código del conector directo servirá como base sólida para esta migración.
-                </p>
-              </CardContent>
-            </Card>
           </div>
         </section>
 
