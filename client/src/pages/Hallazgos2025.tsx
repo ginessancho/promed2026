@@ -194,6 +194,21 @@ export default function Hallazgos2025() {
           </Card>
         </section>
 
+        {/* Cost of Inefficiency */}
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-foreground mb-8">El Costo Oculto de la Ineficiencia</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="bg-orange-500/5 border-orange-500/20">
+              <CardHeader><CardTitle className="text-lg">Conocimiento Tácito: Un Activo Frágil</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground">Gran parte del proceso de facturación depende del conocimiento no documentado de personas clave. Este "conocimiento tácito" es un riesgo operativo enorme: si una persona clave se va, el proceso se rompe. La automatización captura este conocimiento y lo convierte en un activo de la empresa.</p></CardContent>
+            </Card>
+            <Card className="bg-red-500/5 border-red-500/20">
+              <CardHeader><CardTitle className="text-lg">Reprocesos: El Ladrón Silencioso</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground">Cada error detectado tardíamente en NAF no solo requiere tiempo para corregirse, sino que retrasa la facturación, impacta el flujo de caja y erosiona la confianza en los datos. Es un ladrón silencioso que roba horas y eficiencia todos los días.</p></CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Metodología */}
         <section className="mb-16">
           <h3 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
@@ -339,6 +354,25 @@ export default function Hallazgos2025() {
             </Button>
           </Link>
         </div>
+              {/* Project Governance */}
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-foreground mb-8">Gobernanza del Proyecto</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader><CardTitle className="text-base">Reuniones Semanales</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Seguimiento táctico del progreso, identificación de bloqueos y próximos pasos.</p></CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle className="text-base">Comité Mensual</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Revisión estratégica con el equipo ejecutivo de Promed para asegurar la alineación con los objetivos de negocio.</p></CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle className="text-base">Comunicación Continua</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Uso de este sitio web como punto central de verdad y comunicación sobre el estado del proyecto.</p></CardContent>
+            </Card>
+          </div>
+        </section>
+
       </main>
     </div>
   );
