@@ -13,7 +13,7 @@ export default function Home() {
       icon: FileSearch,
       href: '/hallazgos-2025',
       highlight: '📋 Trabajo preliminar documentado',
-      color: 'oklch(0.54 0.18 230)', // Azul Alteridad
+      color: 'border-blue-500',
     },
     {
       title: 'Volumen del Problema',
@@ -21,7 +21,7 @@ export default function Home() {
       icon: BarChart3,
       href: '/volumen-problema',
       highlight: '📊 14.4% dispersión de marcas',
-      color: 'oklch(0.60 0.22 25)', // Rojo Alteridad
+      color: 'border-red-500',
     },
     {
       title: 'Proceso Actual',
@@ -29,7 +29,7 @@ export default function Home() {
       icon: Settings,
       href: '/proceso-actual',
       highlight: '⚙️ Proceso manual sin integración',
-      color: 'oklch(0.45 0.01 286)', // Gris oscuro
+      color: 'border-gray-500',
     },
     
     // Fila 2: SOLUCIÓN (Futuro)
@@ -39,7 +39,7 @@ export default function Home() {
       icon: Lightbulb,
       href: '/propuesta-2026',
       highlight: '📈 Entrega de valor continuo valor',
-      color: 'oklch(0.65 0.18 145)', // Verde
+      color: 'border-green-500',
     },
     {
       title: 'Detalles Técnicos',
@@ -47,7 +47,7 @@ export default function Home() {
       icon: Wrench,
       href: '/detalles-tecnicos',
       highlight: '🔧 Integración Odoo-NAF vía DMS',
-      color: 'oklch(0.45 0.15 230)', // Azul oscuro
+      color: 'border-indigo-500',
     },
     {
       title: 'Mantenimiento DMS',
@@ -55,7 +55,7 @@ export default function Home() {
       icon: Monitor,
       href: '/mantenimiento-dms',
       highlight: '🖥️ Aprendizaje continuo + Reglas dinámicas',
-      color: 'oklch(0.55 0.20 290)', // Púrpura
+      color: 'border-purple-500',
     },
   ];
 
