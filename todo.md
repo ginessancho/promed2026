@@ -232,4 +232,13 @@
 - [x] Diseñar página de login con branding Alteridad
 - [x] Proteger todas las rutas
 - [x] Testing de acceso
-- [ ] Crear checkpoint y entregar credenciales
+- [x] Crear checkpoint y entregar credenciales
+
+
+## Seguridad - Mover Contraseña a Variable de Entorno
+
+- [x] Refactorizar CustomAuthContext para usar variable de entorno
+- [x] Configurar VITE_PROPOSAL_PASSWORD en Manus
+- [x] Testing de login con nueva configuración
+- [ ] Commit y push a GitHub
+- [x] Actualizar documentación con instrucciones (README_SECURITY.md)
