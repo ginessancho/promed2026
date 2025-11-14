@@ -4,12 +4,28 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Home from "./pages/Home";
 import Propuesta from "./pages/Propuesta";
+import Hallazgos2025 from "./pages/Hallazgos2025";
+import VolumenProblema from "./pages/VolumenProblema";
+import ProcesoActual from "./pages/ProcesoActual";
+import Propuesta2026 from "./pages/Propuesta2026";
+import DetallesTecnicos from "./pages/DetallesTecnicos";
+import MantenimientoDMS from "./pages/MantenimientoDMS";
+import PlanTrabajo2026 from "./pages/PlanTrabajo2026";
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Propuesta} />
+      <Route path={"/"} component={Home} />
+      <Route path={"/propuesta-original"} component={Propuesta} />
+      <Route path={"/hallazgos-2025"} component={Hallazgos2025} />
+      <Route path={"/volumen-problema"} component={VolumenProblema} />
+      <Route path={"/proceso-actual"} component={ProcesoActual} />
+      <Route path={"/propuesta-2026"} component={Propuesta2026} />
+      <Route path={"/detalles-tecnicos"} component={DetallesTecnicos} />
+      <Route path={"/mantenimiento-dms"} component={MantenimientoDMS} />
+      <Route path={"/plan-trabajo-2026"} component={PlanTrabajo2026} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

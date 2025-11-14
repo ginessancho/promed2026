@@ -108,3 +108,46 @@ graph TD
     style L fill:#FF6B6B
     style O fill:#FF6B6B
 `;
+
+
+export const asIsDiagram = `
+graph LR
+    subgraph "FLUJO ACTUAL (AS-IS)"
+        B1[F-007: Entrada Manual de Datos] --> B2[Especialista: Revisión]
+        B2 --> B3[Odoo: Entrada Manual Duplicada]
+        B3 --> B4[Equipo Facturación: Revisión en Odoo]
+        B4 --> B5[NAF: Entrada Manual Triplicada]
+        B5 --> B6{¿Errores Detectados?}
+        B6 -->|Sí| B7[Reproceso Manual]
+        B7 --> B3
+        B6 -->|No| B8[KBOX: Análisis de Datos]
+        B8 --> B9[Dashboard: Reportes]
+    end
+    
+    style B1 fill:#FF6B6B
+    style B3 fill:#FF6B6B
+    style B5 fill:#FF6B6B
+    style B7 fill:#FF6B6B
+`;
+
+export const toBeDiagram = `
+graph LR
+    subgraph "FLUJO PROPUESTO (TO-BE)"
+        A1[Odoo: Creación de Cotización] --> A2[Odoo: Conversión a Orden]
+        A2 --> A3[Odoo: Generación de Factura]
+        A3 --> A4[DMS: Validación Automática]
+        A4 --> A5{¿Datos Válidos?}
+        A5 -->|Sí| A6[DMS: Enriquecimiento]
+        A5 -->|No| A7[DMS: Alerta Inmediata]
+        A7 --> A3
+        A6 --> A8[DMS → NAF: Sincronización]
+        A8 --> A9[NAF: Registro Automático]
+        A9 --> A10[KBOX: Análisis]
+        A10 --> A11[Dashboard: Reportes]
+    end
+    
+    style A4 fill:#90EE90
+    style A6 fill:#90EE90
+    style A8 fill:#90EE90
+    style A9 fill:#90EE90
+`;

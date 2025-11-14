@@ -1,0 +1,8 @@
+Creando las 5 páginas restantes:
+1. ProcesoActual.tsx
+2. Propuesta2026.tsx  
+3. DetallesTecnicos.tsx
+4. MantenimientoDMS.tsx
+5. PlanTrabajo2026.tsx
+
+Estas se crearán en los siguientes pasos para completar el sitio.
