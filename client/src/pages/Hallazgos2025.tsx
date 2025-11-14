@@ -160,35 +160,10 @@ export default function Hallazgos2025() {
                 </ul>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div className="bg-muted/30 p-6 rounded-lg border">
-                  <h4 className="font-bold text-lg mb-3 text-muted-foreground">❌ Modelo Anterior</h4>
-                  <p className="text-2xl font-bold text-muted-foreground mb-2">$10,000 USD</p>
-                  <p className="text-sm text-muted-foreground">Proyecto único de análisis e implementación</p>
-                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
-                    <li>• Reglas estáticas</li>
-                    <li>• Sin mantenimiento continuo</li>
-                    <li>• Obsolescencia rápida</li>
-                  </ul>
-                </div>
 
-                <div className="bg-primary/5 p-6 rounded-lg border-2 border-primary">
-                  <h4 className="font-bold text-lg mb-3 text-primary">✅ Nuevo Modelo</h4>
-                  <p className="text-2xl font-bold text-primary mb-2">$5,000 USD + $3,000/mes</p>
-                  <p className="text-sm">Adelanto inicial + Servicio mensual continuo</p>
-                  <ul className="mt-4 space-y-1 text-sm">
-                    <li>• Reglas dinámicas que aprenden</li>
-                    <li>• Mantenimiento y optimización continua</li>
-                    <li>• Evolución con el negocio</li>
-                    <li>• Alertas proactivas ajustables</li>
-                  </ul>
-                </div>
-              </div>
 
               <p className="text-lg mt-6">
-                El <strong>adelanto de $5,000 USD</strong> cubre el análisis inicial y la implementación base. El <strong>servicio 
-                mensual de $3,000 USD</strong> garantiza que el sistema evolucione con el negocio, manteniendo las reglas actualizadas, 
-                generando alertas relevantes y optimizando continuamente los flujos de automatización.
+                El modelo de <strong>servicio mensual continuo</strong> garantiza que el sistema evolucione con el negocio, manteniendo las reglas actualizadas, generando alertas relevantes y optimizando continuamente los flujos de automatización.
               </p>
             </CardContent>
           </Card>

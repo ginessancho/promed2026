@@ -99,10 +99,10 @@ export default function Propuesta2026() {
         <section className="mb-10">
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
-              <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-700 dark:text-green-400" />
-              <div className="text-3xl font-bold text-green-700 dark:text-green-300">$41K</div>
-              <div className="text-sm text-green-600 dark:text-green-400">Inversión Total</div>
-              <div className="text-xs text-muted-foreground mt-1">$5K adelanto + $3K/mes × 12</div>
+              <TrendingUp className="w-8 h-8 mx-auto mb-2 text-green-700 dark:text-green-400" />
+              <div className="text-3xl font-bold text-green-700 dark:text-green-300">Alto ROI</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Retorno de Inversión</div>
+              <div className="text-xs text-muted-foreground mt-1">Eficiencia y Calidad de Datos</div>
             </Card>
             <Card className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
               <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-700 dark:text-blue-400" />

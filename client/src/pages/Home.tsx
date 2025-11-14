@@ -38,7 +38,7 @@ export default function Home() {
       description: 'Solución TO-BE, inversión de $41K, modelo de servicio mensual y beneficios esperados.',
       icon: Lightbulb,
       href: '/propuesta-2026',
-      highlight: '💼 $3,000 USD/mes × 12 meses',
+      highlight: '📈 Entrega de valor continuo valor',
       color: 'oklch(0.65 0.18 145)', // Verde
     },
     {
