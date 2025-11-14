@@ -100,9 +100,9 @@ export default function Propuesta2026() {
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
               <TrendingUp className="w-8 h-8 mx-auto mb-2 text-green-700 dark:text-green-400" />
-              <div className="text-3xl font-bold text-green-700 dark:text-green-300">Alto ROI</div>
-              <div className="text-sm text-green-600 dark:text-green-400">Retorno de Inversión</div>
-              <div className="text-xs text-muted-foreground mt-1">Eficiencia y Calidad de Datos</div>
+              <div className="text-3xl font-bold text-green-700 dark:text-green-300">Valor Estratégico</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Impacto en el Negocio</div>
+              <div className="text-xs text-muted-foreground mt-1">Eficiencia, Precisión y Escalabilidad</div>
             </Card>
             <Card className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
               <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-700 dark:text-blue-400" />
