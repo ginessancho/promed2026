@@ -240,5 +240,5 @@
 - [x] Refactorizar CustomAuthContext para usar variable de entorno
 - [x] Configurar VITE_PROPOSAL_PASSWORD en Manus
 - [x] Testing de login con nueva configuración
-- [ ] Commit y push a GitHub
+- [x] Commit y push a GitHub
 - [x] Actualizar documentación con instrucciones (README_SECURITY.md)
