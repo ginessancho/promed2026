@@ -1,4 +1,4 @@
-import { ArrowLeft, Users, FileSearch, CheckCircle2, Target, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Users, FileSearch, CheckCircle2, Target } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -123,7 +123,7 @@ export default function Hallazgos2025() {
           <Card className="bg-gradient-to-r from-blue-500/10 to-green-500/10 border-2 border-primary/30">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3">
-                <TrendingUp className="w-6 h-6 text-primary" />
+                
                 Cambio de Estrategia: De Proyecto Único a Servicio Continuo
               </CardTitle>
             </CardHeader>
