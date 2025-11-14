@@ -124,10 +124,52 @@ client/
 
 ## 🚀 Desarrollo
 
-El proyecto ya está inicializado y corriendo. Para ver el sitio:
+### Desarrollo Local
 
-1. Abrir la URL del dev server (ver Management UI)
-2. El sitio se recarga automáticamente con los cambios
+```bash
+# Instalar dependencias
+pnpm install
+
+# Iniciar servidor de desarrollo
+pnpm dev
+```
+
+El sitio estará disponible en `http://localhost:3000` y se recarga automáticamente con los cambios.
+
+### Build de Producción
+
+```bash
+# Crear build de producción
+pnpm build
+
+# Iniciar servidor de producción
+pnpm start
+```
+
+## 🌐 Deployment
+
+El sitio está configurado para desplegarse en **promed.alteridad.org**.
+
+### Quick Deploy
+
+```bash
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus valores
+
+# Ejecutar script de deployment
+./deploy.sh production
+```
+
+### Documentación Completa
+
+Ver [DEPLOYMENT.md](./DEPLOYMENT.md) para instrucciones detalladas de deployment incluyendo:
+- Deployment en servidor propio (VPS/Dedicated)
+- Deployment en Vercel
+- Deployment en Netlify
+- Deployment con Docker
+- Configuración de Nginx
+- Configuración de SSL con Let's Encrypt
 
 ## 📝 Información del Proyecto
 
