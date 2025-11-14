@@ -197,6 +197,31 @@ export default function Propuesta2026() {
           </Accordion>
         </section>
 
+        {/* DMS Explanation */}
+        <section className="mb-10">
+          <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+            <Shield className="w-7 h-7 text-green-600" />
+            El Corazón de la Solución: El DMS
+          </h3>
+          <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+            Nuestra solución no es solo un script de integración; es un <strong>Data Management System (DMS)</strong> inteligente que actúa como el cerebro entre Odoo y NAF. Está diseñado para aprender, adaptarse y asegurar la calidad de los datos a largo plazo.
+          </p>
+          <div className="grid md:grid-cols-3 gap-4">
+            <Card className="bg-green-500/5">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">Aprende</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0"><p className="text-xs text-muted-foreground">El DMS observa los patrones de datos y las correcciones manuales para sugerir nuevas reglas de negocio.</p></CardContent>
+            </Card>
+            <Card className="bg-green-500/5">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">Valida</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0"><p className="text-xs text-muted-foreground">Aplica un conjunto de reglas en tiempo real para asegurar que cada factura sea correcta antes de que llegue a NAF.</p></CardContent>
+            </Card>
+            <Card className="bg-green-500/5">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">Sincroniza</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0"><p className="text-xs text-muted-foreground">Transfiere los datos validados a NAF de forma automática y provee retroalimentación a Odoo.</p></CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Benefits */}
         <section className="mb-10">
           <h3 className="text-2xl font-bold mb-4">Beneficios Esperados</h3>
