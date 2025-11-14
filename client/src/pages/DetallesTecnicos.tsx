@@ -319,6 +319,22 @@ export default function DetallesTecnicos() {
           </div>
         </section>
 
+        <section className="mb-10">
+          <Card className="bg-blue-500/10 border-blue-500/20">
+            <CardHeader className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg">Vea la Solución en Acción</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Acceda a nuestra página de demostración para ver un ejemplo práctico.</p>
+                </div>
+                <Link href="/demonstracion">
+                  <Button size="sm">Ir a la Demo</Button>
+                </Link>
+              </div>
+            </CardHeader>
+          </Card>
+        </section>
+
         <div className="flex justify-between pt-6 border-t">
           <Link href="/propuesta-2026"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
           <Link href="/mantenimiento-dms"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>

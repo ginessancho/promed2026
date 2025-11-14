@@ -15,6 +15,7 @@ import Propuesta2026 from "./pages/Propuesta2026";
 import DetallesTecnicos from "./pages/DetallesTecnicos";
 import MantenimientoDMS from "./pages/MantenimientoDMS";
 import PlanTrabajo2026 from "./pages/PlanTrabajo2026";
+import Demonstracion from "./pages/Demonstracion";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -29,6 +30,7 @@ function Router() {
       <Route path={"/detalles-tecnicos"} component={DetallesTecnicos} />
       <Route path={"/mantenimiento-dms"} component={MantenimientoDMS} />
       <Route path={"/plan-trabajo-2026"} component={PlanTrabajo2026} />
+      <Route path={"/demonstracion"} component={Demonstracion} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
