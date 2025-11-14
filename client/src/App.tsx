@@ -4,6 +4,8 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { CustomAuthProvider } from "./contexts/CustomAuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Propuesta from "./pages/Propuesta";
 import Hallazgos2025 from "./pages/Hallazgos2025";
@@ -15,6 +17,7 @@ import MantenimientoDMS from "./pages/MantenimientoDMS";
 import PlanTrabajo2026 from "./pages/PlanTrabajo2026";
 
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
@@ -45,10 +48,14 @@ function App() {
         defaultTheme="light"
         // switchable
       >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <CustomAuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <ProtectedRoute>
+              <Router />
+            </ProtectedRoute>
+          </TooltipProvider>
+        </CustomAuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

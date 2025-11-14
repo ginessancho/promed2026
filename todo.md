@@ -222,3 +222,14 @@
 - [x] Agregar en Hallazgos 2025: explicación del cambio de estrategia ($10K → $5K adelanto + $3K/mes)
 - [x] Actualizar inversión: $3,000/mes × 12 meses = $41,000 total
 - [x] Clarificar enfoque: automatización de flujos + DMS para reglas de negocio que aprenden y generan alertas
+
+
+## Protección con Contraseña White-Label
+
+- [x] Generar contraseña fuerte: Prmd2026!F007#Secure
+- [x] Actualizar proyecto a web-db-user
+- [x] Crear sistema de autenticación personalizado (sin Manus OAuth)
+- [x] Diseñar página de login con branding Alteridad
+- [x] Proteger todas las rutas
+- [x] Testing de acceso
+- [ ] Crear checkpoint y entregar credenciales
