@@ -1,4 +1,4 @@
-import { ArrowLeft, Wrench, Database, Code, ListOrdered, Target } from 'lucide-react';
+import { ArrowLeft, Wrench, Database, Code, ListOrdered, Target, BookOpen } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -278,6 +278,45 @@ export default function DetallesTecnicos() {
           <CriticalFieldsTable title="Facturas" fields={facturaFields} />
           <CriticalFieldsTable title="Clientes" fields={clienteFields} />
           <CriticalFieldsTable title="Productos" fields={productoFields} />
+        </section>
+
+        <section className="mb-10">
+          <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+            <BookOpen className="w-7 h-7 text-blue-600" />
+            Fundamento Técnico y Documentación
+          </h3>
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+            Nuestra estrategia se basa en las mejores prácticas y herramientas estándar proporcionadas por Odoo, garantizando una solución robusta, sostenible y alineada con la tecnología oficial.
+          </p>
+          <div className="grid md:grid-cols-3 gap-4">
+            <Card className="hover:border-blue-500/50 transition-colors">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">API Externa (XML-RPC)</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0">
+                <p className="text-xs text-muted-foreground mb-3">Utilizamos la API externa estándar de Odoo para una comunicación segura y fiable entre sistemas.</p>
+                <a href="https://www.odoo.com/documentation/14.0/developer/reference/external_api.html" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">Ver Documentación</Button>
+                </a>
+              </CardContent>
+            </Card>
+            <Card className="hover:border-blue-500/50 transition-colors">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">Mapeo de Modelos (ORM)</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0">
+                <p className="text-xs text-muted-foreground mb-3">Accedemos a los datos a través del ORM de Odoo, respetando la estructura y lógica de negocio de la plataforma.</p>
+                <a href="https://www.odoo.com/documentation/14.0/developer/reference/orm.html" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">Ver Documentación</Button>
+                </a>
+              </CardContent>
+            </Card>
+            <Card className="hover:border-blue-500/50 transition-colors">
+              <CardHeader className="p-4 pb-2"><CardTitle className="text-base">Desarrollo de Módulos</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0">
+                <p className="text-xs text-muted-foreground mb-3">El "Conector Directo" se empaqueta como un módulo personalizado, siguiendo las guías oficiales de desarrollo.</p>
+                <a href="https://www.odoo.com/documentation/14.0/developer/howtos/rdtraining.html" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">Ver Documentación</Button>
+                </a>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         <div className="flex justify-between pt-6 border-t">
