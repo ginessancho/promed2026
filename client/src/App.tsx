@@ -7,28 +7,32 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { CustomAuthProvider } from "./contexts/CustomAuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
-import Propuesta from "./pages/Propuesta";
+
 import Hallazgos2025 from "./pages/Hallazgos2025";
 import VolumenProblema from "./pages/VolumenProblema";
 import ProcesoActual from "./pages/ProcesoActual";
 import Propuesta2026 from "./pages/Propuesta2026";
 import DetallesTecnicos from "./pages/DetallesTecnicos";
 import MantenimientoDMS from "./pages/MantenimientoDMS";
-import PlanTrabajo2026 from "./pages/PlanTrabajo2026";
+
+import Demonstracion from "./pages/Demonstracion";
+import PlanTrabajo from "./pages/PlanTrabajo";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
-      <Route path={"/propuesta-original"} component={Propuesta} />
+      
       <Route path={"/hallazgos-2025"} component={Hallazgos2025} />
       <Route path={"/volumen-problema"} component={VolumenProblema} />
       <Route path={"/proceso-actual"} component={ProcesoActual} />
       <Route path={"/propuesta-2026"} component={Propuesta2026} />
       <Route path={"/detalles-tecnicos"} component={DetallesTecnicos} />
       <Route path={"/mantenimiento-dms"} component={MantenimientoDMS} />
-      <Route path={"/plan-trabajo-2026"} component={PlanTrabajo2026} />
+      
+      <Route path={"/demonstracion"} component={Demonstracion} />
+      <Route path={"/plan-de-trabajo"} component={PlanTrabajo} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

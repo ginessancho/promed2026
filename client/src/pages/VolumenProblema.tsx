@@ -1,4 +1,4 @@
-import { ArrowLeft, AlertTriangle, TrendingUp } from 'lucide-react';
+import { ArrowLeft, AlertTriangle } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -88,7 +88,7 @@ export default function VolumenProblema() {
             <CardContent className="p-0">
               <div className="bg-muted/30 aspect-video flex items-center justify-center border-b">
                 <div className="text-center">
-                  <TrendingUp className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  
                   <p className="text-muted-foreground">Screenshot del dashboard de análisis de datos</p>
                   <p className="text-sm text-muted-foreground mt-2">(Placeholder - Se reemplazará con captura real)</p>
                 </div>

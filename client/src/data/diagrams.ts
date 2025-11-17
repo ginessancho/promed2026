@@ -1,218 +1,205 @@
+// Compact, horizontal AS-IS vs TO-BE comparison with enhanced colors for animation
+export const comparisonDiagram = `
+graph LR
+    subgraph ASIS["❌ PROCESO ACTUAL (AS-IS)"]
+        direction LR
+        A1[F-007<br/>Manual] --> A2[Odoo<br/>Manual]
+        A2 --> A3[NAF<br/>Manual]
+        A3 --> A4{Errores?}
+        A4 -->|Sí| A5[Reproceso]
+        A5 --> A1
+        A4 -->|No| A6[Dashboard]
+    end
+    
+    subgraph TOBE["✅ PROCESO PROPUESTO (TO-BE)"]
+        direction LR
+        B1[Odoo<br/>Cotización] --> B2[Validación<br/>Automática]
+        B2 --> B3{Válido?}
+        B3 -->|No| B4[Alerta<br/>Inmediata]
+        B4 --> B1
+        B3 -->|Sí| B5[Sync<br/>NAF]
+        B5 --> B6[Dashboard]
+    end
+    
+    style ASIS fill:#ffe6e6,stroke:#ff4444,stroke-width:2px
+    style TOBE fill:#e6ffe6,stroke:#44ff44,stroke-width:2px
+    style A1 fill:#ffcccc,stroke:#ff6666
+    style A2 fill:#ffcccc,stroke:#ff6666
+    style A3 fill:#ffcccc,stroke:#ff6666
+    style A5 fill:#ff9999,stroke:#ff4444
+    style A4 fill:#FFD700,stroke:#FFA500
+    style B2 fill:#90EE90,stroke:#228B22
+    style B5 fill:#90EE90,stroke:#228B22
+    style B3 fill:#FFD700,stroke:#FFA500
+`;
+
 export const architectureDiagram = `
-graph TB
-    subgraph "Capa de Presentación"
-        A[Odoo Web Interface]
-        B[Dashboard Analytics]
-        C[CRM Interface]
+graph LR
+    subgraph UI["🖥️ Interfaz"]
+        A[Odoo Web]
     end
     
-    subgraph "Capa de Aplicación - Odoo"
-        D[Odoo Accounting Module]
-        E[Odoo Sales Module]
-        F[Custom Integration Module]
-        G[API Gateway]
+    subgraph ODOO["📦 Odoo"]
+        B[Ventas]
+        C[Facturación]
+        D[Módulo<br/>Integración]
     end
     
-    subgraph "Capa de Integración - Middleware"
-        H[Data Mapper]
-        I[Business Rules Engine]
-        J[Validation Layer]
-        K[Queue Manager]
-        L[Error Handler]
+    subgraph DMS["🤖 DMS"]
+        E[Validador]
+        F[Reglas<br/>Negocio]
+        G[Mapper]
     end
     
-    subgraph "Sistemas Externos"
-        M[NAF/Oracle]
-        N[Analytics Dashboard]
-        O[CRM System]
+    subgraph EXT["🏢 Sistemas"]
+        H[NAF<br/>Oracle]
     end
     
-    subgraph "Capa de Datos"
-        P[(PostgreSQL - Odoo)]
-        Q[(Oracle - NAF)]
-        R[(Redshift - Analytics)]
-    end
-    
-    A --> D
-    A --> E
-    D --> F
+    A --> B
+    A --> C
+    B --> D
+    C --> D
+    D --> E
     E --> F
     F --> G
     G --> H
-    H --> I
-    I --> J
-    J --> K
-    K --> M
-
-    K --> O
-    K --> L
-    L --> M
-    D --> P
-    M --> Q
-    N --> R
     
-    style F fill:#ffd700
-    style I fill:#ffd700
-    style J fill:#ffd700
-    style K fill:#ffd700
+    style D fill:#FFD700,stroke:#FF8800,stroke-width:3px
+    style E fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style F fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style G fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style H fill:#87CEEB,stroke:#4682B4,stroke-width:2px
 `;
 
 export const flowDiagram = `
 graph LR
-    subgraph "FLUJO PROPUESTO (TO-BE)"
-        A1[Odoo: Creación de Cotización] --> A2[Odoo: Conversión a Orden de Venta]
-        A2 --> A3[Odoo: Generación de Factura]
-        A3 --> A4[DMS: Validación de Reglas de Negocio]
-        A4 --> A5{¿Datos Válidos?}
-        A5 -->|Sí| A6[DMS: Enriquecimiento de Datos]
-        A5 -->|No| A7[DMS: Notificación de Errores]
-        A7 --> A3
-        A6 --> A8[DMS: Sincronización con NAF]
-        A8 --> A9[NAF: Registro de Factura]
-        A9 --> A10[Dashboard: Reportes de Negocio]
-    end
+    A1[Odoo:<br/>Cotización] --> A2[Odoo:<br/>Orden Venta]
+    A2 --> A3[Odoo:<br/>Factura]
+    A3 --> A4[DMS:<br/>Validación]
+    A4 --> A5{Válido?}
+    A5 -->|Sí| A6[DMS:<br/>Enriquecimiento]
+    A5 -->|No| A7[DMS:<br/>Alerta]
+    A7 --> A3
+    A6 --> A8[DMS:<br/>Sync NAF]
+    A8 --> A9[NAF:<br/>Registro]
+    A9 --> A10[Dashboard]
     
-    style A4 fill:#90EE90
-    style A5 fill:#FFD700
-    style A6 fill:#90EE90
-    style A8 fill:#90EE90
+    style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A5 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style A6 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A8 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A9 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
 
 export const businessRulesDiagram = `
-graph TD
-    A[Factura en Odoo] --> B{Validación de Campos Críticos}
-    B -->|no_arti existe| C{¿Marca asignada?}
-    C -->|Sí| D{¿Marca única para artículo?}
-    C -->|No| E[Error: Marca requerida]
-    D -->|Sí| F{¿ind_comodato = S?}
-    D -->|No| G[Error: Múltiples marcas detectadas]
-    F -->|Sí| H{¿no_comodato existe?}
-    F -->|No| I{¿no_comodato vacío?}
-    H -->|Sí| J[Validación OK]
-    H -->|No| K[Error: Número de comodato requerido]
-    I -->|Sí| J
-    I -->|No| L[Error: Comodato sin indicador]
-    J --> M{¿Cálculo de ganancia correcto?}
-    M -->|Sí| N[Sincronizar con NAF]
-    M -->|No| O[Error: Recalcular ganancia]
+graph LR
+    A[Factura] --> B{Campos<br/>Críticos?}
+    B -->|OK| C{Marca<br/>Única?}
+    B -->|Error| E1[❌ Alerta]
+    C -->|OK| D{Comodato<br/>Válido?}
+    C -->|Error| E2[❌ Alerta]
+    D -->|OK| F{Ganancia<br/>Correcta?}
+    D -->|Error| E3[❌ Alerta]
+    F -->|OK| G[✅ Sync NAF]
+    F -->|Error| E4[❌ Alerta]
     
-    style B fill:#FFD700
-    style D fill:#FFD700
-    style F fill:#FFD700
-    style M fill:#FFD700
-    style N fill:#90EE90
-    style E fill:#FF6B6B
-    style G fill:#FF6B6B
-    style K fill:#FF6B6B
-    style L fill:#FF6B6B
-    style O fill:#FF6B6B
+    E1 --> A
+    E2 --> A
+    E3 --> A
+    E4 --> A
+    
+    style B fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style C fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style D fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style F fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style G fill:#90EE90,stroke:#228B22,stroke-width:3px
+    style E1 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E2 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E3 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style E4 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
-
 
 export const asIsDiagram = `
 graph LR
-    subgraph "FLUJO ACTUAL (AS-IS)"
-        B1[F-007: Entrada Manual de Datos] --> B2[Especialista: Revisión]
-        B2 --> B3[Odoo: Entrada Manual Duplicada]
-        B3 --> B4[Equipo Facturación: Revisión en Odoo]
-        B4 --> B5[NAF: Entrada Manual Triplicada]
-        B5 --> B6{¿Errores Detectados?}
-        B6 -->|Sí| B7[Reproceso Manual]
-        B7 --> B3
-        B6 -->|No| B8[Dashboard: Reportes de Negocio]
+    B1[F-007:<br/>Manual] --> B2[Especialista:<br/>Revisión]
+    B2 --> B3[Odoo:<br/>Manual]
+    B3 --> B4[Facturación:<br/>Revisión]
+    B4 --> B5[NAF:<br/>Manual]
+    B5 --> B6{Errores?}
+    B6 -->|Sí| B7[Reproceso]
+    B7 --> B3
+    B6 -->|No| B8[Dashboard]
     
-    style B1 fill:#FF6B6B
-    style B3 fill:#FF6B6B
-    style B5 fill:#FF6B6B
-    style B7 fill:#FF6B6B
+    style B1 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B3 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B5 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
+    style B6 fill:#FFD700,stroke:#FFA500,stroke-width:2px
 `;
 
 export const toBeDiagram = `
 graph LR
-    subgraph "FLUJO PROPUESTO (TO-BE)"
-        A1[Odoo: Creación de Cotización] --> A2[Odoo: Conversión a Orden]
-        A2 --> A3[Odoo: Generación de Factura]
-        A3 --> A4[DMS: Validación Automática]
-        A4 --> A5{¿Datos Válidos?}
-        A5 -->|Sí| A6[DMS: Enriquecimiento]
-        A5 -->|No| A7[DMS: Alerta Inmediata]
-        A7 --> A3
-        A6 --> A8[DMS → NAF: Sincronización]
-        A8 --> A9[NAF: Registro Automático]
-        A9 --> A10[Dashboard: Reportes de Negocio]
-    end
+    A1[Odoo:<br/>Cotización] --> A2[Odoo:<br/>Orden]
+    A2 --> A3[Odoo:<br/>Factura]
+    A3 --> A4[DMS:<br/>Validación]
+    A4 --> A5{Válido?}
+    A5 -->|Sí| A6[DMS:<br/>Enriquece]
+    A5 -->|No| A7[DMS:<br/>Alerta]
+    A7 --> A3
+    A6 --> A8[DMS→NAF:<br/>Sync]
+    A8 --> A9[NAF:<br/>Automático]
+    A9 --> A10[Dashboard]
     
-    style A4 fill:#90EE90
-    style A6 fill:#90EE90
-    style A8 fill:#90EE90
-    style A9 fill:#90EE90
+    style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A6 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A8 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A9 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style A5 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style A7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
 `;
 
+// Compact horizontal purchase order flow with enhanced colors
 export const purchaseOrderDiagram = `
-graph TB
-    subgraph KAM["👤 KAM / Inside Sale"]
-        A1[Genera oportunidad<br/>de venta]
-        A2[Cliente aprueba y<br/>genera orden de compra]
+graph LR
+    subgraph KAM["👤 KAM"]
+        A1[Oportunidad] --> A2[Cliente<br/>Aprueba]
     end
     
-    subgraph ESP["👤 Especialista de Producto"]
-        B1[Confecciona<br/>propuesta]
-        B2[Recibe notificación<br/>de registro]
-        B3{Mercancía<br/>disponible?}
-        B4[Gestiona pre-pedido<br/>y cumple flujo]
-        B5[Completa F-007<br/>en APEX]
+    subgraph ESP["👤 Especialista"]
+        B1[Propuesta]
+        B2[F-007<br/>APEX]
     end
     
-    subgraph ADM["👤 Administrador Servicio al Cliente"]
-        C1[Registra orden<br/>en NAF]
-        C2[Confecciona tiquete<br/>en NAF]
-        C3[Ingresa a NAF y<br/>coloca 'aprobación']
+    subgraph ADM["👤 Admin"]
+        C1[Registro<br/>NAF]
+        C2[Tiquete<br/>NAF]
     end
     
-    subgraph GER["👤 Gerente de Ventas"]
+    subgraph GER["👤 Gerente"]
         D1{Margen<br/>< 10%?}
-        D2[Revisa tiquete<br/>generado]
-        D3{Aprueba<br/>margen?}
-        D4[Comunica decisión<br/>y motivo]
-        D5[Aprueba tiquete<br/>en NAF]
+        D2[Aprueba]
     end
     
-    subgraph BOD["👤 Bodega"]
-        E1[Selección, empaque<br/>y despacho]
-    end
-    
-    subgraph SYS["🖥️ Sistemas"]
-        S1[NAF envía<br/>alerta]
-        S2[NAF genera<br/>tarea en WMS]
+    subgraph BOD["📦 Bodega"]
+        E1[Despacho]
     end
     
     A1 --> B1
     B1 --> A2
     A2 --> C1
     C1 --> B2
-    B2 --> B3
-    B3 -->|No| B4
-    B3 -->|Sí| B5
-    B5 --> C2
+    B2 --> C2
     C2 --> D1
-    D1 -->|Sí| S1
-    S1 --> D2
-    D2 --> D3
-    D3 -->|No| D4
-    D4 --> FIN1[Fin]
-    D3 -->|Sí| D5
-    D5 --> C3
-    D1 -->|No| C3
-    C3 --> S2
-    S2 --> E1
-    E1 --> FIN2[Fin]
+    D1 -->|Sí| D2
+    D1 -->|No| E1
+    D2 --> E1
     
-    style KAM fill:#e3f2fd
-    style ESP fill:#fff3e0
-    style ADM fill:#f3e5f5
-    style GER fill:#e8f5e9
-    style BOD fill:#fce4ec
-    style SYS fill:#f5f5f5
-    style FIN1 fill:#ffebee
-    style FIN2 fill:#e8f5e9
+    style KAM fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+    style ESP fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+    style ADM fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+    style GER fill:#e8f5e9,stroke:#4CAF50,stroke-width:2px
+    style BOD fill:#fce4ec,stroke:#E91E63,stroke-width:2px
+    style D1 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+    style E1 fill:#90EE90,stroke:#228B22,stroke-width:2px
 `;

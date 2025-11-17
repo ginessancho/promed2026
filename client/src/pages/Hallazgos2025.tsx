@@ -1,4 +1,4 @@
-import { ArrowLeft, Users, FileSearch, CheckCircle2, Target, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Users, FileSearch, CheckCircle2, Target } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -123,7 +123,7 @@ export default function Hallazgos2025() {
           <Card className="bg-gradient-to-r from-blue-500/10 to-green-500/10 border-2 border-primary/30">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3">
-                <TrendingUp className="w-6 h-6 text-primary" />
+                
                 Cambio de Estrategia: De Proyecto Único a Servicio Continuo
               </CardTitle>
             </CardHeader>
@@ -160,38 +160,28 @@ export default function Hallazgos2025() {
                 </ul>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div className="bg-muted/30 p-6 rounded-lg border">
-                  <h4 className="font-bold text-lg mb-3 text-muted-foreground">❌ Modelo Anterior</h4>
-                  <p className="text-2xl font-bold text-muted-foreground mb-2">$10,000 USD</p>
-                  <p className="text-sm text-muted-foreground">Proyecto único de análisis e implementación</p>
-                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
-                    <li>• Reglas estáticas</li>
-                    <li>• Sin mantenimiento continuo</li>
-                    <li>• Obsolescencia rápida</li>
-                  </ul>
-                </div>
 
-                <div className="bg-primary/5 p-6 rounded-lg border-2 border-primary">
-                  <h4 className="font-bold text-lg mb-3 text-primary">✅ Nuevo Modelo</h4>
-                  <p className="text-2xl font-bold text-primary mb-2">$5,000 USD + $3,000/mes</p>
-                  <p className="text-sm">Adelanto inicial + Servicio mensual continuo</p>
-                  <ul className="mt-4 space-y-1 text-sm">
-                    <li>• Reglas dinámicas que aprenden</li>
-                    <li>• Mantenimiento y optimización continua</li>
-                    <li>• Evolución con el negocio</li>
-                    <li>• Alertas proactivas ajustables</li>
-                  </ul>
-                </div>
-              </div>
 
               <p className="text-lg mt-6">
-                El <strong>adelanto de $5,000 USD</strong> cubre el análisis inicial y la implementación base. El <strong>servicio 
-                mensual de $3,000 USD</strong> garantiza que el sistema evolucione con el negocio, manteniendo las reglas actualizadas, 
-                generando alertas relevantes y optimizando continuamente los flujos de automatización.
+                El modelo de <strong>servicio mensual continuo</strong> garantiza que el sistema evolucione con el negocio, manteniendo las reglas actualizadas, generando alertas relevantes y optimizando continuamente los flujos de automatización.
               </p>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Cost of Inefficiency */}
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-foreground mb-8">El Costo Oculto de la Ineficiencia</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="bg-orange-500/5 border-orange-500/20">
+              <CardHeader><CardTitle className="text-lg">Conocimiento Tácito: Un Activo Frágil</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground">Gran parte del proceso de facturación depende del conocimiento no documentado de personas clave. Este "conocimiento tácito" es un riesgo operativo enorme: si una persona clave se va, el proceso se rompe. La automatización captura este conocimiento y lo convierte en un activo de la empresa.</p></CardContent>
+            </Card>
+            <Card className="bg-red-500/5 border-red-500/20">
+              <CardHeader><CardTitle className="text-lg">Reprocesos: El Ladrón Silencioso</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground">Cada error detectado tardíamente en NAF no solo requiere tiempo para corregirse, sino que retrasa la facturación, impacta el flujo de caja y erosiona la confianza en los datos. Es un ladrón silencioso que roba horas y eficiencia todos los días.</p></CardContent>
+            </Card>
+          </div>
         </section>
 
         {/* Metodología */}
@@ -339,6 +329,25 @@ export default function Hallazgos2025() {
             </Button>
           </Link>
         </div>
+              {/* Project Governance */}
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-foreground mb-8">Gobernanza del Proyecto</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader><CardTitle className="text-base">Reuniones Semanales</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Seguimiento táctico del progreso, identificación de bloqueos y próximos pasos.</p></CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle className="text-base">Comité Mensual</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Revisión estratégica con el equipo ejecutivo de Promed para asegurar la alineación con los objetivos de negocio.</p></CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle className="text-base">Comunicación Continua</CardTitle></CardHeader>
+              <CardContent><p className="text-xs text-muted-foreground">Uso de este sitio web como punto central de verdad y comunicación sobre el estado del proyecto.</p></CardContent>
+            </Card>
+          </div>
+        </section>
+
       </main>
     </div>
   );
