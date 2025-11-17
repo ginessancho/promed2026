@@ -2,10 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { GitBranch } from 'lucide-react';
 
 const phases = [
-  { name: 'Fase 1: Fundación', start: 0, end: 3, color: 'bg-blue-600' },
-  { name: 'Fase 2: Expansión', start: 3, end: 7, color: 'bg-green-600' },
-  { name: 'Fase 3: Sincronización', start: 7, end: 10, color: 'bg-purple-600' },
-  { name: 'Fase 4: Transferencia', start: 10, end: 12, color: 'bg-orange-600' },
+  { name: 'Fase 1: Diseño', start: 0, end: 2, color: 'bg-blue-500/70' },
+  { name: 'Fase 2: Desarrollo', start: 2, end: 5, color: 'bg-emerald-500/70' },
+  { name: 'Fase 3: Pruebas', start: 5, end: 7, color: 'bg-purple-500/70' },
+  { name: 'Fase 4: Producción', start: 7, end: 9, color: 'bg-amber-500/70' },
+  { name: 'Fase 5: Monitoreo y Capacitación', start: 9, end: 12, color: 'bg-rose-500/70' },
 ];
 
 const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -18,7 +19,9 @@ export default function PhaseTimeline() {
           <GitBranch className="w-5 h-5 text-primary" />
           Roadmap Visual del Proyecto
         </CardTitle>
-        <CardDescription>Distribución de las 4 fases a lo largo de 12 meses.</CardDescription>
+        <CardDescription>
+          Distribución de las 5 fases a lo largo de 12 meses; cada fase funciona como puerta para habilitar la siguiente.
+        </CardDescription>
       </CardHeader>
       <CardContent className="px-4 pb-6 md:px-6">
         <div className="w-full overflow-x-auto rounded-lg border bg-background p-4">

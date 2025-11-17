@@ -329,25 +329,6 @@ export default function Hallazgos2025() {
             </Button>
           </Link>
         </div>
-              {/* Project Governance */}
-        <section className="mb-16">
-          <h3 className="text-3xl font-bold text-foreground mb-8">Gobernanza del Proyecto</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader><CardTitle className="text-base">Reuniones Semanales</CardTitle></CardHeader>
-              <CardContent><p className="text-xs text-muted-foreground">Seguimiento táctico del progreso, identificación de bloqueos y próximos pasos.</p></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-base">Comité Mensual</CardTitle></CardHeader>
-              <CardContent><p className="text-xs text-muted-foreground">Revisión estratégica con el equipo ejecutivo de Promed para asegurar la alineación con los objetivos de negocio.</p></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-base">Comunicación Continua</CardTitle></CardHeader>
-              <CardContent><p className="text-xs text-muted-foreground">Uso de este sitio web como punto central de verdad y comunicación sobre el estado del proyecto.</p></CardContent>
-            </Card>
-          </div>
-        </section>
-
       </main>
     </div>
   );

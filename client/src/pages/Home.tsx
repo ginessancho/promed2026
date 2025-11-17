@@ -12,53 +12,47 @@ export default function Home() {
       description: 'Análisis preliminar, entrevistas y metodología que llevó a la identificación de la necesidad de automatización.',
       icon: FileSearch,
       href: '/hallazgos-2025',
-      highlight: '📋 Trabajo preliminar documentado',
-      color: 'border-blue-500',
+      highlight: 'Trabajo preliminar documentado',
     },
     {
       title: 'Volumen del Problema',
       description: 'Análisis cuantitativo de anomalías detectadas en 739,251 registros de facturación.',
       icon: BarChart3,
       href: '/volumen-problema',
-      highlight: '📊 14.4% dispersión de marcas',
-      color: 'border-red-500',
+      highlight: '14.4% dispersión de marcas',
     },
     {
       title: 'Proceso Actual',
-      description: 'Flujo AS-IS detallado, roles, responsables, fricciones y blockers identificados.',
+      description: 'Flujo actual detallado, roles, responsables, fricciones y blockers identificados.',
       icon: Settings,
       href: '/proceso-actual',
-      highlight: '⚙️ Proceso manual sin integración',
-      color: 'border-gray-500',
+      highlight: 'Proceso manual sin integración',
     },
     
     // Fila 2: SOLUCIÓN (Futuro)
     {
       title: 'Propuesta 2026',
-      description: 'Solución TO-BE, inversión de $41K, modelo de servicio mensual y beneficios esperados.',
+      description: 'Integración Odoo-NAF alineada con la operación actual, modelo de servicio mensual y beneficios esperados.',
       icon: Lightbulb,
       href: '/propuesta-2026',
-      highlight: '📈 Entrega de valor continuo valor',
-      color: 'border-green-500',
+      highlight: 'Entrega de valor continuo valor',
     },
     {
       title: 'Detalles Técnicos',
       description: 'Arquitectura de integración, coordinación de equipos, campos críticos y documentación Odoo/NAF.',
       icon: Wrench,
       href: '/detalles-tecnicos',
-      highlight: '🔧 Integración Odoo-NAF vía DMS',
-      color: 'border-indigo-500',
+      highlight: 'Integración Odoo-NAF vía DMS',
     },
     {
-      title: 'Mantenimiento DMS',
+      title: 'Sistema de Gestión de Datos',
       description: 'DMS que aprende del negocio, extrae conocimiento en reglas accionables y genera alertas para eficiencia de procesos.',
       icon: Monitor,
       href: '/mantenimiento-dms',
-      highlight: '🖥️ Aprendizaje continuo + Reglas dinámicas',
-      color: 'border-purple-500',
+      highlight: 'Aprendizaje continuo + Reglas dinámicas',
     },
   ];
-
+ 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
       {/* Header */}
@@ -81,12 +75,12 @@ export default function Home() {
         {/* Intro */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            Transformación Digital de Facturación
+            Integración de Facturación en Odoo
           </h2>
           <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Automatización de flujos de facturación mediante integración Odoo-NAF, potenciada por un 
-            Data Management System (DMS) que aprende del negocio, extrae conocimiento tácito en reglas 
-            accionables y genera alertas proactivas para eficiencia de procesos.
+            Promed ya cuenta con automatizaciones sólidas en NAF gracias al trabajo del equipo de TI. Esta fase
+            consolida la llegada de Odoo, conectando ambos mundos para profundizar la integración, reducir las
+            tareas manuales que quedan y asegurar que los datos críticos continuen fluyendo al General Ledger.
           </p>
         </div>
 
@@ -118,13 +112,45 @@ export default function Home() {
 
 
 
+        {/* CTA Plan de Trabajo */}
+        <section className="mb-12">
+          <div className="relative overflow-hidden rounded-3xl border bg-gradient-to-r from-primary/40 via-primary/20 to-blue-200 text-primary-foreground">
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_white,_transparent_60%)] pointer-events-none" />
+            <div className="relative z-10 grid gap-6 md:grid-cols-[3fr,1fr] items-center px-8 py-10">
+              <div className="space-y-4">
+                <p className="text-sm font-semibold uppercase tracking-widest text-primary-foreground/80">
+                  Plan de Trabajo 2026
+                </p>
+                <h3 className="text-3xl font-bold leading-snug">
+                  Un año de integración coordinada entre TI Promed, Gateway y Alteridad.
+                </h3>
+                <p className="text-base text-primary-foreground/90 max-w-2xl">
+                  Consulta el roadmap completo, los 67 hitos y el esquema de reuniones que sostienen la operación
+                  conjunta para llevar la integración Odoo-NAF al nivel requerido por finanzas y operaciones.
+                </p>
+                <p className="text-sm font-semibold text-primary-foreground/80">
+                  Noviembre y diciembre de 2025 son la puerta de entrada: sólo con la validación y aceptación del
+                  objetivo fundamental podremos abrir cada fase sucesiva del plan 2026.
+                </p>
+              </div>
+              <div className="flex justify-end">
+                <Link href="/plan-de-trabajo">
+                  <Button size="lg" variant="secondary">
+                    Ver plan anual
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer Info */}
         <div className="mt-12 border-t pt-6">
           <div className="flex items-center justify-between">
             <div>
               <img src={APP_LOGO} alt="Alteridad" className="h-10 object-contain mb-3" />
-              <p className="text-xs text-muted-foreground">Ginés A. Sánchez Arias</p>
-              <p className="text-xs text-muted-foreground">gines@alteridad.org • +33 0664691043</p>
+              <p className="text-xs font-semibold text-muted-foreground">Alteridad</p>
+              <p className="text-xs text-muted-foreground">support@alteridad.org</p>
             </div>
             <div className="text-right text-xs text-muted-foreground">
               <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>

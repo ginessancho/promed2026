@@ -8,13 +8,12 @@ interface Props {
   icon: LucideIcon;
   href: string;
   highlight: string;
-  color: string; // This will now be a Tailwind border color class
 }
 
-export default function PillarCard({ title, description, icon: Icon, href, highlight, color }: Props) {
+export default function PillarCard({ title, description, icon: Icon, href, highlight }: Props) {
   return (
     <Link href={href}>
-      <Card className={`h-full flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-t-4 ${color}`}>
+      <Card className="h-full flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-t-4 border-primary/60">
         <CardHeader className="pb-4">
           <div className="flex items-start justify-between">
             <CardTitle className="text-lg font-bold">{title}</CardTitle>
@@ -24,12 +23,11 @@ export default function PillarCard({ title, description, icon: Icon, href, highl
         <CardContent className="flex-grow">
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         </CardContent>
-        <CardFooter className="pt-4 flex-col items-start">
-          <div className="w-full text-xs font-semibold text-foreground mb-3">
-            {highlight}
-          </div>
-          <div className="w-full flex justify-end text-primary font-semibold text-sm items-center gap-2">
-            Ver Detalles <ArrowRight className="w-4 h-4" />
+        <CardFooter className="pt-4 flex items-center justify-between">
+          <div className="text-xs font-semibold text-foreground">{highlight}</div>
+          <div className="flex items-center text-primary">
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            <span className="sr-only">{`Ir a ${title}`}</span>
           </div>
         </CardFooter>
       </Card>

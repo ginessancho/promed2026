@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PhaseTimeline from '@/components/PhaseTimeline';
 import { ganttTasks, phaseSummary } from '@/data/ganttTasks'; // Assuming ganttTasks is now in a separate file
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export default function PlanTrabajo() {
   const tiposReuniones = [
@@ -38,6 +39,43 @@ export default function PlanTrabajo() {
     { riesgo: 'Resistencia al cambio', probabilidad: 'Media', impacto: 'Medio', mitigacion: 'Capacitación temprana' },
   ];
 
+  const phaseKeywordMap: Record<string, string> = {
+    diseño: 'Diseño',
+    desarrollo: 'Desarrollo',
+    pruebas: 'Pruebas',
+    producción: 'Producción',
+    monitoreo: 'Monitoreo y Capacitación',
+  };
+
+  const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short' });
+  const formatTaskWindow = (task: (typeof ganttTasks)[number]) => {
+    const isValidDate = (date: Date) => date instanceof Date && !Number.isNaN(date.getTime());
+    if (!isValidDate(task.start) || !isValidDate(task.end)) {
+      return 'Por confirmar (depende de validación)';
+    }
+    const sameDay = task.start.toDateString() === task.end.toDateString();
+    return sameDay
+      ? dateFormatter.format(task.start)
+      : `${dateFormatter.format(task.start)} – ${dateFormatter.format(task.end)}`;
+  };
+
+  const fasesConTareas = phaseSummary.map(phase => {
+    const key = Object.entries(phaseKeywordMap).find(([keyword]) =>
+      phase.phase.toLowerCase().includes(keyword)
+    )?.[1];
+    const tasks =
+      key
+        ? ganttTasks
+            .filter(task => (task.type === 'task' || task.type === 'milestone') && task.phase === key)
+            .sort((a, b) => taskTime(a.start) - taskTime(b.start))
+        : [];
+    return { ...phase, tasks };
+  });
+
+  function taskTime(date: Date) {
+    return date instanceof Date ? date.getTime() : Number.POSITIVE_INFINITY;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card sticky top-0 z-40">
@@ -64,40 +102,6 @@ export default function PlanTrabajo() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-green-600" />
-            Listado de Tareas Detalladas
-          </h2>
-          <p className="text-muted-foreground mb-6">A continuación se presenta el desglose de 67 actividades principales, agrupadas por fase.</p>
-          <Card>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/50">
-                    <tr>
-                      <th className="p-4 text-left font-semibold">Fase</th>
-                      <th className="p-4 text-left font-semibold">ID</th>
-                      <th className="p-4 text-left font-semibold">Tarea</th>
-                      <th className="p-4 text-left font-semibold">Responsable</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ganttTasks.filter(t => t.type === 'task' || t.type === 'milestone').map((t, i) => (
-                      <tr key={i} className="border-b last:border-none hover:bg-muted/50">
-                        <td className="p-4 w-24 text-center font-medium">{t.phase}</td>
-                        <td className="p-4 w-24 font-mono text-xs">{t.id}</td>
-                        <td className="p-4">{t.name}</td>
-                        <td className="p-4 w-40">{t.responsible}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mb-12">
           <h3 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
             <Users className="w-8 h-8 text-primary" />
             Calendario de Reuniones
@@ -117,6 +121,56 @@ export default function PlanTrabajo() {
               </Card>
             ))}
           </div>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold mb-4 flex items-center gap-3">
+            <CheckCircle className="w-8 h-8 text-green-600" />
+            Listado de Tareas Detalladas
+          </h2>
+          <p className="text-muted-foreground mb-2">
+            Abrí cada fase para revisar sus actividades. Cuando una tarea dependa de aprobaciones o disponibilidad,
+            aparecerá como “Por confirmar”.
+          </p>
+          <p className="text-xs text-muted-foreground mb-6">
+            Nota: las fases se comportan como puertas encadenadas; sin la validación de Nov-Dic 2025 no se activa el cronograma 2026.
+          </p>
+          <Accordion type="multiple" className="space-y-4">
+            {fasesConTareas.map(({ phase, tasks, duration }) => (
+              <AccordionItem key={phase} value={phase}>
+                <AccordionTrigger className="text-left">
+                  <div>
+                    <p className="text-lg font-semibold">{phase}</p>
+                    <p className="text-xs text-muted-foreground">{duration} • {tasks.length} actividades</p>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="p-3 text-left font-semibold w-24">ID</th>
+                          <th className="p-3 text-left font-semibold">Tarea</th>
+                          <th className="p-3 text-left font-semibold w-40">Responsable</th>
+                          <th className="p-3 text-left font-semibold w-48">Ventana estimada</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tasks.map(task => (
+                          <tr key={task.id} className="border-b last:border-none">
+                            <td className="p-3 font-mono text-xs">{task.id}</td>
+                            <td className="p-3">{task.name}</td>
+                            <td className="p-3">{task.responsible}</td>
+                            <td className="p-3 text-muted-foreground">{formatTaskWindow(task)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </section>
 
         <section>
