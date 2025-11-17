@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AnomaliesChart from '@/components/AnomaliesChart';
+import dmsPlaceholder from '@/assets/dms placeholder.png';
 
 export default function VolumenProblema() {
   const anomalias = [
@@ -79,20 +80,26 @@ export default function VolumenProblema() {
           </div>
         </div>
 
-        {/* Screenshot del DMS - Placeholder */}
+        {/* Screenshot del DMS */}
         <section className="mb-16">
           <Card className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-primary/10 to-accent/10">
               <CardTitle className="text-2xl">Análisis en dms.alteridad.org</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="bg-muted/30 aspect-video flex items-center justify-center border-b">
-                <div className="text-center">
-                  
-                  <p className="text-muted-foreground">Screenshot del dashboard de análisis de datos</p>
-                  <p className="text-sm text-muted-foreground mt-2">(Placeholder - Se reemplazará con captura real)</p>
+              <figure className="bg-muted/30 border-b">
+                <div className="aspect-video overflow-hidden bg-background">
+                  <img
+                    src={dmsPlaceholder}
+                    alt="Vista del dashboard de análisis en dms.alteridad.org"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
-              </div>
+                <figcaption className="text-center px-6 py-4 text-sm text-muted-foreground">
+                  Screenshot del dashboard de análisis de datos en <strong>dms.alteridad.org</strong>
+                </figcaption>
+              </figure>
               <div className="p-6 space-y-2">
                 <p className="text-sm text-muted-foreground">
                   <strong>Dataset:</strong> 739,251 registros de facturación

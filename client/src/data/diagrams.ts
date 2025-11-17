@@ -36,39 +36,40 @@ graph LR
 export const architectureDiagram = `
 graph LR
     subgraph UI["🖥️ Interfaz"]
-        A[Odoo Web]
+        A[Odoo Web<br/>CRM / Preventa]
     end
     
-    subgraph ODOO["📦 Odoo"]
-        B[Ventas]
-        C[Facturación]
-        D[Módulo<br/>Integración]
+    subgraph PROMED["🏢 Sistemas Promed"]
+        B[Odoo 18<br/>CRM + F-007 Digital]
+        C[Formulario F-007<br/>APEX (Actual)]
+        G[Flujo de Correos<br/>Manual]
+        D[NAF<br/>Procesos Comerciales]
+        E[NAF<br/>General Ledger]
+        F[WMS / Bodega]
     end
     
-    subgraph DMS["🤖 DMS"]
-        E[Validador]
-        F[Reglas<br/>Negocio]
-        G[Mapper]
-    end
-    
-    subgraph EXT["🏢 Sistemas"]
-        H[NAF<br/>Oracle]
+    subgraph PARALELO["🧠 DMS (paralelo / opcional)"]
+        X[Validaciones<br/>y Alertas]
     end
     
     A --> B
-    A --> C
     B --> D
-    C --> D
+    B --> G
+    G --> D
+    C -.-> D
     D --> E
+    D --> F
     E --> F
-    F --> G
-    G --> H
+    B -.-> X
+    X -.-> D
     
-    style D fill:#FFD700,stroke:#FF8800,stroke-width:3px
-    style E fill:#90EE90,stroke:#228B22,stroke-width:2px
-    style F fill:#90EE90,stroke:#228B22,stroke-width:2px
-    style G fill:#90EE90,stroke:#228B22,stroke-width:2px
-    style H fill:#87CEEB,stroke:#4682B4,stroke-width:2px
+    style B fill:#FFE7BA,stroke:#FFAA33,stroke-width:2px
+    style C fill:#FFE4E1,stroke:#FF7F7F,stroke-width:2px,stroke-dasharray:4 3
+    style G fill:#FFFACD,stroke:#E6B800,stroke-width:2px
+    style D fill:#ADD8E6,stroke:#4682B4,stroke-width:2px
+    style E fill:#87CEFA,stroke:#1E90FF,stroke-width:3px
+    style F fill:#E0E7FF,stroke:#7C83FD,stroke-width:2px
+    style PARALELO fill:#F3E8FF,stroke:#B980FF,stroke-dasharray:5 5
 `;
 
 export const flowDiagram = `
