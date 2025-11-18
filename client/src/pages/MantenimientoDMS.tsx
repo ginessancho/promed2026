@@ -3,14 +3,14 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MermaidDiagram from '@/components/MermaidDiagram';
-import dmsPlaceholder from '@/assets/dms placeholder.png';
+import FeatureMockPanel from '@/components/FeatureMockPanel';
 
 export default function MantenimientoDMS() {
   const capacidades = [
-    { titulo: 'Business Rules Engine', icono: Shield, descripcion: 'Reglas dinámicas que aprenden del comportamiento real del negocio y se ajustan automáticamente', beneficio: 'Evolución continua sin intervención manual' },
-    { titulo: 'Sistema de Alertas Proactivas', icono: Zap, descripcion: 'Alertas inteligentes que se generan antes de que ocurran problemas, basadas en patrones detectados', beneficio: 'Prevención en lugar de corrección' },
-    { titulo: 'Process Mining', icono: BarChart, descripcion: 'Análisis continuo de flujos reales para extraer conocimiento tácito y optimizar procesos', beneficio: 'Mejora automática de eficiencia' },
-    { titulo: 'Tarjetas de Análisis Conectadas', icono: Monitor, descripcion: 'KPIs que reflejan el estado real del negocio y se actualizan en tiempo real', beneficio: 'Visibilidad completa y accionable' },
+    { titulo: 'Business Rules Engine', icono: Shield, descripcion: 'Reglas dinámicas que aprenden del comportamiento real del negocio y se ajustan automáticamente', beneficio: 'Evolución continua sin intervención manual', mock: 'rules' as const },
+    { titulo: 'Sistema de Alertas Proactivas', icono: Zap, descripcion: 'Alertas inteligentes que se generan antes de que ocurran problemas, basadas en patrones detectados', beneficio: 'Prevención en lugar de corrección', mock: 'alerts' as const },
+    { titulo: 'Process Mining', icono: BarChart, descripcion: 'Análisis continuo de flujos reales para extraer conocimiento tácito y optimizar procesos', beneficio: 'Mejora automática de eficiencia', mock: 'process' as const },
+    { titulo: 'Tarjetas de Análisis Conectadas', icono: Monitor, descripcion: 'KPIs que reflejan el estado real del negocio y se actualizan en tiempo real', beneficio: 'Visibilidad completa y accionable', mock: 'cards' as const },
   ];
 
   const dataStores = [
@@ -23,7 +23,7 @@ export default function MantenimientoDMS() {
     { title: 'Validaciones ACID', text: 'Cada asiento queda trazado entre Odoo, DMS y NAF; el DMS registra confirmaciones de commit.' },
     { title: 'Aprendizaje asistido por IA', text: 'Las correcciones humanas alimentan nuevas reglas y recomendaciones.' },
     { title: 'Alertas multi-canal', text: 'Publica alertas antes de que llegue al GL (correo, Teams y panel).' },
-    { title: 'Process mining continuo', text: 'Reconstruye el flujo real y compara contra el TO-BE para priorizar mejoras.' },
+    { title: 'Process mining continuo', text: 'Reconstruye el flujo real y compara contra el Propuesto para priorizar mejoras.' },
   ];
 
   const dmsDiagram = `
@@ -80,12 +80,7 @@ graph TD
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="bg-muted/30 aspect-video rounded-lg border overflow-hidden">
-                      <img
-                        src={dmsPlaceholder}
-                        alt={`${cap.titulo} en dms.alteridad.org`}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
+                      <FeatureMockPanel variant={cap.mock} />
                     </div>
                     <p className="text-muted-foreground">{cap.descripcion}</p>
                     <p className="text-sm"><strong className="text-purple-600">Beneficio:</strong> {cap.beneficio}</p>

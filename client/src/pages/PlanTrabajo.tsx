@@ -70,12 +70,29 @@ export default function PlanTrabajo() {
   ];
 
   const raciMatrix = [
-    { deliverable: 'F-007 digital en Odoo', alteridad: 'R', promedTI: 'A', gateway: 'C', finanzas: 'I' },
-    { deliverable: 'Conector directo Odoo ↔ NAF', alteridad: 'C', promedTI: 'I', gateway: 'R', finanzas: 'A' },
-    { deliverable: 'Motor de reglas y alertas (DMS)', alteridad: 'R', promedTI: 'C', gateway: 'C', finanzas: 'I' },
-    { deliverable: 'Go-live y plan de soporte', alteridad: 'A', promedTI: 'R', gateway: 'C', finanzas: 'C' },
-    { deliverable: 'KPIs y monitoreo continuo', alteridad: 'R', promedTI: 'C', gateway: 'I', finanzas: 'A' },
+    { deliverable: 'Campos F-007 en Odoo', alteridad: 'R', promedTI: 'C', gateway: 'I', executive: 'I' },
+    { deliverable: 'F-007 digital en Odoo', alteridad: 'R', promedTI: 'A', gateway: 'C', executive: 'I' },
+    { deliverable: 'Conector directo Odoo ↔ NAF', alteridad: 'C', promedTI: 'I', gateway: 'R', executive: 'A' },
+    { deliverable: 'Motor de reglas y alertas (DMS)', alteridad: 'R', promedTI: 'C', gateway: 'C', executive: 'I' },
+    { deliverable: 'Go-live y plan de soporte', alteridad: 'A', promedTI: 'R', gateway: 'C', executive: 'C' },
+    { deliverable: 'KPIs y monitoreo continuo', alteridad: 'R', promedTI: 'C', gateway: 'I', executive: 'A' },
   ];
+
+  const raciLegend = [
+    { code: 'R', label: 'Responsible', className: 'bg-blue-100 text-blue-800 border border-blue-200' },
+    { code: 'A', label: 'Accountable', className: 'bg-emerald-100 text-emerald-800 border border-emerald-200' },
+    { code: 'C', label: 'Consulted', className: 'bg-amber-100 text-amber-800 border border-amber-200' },
+    { code: 'I', label: 'Informed', className: 'bg-slate-100 text-slate-700 border border-slate-200' },
+  ];
+
+  const renderRoleBadge = (role: string) => {
+    const style = raciLegend.find((item) => item.code === role)?.className ?? 'bg-muted text-foreground';
+    return (
+      <span className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold ${style}`}>
+        {role}
+      </span>
+    );
+  };
 
   const kpis = [
     {
@@ -294,7 +311,18 @@ export default function PlanTrabajo() {
         </section>
 
         <section className="mb-12">
-          <h3 className="text-3xl font-bold text-foreground mb-8">Matriz RACI</h3>
+          <h3 className="text-3xl font-bold text-foreground mb-4">Matriz RACI</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Leyenda rápida: cada letra indica el nivel de responsabilidad sobre el entregable.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-6">
+            {raciLegend.map((item) => (
+              <div key={item.code} className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${item.className}`}>{item.code}</span>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
           <Card>
             <CardContent className="p-0 overflow-x-auto">
               <table className="w-full text-sm">
@@ -304,17 +332,17 @@ export default function PlanTrabajo() {
                     <th className="p-4 text-left font-semibold">Alteridad</th>
                     <th className="p-4 text-left font-semibold">Promed TI</th>
                     <th className="p-4 text-left font-semibold">Gateway Resources</th>
-                    <th className="p-4 text-left font-semibold">Finanzas Promed</th>
+                    <th className="p-4 text-left font-semibold">Equipo Ejecutivo</th>
                   </tr>
                 </thead>
                 <tbody>
                   {raciMatrix.map((row) => (
                     <tr key={row.deliverable} className="border-b last:border-none">
                       <td className="p-4">{row.deliverable}</td>
-                      <td className="p-4 font-semibold">{row.alteridad}</td>
-                      <td className="p-4 font-semibold">{row.promedTI}</td>
-                      <td className="p-4 font-semibold">{row.gateway}</td>
-                      <td className="p-4 font-semibold">{row.finanzas}</td>
+                      <td className="p-4 font-semibold">{renderRoleBadge(row.alteridad)}</td>
+                      <td className="p-4 font-semibold">{renderRoleBadge(row.promedTI)}</td>
+                      <td className="p-4 font-semibold">{renderRoleBadge(row.gateway)}</td>
+                      <td className="p-4 font-semibold">{renderRoleBadge(row.executive)}</td>
                     </tr>
                   ))}
                 </tbody>

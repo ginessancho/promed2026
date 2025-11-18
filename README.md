@@ -1,6 +1,6 @@
-# Propuesta F-007 Enhanced - Sitio Web Interactivo
+# Proyecto: Integración de Facturación en Odoo - Sitio Web Interactivo
 
-Sitio web interactivo mejorado para presentar la propuesta de integración Odoo-NAF para Promed S.A.
+Sitio web interactivo integral para documentar el reporte, la propuesta y el plan de integración Odoo-NAF para Promed S.A.
 
 ## 🚀 Características Principales
 
@@ -21,7 +21,7 @@ Sitio web interactivo mejorado para presentar la propuesta de integración Odoo-
    - Colores corporativos de Alteridad (azul y rojo) aplicados en todo el diseño
 
 3. **Diagramas Vectoriales con Mermaid.js**
-   - Diagrama de flujo TO-BE (proceso propuesto)
+   - Diagrama de flujo propuesto (proceso objetivo)
    - Diagrama de arquitectura técnica (capas de integración)
    - Diagrama de reglas de negocio (validaciones)
    - Diagramas editables, escalables y de alta calidad
@@ -43,7 +43,7 @@ Sitio web interactivo mejorado para presentar la propuesta de integración Odoo-
 - ✅ **Cards informativos** con KPIs del proyecto
 - ✅ **Animaciones sutiles** en hover y scroll
 
-## 📊 Contenido de la Propuesta
+## 📊 Contenido del Proyecto
 
 1. **Portada** - Logos corporativos e información de contacto
 2. **Resumen Ejecutivo** - KPIs clave del proyecto
@@ -107,7 +107,7 @@ client/
 │   └── flujo_as_is_to_be.png
 ├── src/
 │   ├── components/
-│   │   ├── Sidebar.tsx              # Navegación lateral
+│   │   ├── DashboardLayout.tsx      # Layout principal con navegación
 │   │   ├── AnomaliesChart.tsx       # Gráfico de anomalías
 │   │   ├── ProjectTimeline.tsx      # Timeline del proyecto
 │   │   └── MermaidDiagram.tsx       # Wrapper para Mermaid

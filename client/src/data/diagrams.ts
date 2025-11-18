@@ -1,28 +1,27 @@
-// Compact, horizontal AS-IS vs TO-BE comparison with enhanced colors for animation
 export const comparisonDiagram = `
 graph LR
-    subgraph ASIS["❌ PROCESO ACTUAL (AS-IS)"]
+    subgraph ACTUAL["❌ Proceso actual"]
         direction LR
-        A1[F-007<br/>Manual] --> A2[Odoo<br/>Manual]
-        A2 --> A3[NAF<br/>Manual]
+        A1["F-007<br/>Manual"] --> A2["Odoo<br/>Manual"]
+        A2 --> A3["NAF<br/>Manual"]
         A3 --> A4{Errores?}
         A4 -->|Sí| A5[Reproceso]
         A5 --> A1
-        A4 -->|No| A6[Dashboard]
+        A4 -->|No| A6[Panel]
     end
     
-    subgraph TOBE["✅ PROCESO PROPUESTO (TO-BE)"]
+    subgraph PROPUESTO["✅ Proceso integrado"]
         direction LR
-        B1[Odoo<br/>Cotización] --> B2[Validación<br/>Automática]
+        B1["Odoo<br/>Cotización"] --> B2["Validación<br/>Automática"]
         B2 --> B3{Válido?}
-        B3 -->|No| B4[Alerta<br/>Inmediata]
+        B3 -->|No| B4["Alerta<br/>Inmediata"]
         B4 --> B1
-        B3 -->|Sí| B5[Sync<br/>NAF]
-        B5 --> B6[Dashboard]
+        B3 -->|Sí| B5["Sync<br/>NAF"]
+        B5 --> B6[Panel]
     end
     
-    style ASIS fill:#ffe6e6,stroke:#ff4444,stroke-width:2px
-    style TOBE fill:#e6ffe6,stroke:#44ff44,stroke-width:2px
+    style ACTUAL fill:#ffe6e6,stroke:#ff4444,stroke-width:2px
+    style PROPUESTO fill:#e6ffe6,stroke:#44ff44,stroke-width:2px
     style A1 fill:#ffcccc,stroke:#ff6666
     style A2 fill:#ffcccc,stroke:#ff6666
     style A3 fill:#ffcccc,stroke:#ff6666
@@ -36,20 +35,20 @@ graph LR
 export const architectureDiagram = `
 graph LR
     subgraph UI["🖥️ Interfaz"]
-        A[Odoo Web<br/>CRM / Preventa]
+        A["Odoo Web<br/>CRM / Preventa"]
     end
     
     subgraph PROMED["🏢 Sistemas Promed"]
-        B[Odoo 18<br/>CRM + F-007 Digital]
-        C[Formulario F-007<br/>APEX (Actual)]
-        G[Flujo de Correos<br/>Manual]
-        D[NAF<br/>Procesos Comerciales]
-        E[NAF<br/>General Ledger]
-        F[WMS / Bodega]
+        B["Odoo 18<br/>CRM + F-007 Digital"]
+        C["Formulario F-007<br/>APEX (Actual)"]
+        G["Flujo de Correos<br/>Manual"]
+        D["NAF<br/>Procesos Comerciales"]
+        E["NAF<br/>General Ledger"]
+        F["WMS / Bodega"]
     end
     
     subgraph PARALELO["🧠 DMS (paralelo / opcional)"]
-        X[Validaciones<br/>y Alertas]
+        X["Validaciones<br/>y Alertas"]
     end
     
     A --> B
@@ -64,25 +63,25 @@ graph LR
     X -.-> D
     
     style B fill:#FFE7BA,stroke:#FFAA33,stroke-width:2px
-    style C fill:#FFE4E1,stroke:#FF7F7F,stroke-width:2px,stroke-dasharray:4 3
+    style C fill:#FFE4E1,stroke:#FF7F7F,stroke-width:2px
     style G fill:#FFFACD,stroke:#E6B800,stroke-width:2px
     style D fill:#ADD8E6,stroke:#4682B4,stroke-width:2px
     style E fill:#87CEFA,stroke:#1E90FF,stroke-width:3px
     style F fill:#E0E7FF,stroke:#7C83FD,stroke-width:2px
-    style PARALELO fill:#F3E8FF,stroke:#B980FF,stroke-dasharray:5 5
+    style PARALELO fill:#F3E8FF,stroke:#B980FF
 `;
 
 export const flowDiagram = `
 graph LR
-    A1[Odoo:<br/>Cotización] --> A2[Odoo:<br/>Orden Venta]
-    A2 --> A3[Odoo:<br/>Factura]
-    A3 --> A4[DMS:<br/>Validación]
+    A1["Odoo:<br/>Cotización"] --> A2["Odoo:<br/>Orden Venta"]
+    A2 --> A3["Odoo:<br/>Factura"]
+    A3 --> A4["DMS:<br/>Validación"]
     A4 --> A5{Válido?}
-    A5 -->|Sí| A6[DMS:<br/>Enriquecimiento]
-    A5 -->|No| A7[DMS:<br/>Alerta]
+    A5 -->|Sí| A6["DMS:<br/>Enriquecimiento"]
+    A5 -->|No| A7["DMS:<br/>Alerta"]
     A7 --> A3
-    A6 --> A8[DMS:<br/>Sync NAF]
-    A8 --> A9[NAF:<br/>Registro]
+    A6 --> A8["DMS:<br/>Sync NAF"]
+    A8 --> A9["NAF:<br/>Registro"]
     A9 --> A10[Dashboard]
     
     style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
@@ -95,15 +94,15 @@ graph LR
 
 export const businessRulesDiagram = `
 graph LR
-    A[Factura] --> B{Campos<br/>Críticos?}
-    B -->|OK| C{Marca<br/>Única?}
-    B -->|Error| E1[❌ Alerta]
-    C -->|OK| D{Comodato<br/>Válido?}
-    C -->|Error| E2[❌ Alerta]
-    D -->|OK| F{Ganancia<br/>Correcta?}
-    D -->|Error| E3[❌ Alerta]
-    F -->|OK| G[✅ Sync NAF]
-    F -->|Error| E4[❌ Alerta]
+    A[Factura] --> B{"Campos<br/>Críticos?"}
+    B -->|OK| C{"Marca<br/>Única?"}
+    B -->|Error| E1["❌ Alerta"]
+    C -->|OK| D{"Comodato<br/>Válido?"}
+    C -->|Error| E2["❌ Alerta"]
+    D -->|OK| F{"Ganancia<br/>Correcta?"}
+    D -->|Error| E3["❌ Alerta"]
+    F -->|OK| G["✅ Sync NAF"]
+    F -->|Error| E4["❌ Alerta"]
     
     E1 --> A
     E2 --> A
@@ -123,10 +122,10 @@ graph LR
 
 export const asIsDiagram = `
 graph LR
-    B1[F-007:<br/>Manual] --> B2[Especialista:<br/>Revisión]
-    B2 --> B3[Odoo:<br/>Manual]
-    B3 --> B4[Facturación:<br/>Revisión]
-    B4 --> B5[NAF:<br/>Manual]
+    B1["F-007:<br/>Manual"] --> B2["Especialista:<br/>Revisión"]
+    B2 --> B3["Odoo:<br/>Manual"]
+    B3 --> B4["Facturación:<br/>Revisión"]
+    B4 --> B5["NAF:<br/>Manual"]
     B5 --> B6{Errores?}
     B6 -->|Sí| B7[Reproceso]
     B7 --> B3
@@ -141,15 +140,15 @@ graph LR
 
 export const toBeDiagram = `
 graph LR
-    A1[Odoo:<br/>Cotización] --> A2[Odoo:<br/>Orden]
-    A2 --> A3[Odoo:<br/>Factura]
-    A3 --> A4[DMS:<br/>Validación]
+    A1["Odoo:<br/>Cotización"] --> A2["Odoo:<br/>Orden"]
+    A2 --> A3["Odoo:<br/>Factura"]
+    A3 --> A4["DMS:<br/>Validación"]
     A4 --> A5{Válido?}
-    A5 -->|Sí| A6[DMS:<br/>Enriquece]
-    A5 -->|No| A7[DMS:<br/>Alerta]
+    A5 -->|Sí| A6["DMS:<br/>Enriquece"]
+    A5 -->|No| A7["DMS:<br/>Alerta"]
     A7 --> A3
-    A6 --> A8[DMS→NAF:<br/>Sync]
-    A8 --> A9[NAF:<br/>Automático]
+    A6 --> A8["DMS→NAF:<br/>Sync"]
+    A8 --> A9["NAF:<br/>Automático"]
     A9 --> A10[Dashboard]
     
     style A4 fill:#90EE90,stroke:#228B22,stroke-width:2px
@@ -164,21 +163,21 @@ graph LR
 export const purchaseOrderDiagram = `
 graph LR
     subgraph KAM["👤 KAM"]
-        A1[Oportunidad] --> A2[Cliente<br/>Aprueba]
+        A1[Oportunidad] --> A2["Cliente<br/>Aprueba"]
     end
     
     subgraph ESP["👤 Especialista"]
         B1[Propuesta]
-        B2[F-007<br/>APEX]
+        B2["F-007<br/>APEX"]
     end
     
     subgraph ADM["👤 Admin"]
-        C1[Registro<br/>NAF]
-        C2[Tiquete<br/>NAF]
+        C1["Registro<br/>NAF"]
+        C2["Tiquete<br/>NAF"]
     end
     
     subgraph GER["👤 Gerente"]
-        D1{Margen<br/>< 10%?}
+        D1{"Margen<br/>< 10%?"}
         D2[Aprueba]
     end
     

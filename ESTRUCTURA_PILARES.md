@@ -1,10 +1,10 @@
-# Estructura de Navegación por Pilares - Propuesta F-007
+# Estructura de Navegación por Pilares - Proyecto: Integración de Facturación en Odoo
 
 ## 🎯 Concepto Visual
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    PROPUESTA F-007 - PROMED                      │
+│        PROYECTO INTEGRACIÓN DE FACTURACIÓN EN ODOO - PROMED      │
 │              [Logo Alteridad]    [Logo Promed]                   │
 └─────────────────────────────────────────────────────────────────┘
 
@@ -15,7 +15,7 @@
 │  HALLAZGOS      │  VOLUMEN DEL    │     PROCESO                   │
 │     2025        │   PROBLEMA      │     ACTUAL                    │
 │                 │                 │                               │
-│  📋 Análisis    │  📊 14.4%       │  ⚙️ Flujo AS-IS              │
+│  📋 Análisis    │  📊 14.4%       │  ⚙️ Flujo Actual             │
 │  Preliminar     │  Dispersión     │  Roles y                      │
 │                 │  de Marcas      │  Responsables                 │
 │  [Ver Detalles] │ [Ver Análisis]  │ [Ver Proceso]                 │
@@ -56,7 +56,7 @@
 /                           → Homepage (panel de 6 + barra)
 /hallazgos-2025            → Página completa con análisis preliminar
 /volumen-problema          → Página con gráficos y análisis de datos
-/proceso-actual            → Página con flujo AS-IS detallado
+/proceso-actual            → Página con flujo actual detallado
 /propuesta-2026            → Página con propuesta de inversión
 /detalles-tecnicos         → Página con arquitectura e integración
 /mantenimiento-dms         → Página con screenshots y capacidades DMS
@@ -181,12 +181,12 @@
 
 ---
 
-### 3. PROCESO ACTUAL (AS-IS)
+### 3. PROCESO ACTUAL (Estado actual)
 
 **Objetivo**: Documentar a detalle el proceso actual, identificando fricciones y blockers.
 
 **Estructura**:
-1. **Flujo de Proceso AS-IS**
+1. **Flujo de Proceso Actual**
    - Diagrama de flujo detallado
    - Paso a paso con tiempos estimados
    
@@ -246,7 +246,7 @@
      * Impacto: Errores descubiertos tarde
 
 **Componentes**:
-- Diagrama de flujo AS-IS (Mermaid)
+- Diagrama de flujo actual (Mermaid)
 - Cards de roles con fotos/iconos
 - Galería de screenshots con anotaciones
 - Cards de fricciones (con iconos de alerta)
@@ -264,9 +264,9 @@
    - Beneficios principales
    - Inversión total
    
-2. **Solución Propuesta (TO-BE)**
-   - Diagrama de flujo TO-BE
-   - Comparación AS-IS vs TO-BE
+2. **Solución Propuesta (Propuesto)**
+   - Diagrama de flujo propuesto
+   - Comparación Actual vs Propuesto
    - Mejoras clave
    
 3. **Inversión y Estructura de Pago**
@@ -299,7 +299,7 @@
    - Inicio en enero 2026
 
 **Componentes**:
-- Diagrama TO-BE (Mermaid)
+- Diagrama propuesto (Mermaid)
 - Gráfico de inversión (ya existe)
 - Cards de roles
 - Timeline de próximos pasos
@@ -432,7 +432,7 @@
    - Descripción:
      * Visualización de flujos reales
      * Identificación de cuellos de botella
-     * Comparación AS-IS vs TO-BE
+      * Comparación Actual vs Propuesto
    - Ejemplo: Análisis del flujo de facturación
    - Beneficio: Mejora continua basada en datos
    

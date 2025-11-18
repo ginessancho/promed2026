@@ -60,7 +60,7 @@ export default function Hallazgos2025() {
     },
     {
       fase: 'Análisis de Procesos',
-      descripcion: 'Mapeo del flujo AS-IS completo con tiempos y puntos de fricción.',
+      descripcion: 'Mapeo del flujo actual completo con tiempos y puntos de fricción.',
       duracion: '2 semanas',
     },
     {

@@ -11,7 +11,7 @@ export default function MermaidDiagram({ chart, id }: MermaidDiagramProps) {
 
   useEffect(() => {
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'default',
       securityLevel: 'loose',
       fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -22,7 +22,7 @@ export default function MermaidDiagram({ chart, id }: MermaidDiagramProps) {
       containerRef.current.innerHTML = '';
       const element = document.createElement('div');
       element.className = 'mermaid';
-      element.textContent = chart;
+      element.innerHTML = chart.trim();
       containerRef.current.appendChild(element);
       
       mermaid.run({

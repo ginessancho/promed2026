@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Eye, EyeOff } from 'lucide-react';
-import { APP_LOGO } from '@/const';
+import { APP_LOGO, PROJECT_STATUS } from '@/const';
 
 export default function Login() {
   const [password, setPassword] = useState('');
@@ -12,6 +12,9 @@ export default function Login() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useCustomAuth();
+  const formattedDate = new Intl.DateTimeFormat('es-PA', {
+    dateStyle: 'long',
+  }).format(new Date());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,10 +39,19 @@ export default function Login() {
             <img src={APP_LOGO} alt="Alteridad" className="h-16 object-contain" />
           </div>
           <div>
-            <CardTitle className="text-3xl font-bold">Propuesta F-007</CardTitle>
+            <CardTitle className="text-3xl font-bold">Proyecto: Integración de Facturación en Odoo</CardTitle>
             <CardDescription className="text-base mt-2">
-              Proyecto Integración de Facturación NAF-Odoo
+              Reporte, propuesta, plan y timeline del proyecto de integración entre Odoo y NAF en un solo espacio.
             </CardDescription>
+            <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+              <span className="inline-flex items-center justify-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs font-medium text-foreground">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                Actualizado {formattedDate}
+              </span>
+              <p className="text-sm leading-snug text-foreground">
+                <span className="text-muted-foreground">Estado:</span> {PROJECT_STATUS}
+              </p>
+            </div>
           </div>
         </CardHeader>
         <CardContent>

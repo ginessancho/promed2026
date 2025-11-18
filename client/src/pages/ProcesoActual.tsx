@@ -31,7 +31,7 @@ export default function ProcesoActual() {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link href="/"><Button variant="ghost" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Volver</Button></Link>
-            <div className="text-right"><h1 className="text-lg font-bold">Proceso Actual</h1><p className="text-xs text-muted-foreground">Flujo AS-IS</p></div>
+            <div className="text-right"><h1 className="text-lg font-bold">Proceso Actual</h1><p className="text-xs text-muted-foreground">Flujo actual</p></div>
           </div>
         </div>
       </header>
@@ -43,7 +43,7 @@ export default function ProcesoActual() {
               <Settings className="w-7 h-7 text-muted-foreground" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-foreground">Proceso Actual (AS-IS)</h2>
+              <h2 className="text-3xl font-bold text-foreground">Proceso Actual (Estado actual)</h2>
               <p className="text-base text-muted-foreground">Flujo detallado, roles y puntos de fricción</p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function ProcesoActual() {
         </div>
 
         <section className="mb-10">
-          <h3 className="text-2xl font-bold text-foreground mb-4">Diagrama de Flujo AS-IS - Facturación</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-4">Diagrama de Flujo Actual - Facturación</h3>
           <Card>
             <CardContent className="p-4">
               <MermaidDiagram id="as-is-flow" chart={asIsDiagram} />

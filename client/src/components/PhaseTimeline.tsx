@@ -2,10 +2,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { GitBranch } from 'lucide-react';
 
 const phases = [
-  { name: 'Fase 1: Diseño', concept: 'Fundación y victoria temprana', start: 0, end: 2, color: 'bg-blue-500/70' },
+  { name: 'Fase 1: Diseño', concept: 'Fundación', start: 0, end: 2, color: 'bg-blue-500/70' },
   { name: 'Fase 2: Desarrollo', concept: 'Expansión sin F-007', start: 2, end: 5, color: 'bg-emerald-500/70' },
   { name: 'Fase 3: Pruebas', concept: 'Sincronización bidireccional', start: 5, end: 7, color: 'bg-purple-500/70' },
-  { name: 'Fase 4: Producción', concept: 'Capacitación y puesta en marcha', start: 7, end: 9, color: 'bg-amber-500/70' },
+  { name: 'Fase 4: Producción', concept: 'Puesta en marcha', start: 7, end: 9, color: 'bg-amber-500/70' },
   { name: 'Fase 5: Monitoreo y Capacitación', concept: 'Operación con monitoreo continuo (DMS)', start: 9, end: 12, color: 'bg-rose-500/70' },
 ];
 

@@ -66,7 +66,7 @@ export default function Propuesta2026() {
   }> = [
     {
       technical: 'Fase 1: Diseño',
-      concept: 'Fundación y victoria temprana',
+      concept: 'Fundación',
       duration: 'Enero - Febrero 2026 (8 semanas)',
       gate: 'Blueprint aprobado y casos piloto listos.',
       accentKey: 'blue',
@@ -108,7 +108,7 @@ export default function Propuesta2026() {
     },
     {
       technical: 'Fase 4: Producción',
-      concept: 'Capacitación y puesta en marcha',
+      concept: 'Puesta en marcha',
       duration: 'Agosto - Septiembre 2026 (6 semanas)',
       gate: 'Go-live controlado y equipos capacitados.',
       accentKey: 'amber',
@@ -233,10 +233,17 @@ export default function Propuesta2026() {
           <PhaseTimeline />
         </section>
 
-        {/* AS-IS vs TO-BE */}
+        {/* Comparativa del proceso */}
         <section className="mb-10">
-          <h3 className="text-2xl font-bold mb-4">Transformación del Proceso</h3>
-          <Card><CardContent className="p-4"><MermaidDiagram id="comparison-flow" chart={comparisonDiagram} /></CardContent></Card>
+          <h3 className="text-2xl font-bold mb-4">Proceso Actual vs Integrado</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Visualizamos la transición desde la captura manual hacia un flujo automatizado entre Odoo y NAF.
+          </p>
+          <Card>
+            <CardContent className="p-4">
+              <MermaidDiagram id="comparison-flow" chart={comparisonDiagram} />
+            </CardContent>
+          </Card>
         </section>
 
         {/* Phases with Detailed Deliverables */}
