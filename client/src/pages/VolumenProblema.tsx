@@ -6,34 +6,35 @@ import AnomaliesChart from '@/components/AnomaliesChart';
 import dmsPlaceholder from '@/assets/dms placeholder.png';
 
 export default function VolumenProblema() {
+  const TOTAL_REGISTROS = 739_251;
   const anomalias = [
     {
       tipo: 'Dispersión de Marcas',
-      cantidad: '898 artículos',
-      porcentaje: '14.4%',
+      cantidad: 898,
+      contexto: 'Equivale a 14.4% del catálogo específico de 6,249 artículos auditados.',
       impacto: 'Análisis por marca no fiable',
-      costo: '~$15K USD/año en reprocesos',
+      indicador: 'SKU duplicados',
     },
     {
       tipo: 'Inconsistencias de Comodatos',
-      cantidad: '70 facturas',
-      porcentaje: '0.01%',
+      cantidad: 70,
+      contexto: 'Facturas con indicador de comodato sin activo o viceversa.',
       impacto: 'Pérdida de trazabilidad de activos',
-      costo: 'Riesgo de auditoría',
+      indicador: 'Activos médicos',
     },
     {
       tipo: 'Múltiples Números Físicos',
-      cantidad: '430 facturas',
-      porcentaje: '0.06%',
+      cantidad: 430,
+      contexto: 'Folio lógico conectado a más de un comprobante físico.',
       impacto: 'Confusión en auditoría',
-      costo: '~$8K USD/año en verificaciones',
+      indicador: 'Números físicos por folio',
     },
     {
       tipo: 'Errores de Ganancia',
-      cantidad: '100% líneas',
-      porcentaje: '100%',
+      cantidad: TOTAL_REGISTROS,
+      contexto: 'Cada línea impresa presenta cálculos fuera de tolerancia.',
       impacto: 'Reportes financieros imprecisos',
-      costo: 'Decisiones basadas en datos incorrectos',
+      indicador: 'Cálculo de margen',
     },
   ];
 
@@ -133,30 +134,34 @@ export default function VolumenProblema() {
           <h3 className="text-3xl font-bold text-foreground mb-8">Detalle de Anomalías</h3>
           
           <div className="grid grid-cols-1 gap-6">
-            {anomalias.map((anomalia, index) => (
-              <Card key={index} className="border-l-4 border-l-destructive">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">{anomalia.tipo}</CardTitle>
-                      <div className="flex gap-4 text-sm text-muted-foreground">
-                        <span><strong>Cantidad:</strong> {anomalia.cantidad}</span>
-                        <span><strong>Porcentaje:</strong> {anomalia.porcentaje}</span>
+            {anomalias.map((anomalia, index) => {
+              const porcentaje = ((anomalia.cantidad / TOTAL_REGISTROS) * 100).toFixed(2);
+              return (
+                <Card key={index} className="border-l-4 border-l-destructive">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 space-y-1.5">
+                        <CardTitle className="text-2xl">{anomalia.tipo}</CardTitle>
+                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                          <span><strong>Registros:</strong> {anomalia.cantidad.toLocaleString()}</span>
+                          <span><strong>Porcentaje:</strong> {porcentaje}% del universo (739,251)</span>
+                          <span><strong>Indicador:</strong> {anomalia.indicador}</span>
+                        </div>
                       </div>
+                      <span className="text-3xl font-bold text-destructive">{porcentaje}%</span>
                     </div>
-                    <span className="text-3xl font-bold text-destructive">{anomalia.porcentaje}</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-foreground">
-                    <strong>Impacto:</strong> {anomalia.impacto}
-                  </p>
-                  <p className="text-muted-foreground">
-                    <strong>Costo Estimado:</strong> {anomalia.costo}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <p className="text-foreground">
+                      <strong>Impacto:</strong> {anomalia.impacto}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {anomalia.contexto}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </section>
 
@@ -194,7 +199,7 @@ export default function VolumenProblema() {
 
         {/* Impacto Cuantificado */}
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-foreground mb-8">Impacto Cuantificado en el Negocio</h3>
+          <h3 className="text-3xl font-bold text-foreground mb-8">Impacto Cuantitativo en la Operación</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
@@ -203,17 +208,17 @@ export default function VolumenProblema() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-destructive">~120</p>
-                <p className="text-sm text-muted-foreground mt-2">En reprocesos y verificaciones</p>
+                <p className="text-sm text-muted-foreground mt-2">Entre reprocesos, validaciones y consultas manuales.</p>
               </CardContent>
             </Card>
             
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm text-muted-foreground">Costo Anual Estimado</CardTitle>
+                <CardTitle className="text-sm text-muted-foreground">Carga Operativa</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-4xl font-bold text-destructive">$23K</p>
-                <p className="text-sm text-muted-foreground mt-2">En tiempo de personal</p>
+                <p className="text-4xl font-bold text-destructive">Muy Alta</p>
+                <p className="text-sm text-muted-foreground mt-2">Se requieren dos equipos para mantener datos sincronizados.</p>
               </CardContent>
             </Card>
             
@@ -223,7 +228,7 @@ export default function VolumenProblema() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-orange-600">Alto</p>
-                <p className="text-sm text-muted-foreground mt-2">Por inconsistencias de datos</p>
+                <p className="text-sm text-muted-foreground mt-2">Inconsistencias entre folios físicos y lógicos.</p>
               </CardContent>
             </Card>
             
@@ -233,7 +238,7 @@ export default function VolumenProblema() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-orange-600">Media</p>
-                <p className="text-sm text-muted-foreground mt-2">Decisiones con datos imprecisos</p>
+                <p className="text-sm text-muted-foreground mt-2">Las decisiones se basan en data que requiere validación manual.</p>
               </CardContent>
             </Card>
           </div>

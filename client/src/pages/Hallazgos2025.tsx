@@ -70,6 +70,18 @@ export default function Hallazgos2025() {
     },
   ];
 
+  const timeline = [
+    { mes: 'Enero 2025', evento: 'Kick-off, entrevistas con colaboradores de facturación, KAMs y especialistas de producto.' },
+    { mes: 'Febrero 2025', evento: 'Bloqueos de acceso y setups; se documentan dependencias técnicas con TI y seguridad.' },
+    { mes: 'Marzo 2025', evento: 'Se evidencian limitaciones con los proveedores anteriores de analisis de datos, lo que frena adecuaciones.' },
+    { mes: 'Abril 2025', evento: 'Reinicio de entrevistas y captura de pantallas tras estabilizar procesos internos.' },
+    { mes: 'Julio 2025', evento: 'Nuevo ciclo de entrevistas + documentación de pantallas F-007, Odoo y NAF.' },
+    { mes: 'Septiembre 2025', evento: 'Expansión del equipo de Alteridad con especialistas de procesos.' },
+    { mes: 'Octubre 2025', evento: 'Análisis detallado del flujo F-007, Odoo y NAF para identificar fricciones.' },
+    { mes: 'Noviembre 2025', evento: 'Se profundiza en la necesidad fundamental: automatizar la facturación Odoo → NAF.' },
+    { mes: 'Diciembre 2025', evento: 'Presentación de la propuesta de integración Odoo (siguiente paso del proyecto).' },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -106,14 +118,14 @@ export default function Hallazgos2025() {
           
           <div className="prose prose-lg max-w-none">
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Durante el segundo semestre de 2025, el equipo de Alteridad realizó un análisis exhaustivo del proceso
-              de facturación de Promed. Este trabajo preliminar surgió de la necesidad de identificar oportunidades
-              de automatización mientras la empresa espera la migración a una versión más reciente de Odoo.
+              Desde enero de 2025, el equipo de Alteridad inició entrevistas y levantamiento de información con todas las
+              áreas involucradas en facturación. Los primeros meses se centraron en destrabar accesos técnicos, convivir
+              con la migración de Odoo 14 → 18 (ejecutada por Promed) y entender las dependencias con proveedores previos.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed mt-4">
-              A través de entrevistas con colaboradores y ejecutivos, análisis de sistemas y auditoría de datos,
-              validamos las sospechas iniciales: existe una necesidad urgente de automatizar el proceso de facturación
-              para reducir errores, eliminar reprocesos y preparar una base sólida para futuras migraciones.
+              A medida que superamos esos bloqueos, profundizamos en análisis de sistemas y auditorías de datos. El resultado
+              confirmó la necesidad urgente de automatizar el proceso de facturación para reducir errores, eliminar reprocesos
+              y preparar una base sólida para futuras integraciones.
             </p>
           </div>
         </div>
@@ -129,9 +141,8 @@ export default function Hallazgos2025() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-lg">
-                Inicialmente, Alteridad propuso un <strong>modelo de proyecto único</strong> con una inversión de <strong>$10,000 USD</strong> 
-                para análisis e implementación. Sin embargo, tras el análisis preliminar, identificamos que la naturaleza dinámica del 
-                negocio de Promed requiere un enfoque diferente.
+                Inicialmente, Alteridad propuso un <strong>modelo de proyecto único</strong> con una inversión fija para análisis e implementación. 
+                Esa inversión proyectada nunca se activó debido a las dificultades técnicas heredadas de proveedores anteriores, y el aprendizaje del diagnóstico nos llevó a replantear el enfoque.
               </p>
               
               <div className="bg-background/50 p-6 rounded-lg border space-y-3">
@@ -144,8 +155,7 @@ export default function Hallazgos2025() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span><strong>Aprendizaje continuo:</strong> El Data Management System (DMS) debe aprender del negocio de forma 
-                    continua, extrayendo conocimiento y convirtiéndolo en reglas accionables.</span>
+                    <span><strong>Aprendizaje continuo:</strong> La integración debe absorber el conocimiento tácito del negocio para convertirlo en reglas accionables y mantener la calidad de los datos.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
@@ -290,27 +300,68 @@ export default function Hallazgos2025() {
         <section className="mb-16">
           <h3 className="text-3xl font-bold text-foreground mb-8">Timeline 2025</h3>
           
-          <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border"></div>
-            
-            <div className="space-y-8">
-              {[
-                { mes: 'Julio 2025', evento: 'Inicio de entrevistas con equipo de facturación' },
-                { mes: 'Agosto 2025', evento: 'Validación con ejecutivos de Promed' },
-                { mes: 'Septiembre 2025', evento: 'Expansión del equipo Alteridad con expertos' },
-                { mes: 'Octubre 2025', evento: 'Análisis detallado de pantallas y procesos' },
-                { mes: 'Noviembre 2025', evento: 'Auditoría de datos y cuantificación de anomalías' },
-                { mes: 'Diciembre 2025', evento: 'Presentación de propuesta F-007 con nuevo modelo de servicio' },
-              ].map((item, index) => (
-                <div key={index} className="relative pl-16">
-                  <div className="absolute left-6 top-2 w-5 h-5 rounded-full bg-primary border-4 border-background"></div>
-                  <div>
-                    <span className="text-sm font-semibold text-primary">{item.mes}</span>
-                    <p className="text-lg text-foreground mt-1">{item.evento}</p>
-                  </div>
-                </div>
-              ))}
+          <div className="hidden lg:block">
+            <div className="relative overflow-x-auto pb-12">
+              <div className="flex min-w-max px-4">
+                {timeline.map((item, index) => {
+                  const isNovember = index === timeline.length - 2;
+                  const isDecember = index === timeline.length - 1;
+                  return (
+                    <div key={item.mes} className="relative flex items-center min-w-[280px]">
+                      {index > 0 && (
+                        <div className={`flex-1 h-0 border-t ${isDecember ? 'border-dashed border-amber-400' : 'border-border/60'} ${
+                          isNovember ? 'animate-pulse' : ''
+                        }`}>
+                          <span className={`block h-0 w-full relative after:content-[''] after:absolute after:-right-1 after:-top-1 after:border-t-4 after:border-r-4 ${
+                            isDecember ? 'after:border-amber-400 after:rotate-45' : 'after:border-border/60 after:rotate-45'
+                          }`} />
+                        </div>
+                      )}
+                      <div className={`flex flex-col items-center text-center gap-3 transition-transform duration-200 ${index % 2 === 0 ? '-translate-y-6' : 'translate-y-6'}`}>
+                        <div className={`w-5 h-5 rounded-full shadow-lg border-4 border-background ${
+                          isNovember ? 'bg-amber-500 animate-pulse' :
+                          isDecember ? 'bg-amber-400 animate-pulse' :
+                          'bg-primary'
+                        }`} />
+                        <div className={`bg-card border rounded-xl p-4 shadow-sm min-h-[150px] w-[260px] flex flex-col justify-center text-left ${
+                          isNovember ? 'border-amber-200' :
+                          isDecember ? 'border-amber-100 border-dashed' :
+                          ''
+                        }`}>
+                          <p className={`text-sm font-semibold uppercase tracking-wide ${
+                            isNovember ? 'text-amber-600' :
+                            isDecember ? 'text-amber-500' :
+                            'text-primary'
+                          }`}>
+                            {item.mes}
+                          </p>
+                          <p className="text-sm text-foreground mt-2 leading-relaxed text-balance">{item.evento}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+
+            <div className="mt-4 text-xs text-muted-foreground">
+              * Nota: La migración Odoo 14 → 18 fue ejecutada internamente por Promed entre marzo y junio 2025, pausando adecuaciones externas.
+            </div>
+          </div>
+
+          <div className="lg:hidden space-y-6">
+                {timeline.map((item, index) => (
+              <Card key={item.mes} className="border-l-4 border-l-primary">
+                <CardContent className="pl-6 py-4">
+                      <p className={`text-sm font-semibold uppercase tracking-wide ${
+                        index === timeline.length - 2 ? 'text-amber-600' : 'text-primary'
+                      }`}>
+                        {item.mes}
+                      </p>
+                  <p className="text-base text-foreground mt-1">{item.evento}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </section>
 

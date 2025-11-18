@@ -19,56 +19,128 @@ export default function Propuesta2026() {
     'Mejora continua del ecosistema',
   ];
 
-  const phases = [
+  const accentStyles = {
+    blue: {
+      border: 'border-l-blue-600',
+      badge: 'bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800',
+      badgeTitle: 'text-blue-900 dark:text-blue-100',
+      badgeBody: 'text-blue-800 dark:text-blue-200',
+    },
+    emerald: {
+      border: 'border-l-emerald-600',
+      badge: 'bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800',
+      badgeTitle: 'text-emerald-900 dark:text-emerald-100',
+      badgeBody: 'text-emerald-800 dark:text-emerald-200',
+    },
+    purple: {
+      border: 'border-l-purple-600',
+      badge: 'bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800',
+      badgeTitle: 'text-purple-900 dark:text-purple-100',
+      badgeBody: 'text-purple-800 dark:text-purple-200',
+    },
+    amber: {
+      border: 'border-l-amber-600',
+      badge: 'bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800',
+      badgeTitle: 'text-amber-900 dark:text-amber-100',
+      badgeBody: 'text-amber-800 dark:text-amber-200',
+    },
+    rose: {
+      border: 'border-l-rose-600',
+      badge: 'bg-rose-50 dark:bg-rose-950 border border-rose-200 dark:border-rose-800',
+      badgeTitle: 'text-rose-900 dark:text-rose-100',
+      badgeBody: 'text-rose-800 dark:text-rose-200',
+    },
+  } as const;
+
+  type AccentKey = keyof typeof accentStyles;
+
+  const phases: Array<{
+    technical: string;
+    concept: string;
+    duration: string;
+    gate: string;
+    accentKey: AccentKey;
+    objective: string;
+    deliverables: { category: string; items: string[] }[];
+    outcome: string;
+  }> = [
     {
-      title: 'Fase 1: Fundación y Victoria Temprana',
-      duration: 'Enero - Marzo 2026 (3 meses)',
-      color: 'blue',
-      objective: 'Establecer las bases técnicas y demostrar el valor de la integración con un caso de uso de alto impacto y complejidad controlada.',
+      technical: 'Fase 1: Diseño',
+      concept: 'Fundación y victoria temprana',
+      duration: 'Enero - Febrero 2026 (8 semanas)',
+      gate: 'Blueprint aprobado y casos piloto listos.',
+      accentKey: 'blue',
+      objective: 'Definir el modelo de datos, reglas y gobernanza que permiten replicar el F-007 digital sin depender del formulario físico.',
       deliverables: [
-        { category: 'Análisis y Diseño', items: ['Auditoría completa de campos Odoo vs. NAF', 'Mapeo de datos detallado (campo por campo)', 'Diseño técnico del \'Conector Directo v1.0\'', 'Definición de casos de uso para el piloto'] },
-        { category: 'Desarrollo', items: ['Desarrollo del módulo Python en Odoo', 'Creación de endpoint para recibir datos', 'Implementación de lógica de validación básica'] },
-        { category: 'Pruebas y Despliegue', items: ['Pruebas unitarias del conector', 'Lanzamiento del piloto para casos simples', 'Configuración del Dashboard de seguimiento'] },
+        { category: 'Análisis y Diseño', items: ['Auditoría completa de campos Odoo ↔ NAF', 'Mapeo de datos detallado (campo por campo)', 'Diseño técnico del Conector Directo v1.0'] },
+        { category: 'Gobernanza', items: ['Catálogo de validaciones priorizadas', 'Backlog del DMS con reglas iniciales', 'Checklist de ambientes y accesos'] },
+        { category: 'Piloto', items: ['Definición de casos de uso de prueba', 'Dashboards de seguimiento inicial', 'Plan de adopción temprana'] },
       ],
-      outcome: 'Reducción medible del tiempo de procesamiento para un segmento de facturas. Validación del enfoque técnico.',
+      outcome: 'Reducción visible de tiempos para un segmento piloto y hoja de ruta técnica validada.',
     },
     {
-      title: 'Fase 2: Expansión y Eliminación de F-007',
-      duration: 'Abril - Julio 2026 (4 meses)',
-      color: 'green',
-      objective: 'Extender la automatización para cubrir la mayoría de los escenarios de facturación y retirar por completo la dependencia del formulario F-007.',
+      technical: 'Fase 2: Desarrollo',
+      concept: 'Expansión sin F-007',
+      duration: 'Marzo - Mayo 2026 (12 semanas)',
+      gate: 'Automatización lista para cubrir todos los escenarios de facturación.',
+      accentKey: 'emerald',
+      objective: 'Construir los módulos Odoo/NAF, evolucionar el conector y eliminar la dependencia del formulario F-007.',
       deliverables: [
-        { category: 'Análisis y Diseño', items: ['Análisis de casos de uso complejos (comodatos, alquileres)', 'Diseño de la lógica de negocio para casos especiales'] },
-        { category: 'Desarrollo', items: ['Evolución del Conector a v2.0', 'Implementación de lógica para comodatos y alquileres', 'Scripts para depuración del catálogo de servicios'] },
-        { category: 'Implementación', items: ['Migración progresiva de todos los tipos de facturación', 'Gestión del cambio para el retiro del F-007', 'Ceremonia de \'apagado\' del formulario F-007'] },
+        { category: 'Desarrollo', items: ['Módulo Odoo custom y colas de integración', 'Conector REST/PL-SQL con idempotencia', 'Scripts de depuración del catálogo de servicios'] },
+        { category: 'Reglas', items: ['Motor de Business Rules con aprendizaje continuo', 'Alertas proactivas por marca, comodatos y folios físicos', 'Documentación de SLA por regla'] },
+        { category: 'Implementación', items: ['Migración progresiva de tipos de facturación', 'Plan de apagado del F-007', 'Gestión del cambio con los equipos clave'] },
       ],
-      outcome: 'Eliminación casi total de la entrada de datos duplicada. Aumento drástico de la eficiencia operativa.',
+      outcome: 'Eliminación casi total de la entrada manual duplicada y adopción del flujo digital.',
     },
     {
-      title: 'Fase 3: Sincronización Bidireccional',
-      duration: 'Agosto - Octubre 2026 (3 meses)',
-      color: 'purple',
-      objective: 'Crear un flujo de datos de ciclo cerrado, asegurando que Odoo no solo envíe datos, sino que también reciba actualizaciones de estado desde NAF.',
+      technical: 'Fase 3: Pruebas',
+      concept: 'Sincronización bidireccional',
+      duration: 'Junio - Julio 2026 (8 semanas)',
+      gate: 'Pruebas end-to-end y retroalimentación NAF → Odoo con visibilidad total.',
+      accentKey: 'purple',
+      objective: 'Cerrar el ciclo validando integraciones, webhooks y paneles operativos antes del go-live.',
       deliverables: [
-        { category: 'Análisis y Diseño', items: ['Diseño de la arquitectura de retroalimentación (NAF → Odoo)', 'Selección de tecnología (Webhooks vs. Polling)'] },
-        { category: 'Desarrollo', items: ['Implementación de webhooks o listener en Odoo', 'Desarrollo del panel de control de la integración'] },
-        { category: 'Optimización', items: ['Pruebas de carga y optimización de rendimiento', 'Monitoreo de la salud de la integración'] },
+        { category: 'Pruebas Unitarias', items: ['Test suites de módulo Odoo', 'Simulación de payloads hacia NAF', 'Pruebas de reglas y alertas'] },
+        { category: 'Pruebas de Integración', items: ['Odoo ↔ DMS ↔ NAF en staging', 'Pruebas de carga y resiliencia', 'Panel Rayos X con correlation-id'] },
+        { category: 'UAT', items: ['Casos de prueba con usuarios', 'Plan de remediación para hallazgos', 'Acta de aprobación final'] },
       ],
-      outcome: 'Visibilidad completa del ciclo de vida de la factura desde Odoo. Sistema de integración robusto y monitoreable.',
+      outcome: 'Visibilidad completa del ciclo de vida de la factura y retroalimentación operativa validada.',
     },
     {
-      title: 'Fase 4: Capacitación y Transferencia',
-      duration: 'Noviembre - Diciembre 2026 (2 meses)',
-      color: 'orange',
-      objective: 'Asegurar la adopción exitosa de los nuevos procesos y transferir el conocimiento necesario al equipo de TI de Promed.',
+      technical: 'Fase 4: Producción',
+      concept: 'Capacitación y puesta en marcha',
+      duration: 'Agosto - Septiembre 2026 (6 semanas)',
+      gate: 'Go-live controlado y equipos capacitados.',
+      accentKey: 'amber',
+      objective: 'Migrar datos, desplegar en productivo y transferir conocimiento a los equipos operativos.',
       deliverables: [
-        { category: 'Documentación', items: ['Creación de manuales de usuario para el nuevo flujo', 'Elaboración de documentación técnica del conector'] },
-        { category: 'Capacitación', items: ['Sesiones de formación para equipos (Ventas, Facturación)', 'Workshops técnicos para el equipo de TI de Promed'] },
-        { category: 'Soporte', items: ['Definición del plan de soporte a largo plazo', 'Entrega formal del código fuente y documentación'] },
+        { category: 'Migración', items: ['Plan de corte y reconciliación', 'Carga de datos históricos y validaciones post-migración', 'Automatización de catálogos'] },
+        { category: 'Despliegue', items: ['Go-live del módulo Odoo + DMS', 'Configuración de monitoreo y alertas', 'Playbooks de soporte de primer nivel'] },
+        { category: 'Capacitación', items: ['Workshops para Facturación, KAM y TI', 'Documentación técnica y funcional', 'Plan de soporte posterior a la salida'] },
       ],
-      outcome: 'Un equipo capacitado y autónomo, y una solución documentada y sostenible en el tiempo.',
+      outcome: 'Operación estable en productivo y equipos de Promed operando el nuevo proceso sin dependencia externa.',
+    },
+    {
+      technical: 'Fase 5: Monitoreo y Capacitación',
+      concept: 'Operación supervisada con DMS',
+      duration: 'Octubre - Diciembre 2026 (10 semanas)',
+      gate: 'Escucha continua tipo "heart monitor".',
+      accentKey: 'rose',
+      objective: 'Monitorear, optimizar y evolucionar las reglas con el DMS como sistema nervioso del flujo.',
+      deliverables: [
+        { category: 'Monitoreo', items: ['KPIs semanales (tiempo ciclo, % validado en origen)', 'Soporte reactivo y corrección de issues menores', 'Reportes ejecutivos mensuales'] },
+        { category: 'Optimización', items: ['Ajustes de performance del conector', 'Nuevas reglas basadas en process mining', 'Backlog priorizado para 2027'] },
+        { category: 'Transferencia', items: ['Runbooks y lecciones aprendidas', 'Reunión de cierre con indicadores finales', 'Plan de evolución conjunta Promed + Gateway + Alteridad'] },
+      ],
+      outcome: 'Sistema monitoreado 24/7 con DMS y Promed operando con métricas predictivas.',
     },
   ];
+
+  const conceptualBridges = phases.map(({ technical, concept, gate }) => ({
+    technical,
+    concept,
+    gate,
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -112,10 +184,32 @@ export default function Propuesta2026() {
             </Card>
             <Card className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 border-purple-200 dark:border-purple-800">
               <Layers className="w-8 h-8 mx-auto mb-2 text-purple-700 dark:text-purple-400" />
-              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">4 Fases</div>
-              <div className="text-sm text-purple-600 dark:text-purple-400">Entrega Incremental</div>
+              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">5 Fases</div>
+              <div className="text-sm text-purple-600 dark:text-purple-400">Taxonomía única</div>
               <div className="text-xs text-muted-foreground mt-1">Valor continuo</div>
             </Card>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h3 className="text-2xl font-bold mb-3">Puentes Conceptuales ↔ Fases Técnicas</h3>
+          <p className="text-sm text-muted-foreground mb-5">
+            Adoptamos una sola taxonomía de cinco fases técnicas. Cada hito conceptual previo (Fundación, Expansión, Sincronización, Capacitación y Monitoreo)
+            vive ahora dentro de la fase correspondiente para facilitar seguimiento y gate reviews.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {conceptualBridges.map((bridge) => (
+              <Card key={bridge.technical} className="h-full">
+                <CardHeader className="pb-3">
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">Concepto</div>
+                  <CardTitle className="text-lg">{bridge.concept}</CardTitle>
+                  <p className="text-xs font-semibold text-primary mt-1">{bridge.technical}</p>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{bridge.gate}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </section>
 
@@ -152,48 +246,56 @@ export default function Propuesta2026() {
             Estrategia de Implementación Incremental
           </h3>
           <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-            El proyecto se ejecutará en 4 fases diseñadas para entregar valor de manera continua. Haga clic en cada fase para ver los entregables detallados.
+            El proyecto se ejecutará en 5 fases técnicas encadenadas. Haga clic en cada fase para ver los entregables detallados.
           </p>
           
           <Accordion type="single" collapsible className="w-full space-y-4">
-            {phases.map((phase, index) => (
-              <AccordionItem value={`item-${index + 1}`} key={index} className={`border-l-4 border-l-${phase.color}-600 bg-card rounded-lg`}>
-                <AccordionTrigger className="p-4 text-left hover:no-underline">
-                  <div className="flex items-center justify-between w-full">
-                    <div>
-                      <CardTitle className="text-base">{phase.title}</CardTitle>
-                      <p className="text-xs text-muted-foreground mt-0.5">{phase.duration}</p>
+            {phases.map((phase, index) => {
+              const accent = accentStyles[phase.accentKey];
+              return (
+                <AccordionItem
+                  value={`item-${index + 1}`}
+                  key={index}
+                  className={`border-l-4 ${accent.border} bg-card rounded-lg`}
+                >
+                  <AccordionTrigger className="p-4 text-left hover:no-underline">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <CardTitle className="text-base">{phase.technical}</CardTitle>
+                        <p className="text-xs text-muted-foreground mt-0.5">{phase.concept}</p>
+                        <p className="text-[11px] text-muted-foreground">{phase.duration}</p>
+                      </div>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                     </div>
-                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="p-4 pt-0">
-                  <div className="space-y-3">
-                    <div>
-                      <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
-                      <p className="text-xs text-muted-foreground leading-snug">{phase.objective}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2">Entregables Detallados</h4>
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
-                        {phase.deliverables.map((group, i) => (
-                          <div key={i}>
-                            <p className="font-semibold text-xs mb-1 text-foreground">{group.category}</p>
-                            <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground">
-                              {group.items.map((item, j) => <li key={j}>{item}</li>)}
-                            </ul>
-                          </div>
-                        ))}
+                  </AccordionTrigger>
+                  <AccordionContent className="p-4 pt-0">
+                    <div className="space-y-3">
+                      <div>
+                        <h4 className="font-semibold text-sm mb-1">Objetivo</h4>
+                        <p className="text-xs text-muted-foreground leading-snug">{phase.objective}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm mb-2">Entregables Detallados</h4>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
+                          {phase.deliverables.map((group, i) => (
+                            <div key={i}>
+                              <p className="font-semibold text-xs mb-1 text-foreground">{group.category}</p>
+                              <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground">
+                                {group.items.map((item, j) => <li key={j}>{item}</li>)}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className={`${accent.badge} p-3 rounded`}>
+                        <p className={`font-semibold ${accent.badgeTitle} text-xs mb-1`}>🎯 Resultado Esperado</p>
+                        <p className={`text-xs ${accent.badgeBody}`}>{phase.outcome}</p>
                       </div>
                     </div>
-                    <div className={`bg-${phase.color}-50 dark:bg-${phase.color}-950 p-3 rounded border border-${phase.color}-200 dark:border-${phase.color}-800`}>
-                      <p className={`font-semibold text-${phase.color}-900 dark:text-${phase.color}-100 text-xs mb-1`}>🎯 Resultado Esperado</p>
-                      <p className={`text-xs text-${phase.color}-800 dark:text-${phase.color}-200`}>{phase.outcome}</p>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
           </Accordion>
         </section>
 

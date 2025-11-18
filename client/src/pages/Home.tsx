@@ -35,7 +35,7 @@ export default function Home() {
       description: 'Integración Odoo-NAF alineada con la operación actual, modelo de servicio mensual y beneficios esperados.',
       icon: Lightbulb,
       href: '/propuesta-2026',
-      highlight: 'Entrega de valor continuo valor',
+      highlight: 'Cadena de cinco fases técnicas',
     },
     {
       title: 'Detalles Técnicos',
@@ -122,15 +122,16 @@ export default function Home() {
                   Plan de Trabajo 2026
                 </p>
                 <h3 className="text-3xl font-bold leading-snug">
-                  Un año de integración coordinada entre TI Promed, Gateway y Alteridad.
+                  Un año de integración coordinada en cinco fases técnicas.
                 </h3>
                 <p className="text-base text-primary-foreground/90 max-w-2xl">
-                  Consulta el roadmap completo, los 67 hitos y el esquema de reuniones que sostienen la operación
-                  conjunta para llevar la integración Odoo-NAF al nivel requerido por finanzas y operaciones.
+                  Consulta el roadmap completo, los 67 hitos y el esquema de reuniones que sostienen la operación conjunta
+                  entre Alteridad, Gateway y Promed. Cada fase técnica se alinea con los hitos conceptuales (fundación, expansión,
+                  sincronización, capacitación y monitoreo) para que las puertas de aprobación sean inequívocas.
                 </p>
                 <p className="text-sm font-semibold text-primary-foreground/80">
-                  Noviembre y diciembre de 2025 son la puerta de entrada: sólo con la validación y aceptación del
-                  objetivo fundamental podremos abrir cada fase sucesiva del plan 2026.
+                  Las fases se abren únicamente cuando la puerta conceptual asociada queda aprobada; así evitamos solapamientos
+                  y mantenemos los entregables listos para auditoría.
                 </p>
               </div>
               <div className="flex justify-end">

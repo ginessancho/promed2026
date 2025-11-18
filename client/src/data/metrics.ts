@@ -1,37 +1,43 @@
 // Métricas y datos para visualizaciones - Actualizado para Proyecto 2026
 
+const DATASET_TOTAL = 739_251;
+
 export const anomaliesData = [
   {
     name: 'Entrada Manual Duplicada',
     value: 100,
-    count: 'Todas',
-    total: 'Facturas',
+    count: DATASET_TOTAL,
+    total: DATASET_TOTAL,
     impact: 'Crítico',
     color: 'hsl(var(--chart-5))',
+    context: 'El mismo registro se llena en F-007, Odoo y NAF.',
   },
   {
     name: 'Dispersión de Marcas',
-    value: 14.4,
+    value: Number(((898 / DATASET_TOTAL) * 100).toFixed(2)), // 0.12%
     count: 898,
-    total: 6249,
+    total: DATASET_TOTAL,
     impact: 'Alto',
     color: 'hsl(var(--chart-3))',
+    context: 'Equivale a 14.4% del catálogo específico de 6,249 artículos analizados.',
   },
   {
     name: 'Inconsistencias Comodatos',
-    value: 0.95,
+    value: Number(((70 / DATASET_TOTAL) * 100).toFixed(2)), // 0.01%
     count: 70,
-    total: 7400,
+    total: DATASET_TOTAL,
     impact: 'Alto',
     color: 'hsl(var(--chart-4))',
+    context: 'Facturas con indicador de comodato sin activo o viceversa.',
   },
   {
     name: 'Múltiples Números Físicos',
-    value: 5.8,
+    value: Number(((430 / DATASET_TOTAL) * 100).toFixed(2)), // 0.06%
     count: 430,
-    total: 7400,
+    total: DATASET_TOTAL,
     impact: 'Medio',
     color: 'hsl(var(--chart-2))',
+    context: 'Un folio lógico termina vinculado con más de un comprobante físico.',
   },
 ];
 
@@ -83,21 +89,6 @@ export const projectPhases = [
       'Plan de soporte y mantenimiento a largo plazo',
       'Transferencia de conocimiento al equipo de TI',
     ],
-  },
-];
-
-export const investmentBreakdown = [
-  {
-    category: 'Adelanto Inicial',
-    amount: 5000,
-    percentage: 12.2,
-    description: 'Pago único al inicio del proyecto para validación y viabilidad',
-  },
-  {
-    category: 'Servicio Mensual (12 meses)',
-    amount: 36000,
-    percentage: 87.8,
-    description: '$3,000 USD mensuales por 12 meses',
   },
 ];
 

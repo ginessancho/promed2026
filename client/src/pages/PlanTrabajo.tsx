@@ -31,6 +31,79 @@ export default function PlanTrabajo() {
     },
   ];
 
+  const calendarBlocks = [
+    {
+      month: 'Enero',
+      phase: 'Fase 1 - Diseño',
+      focus: 'Blueprint y accesos listos',
+      cadences: ['Progress semanal', 'Steering semana 1'],
+      gate: 'Fundación validada',
+    },
+    {
+      month: 'Marzo',
+      phase: 'Fase 2 - Desarrollo',
+      focus: 'Conector v2.0 + reglas clave',
+      cadences: ['Progress semanal', 'Steering semana 1'],
+      gate: 'Apagado progresivo de F-007',
+    },
+    {
+      month: 'Junio',
+      phase: 'Fase 3 - Pruebas',
+      focus: 'UAT completo y retroalimentación NAF→Odoo',
+      cadences: ['Progress semanal', 'Steering mes medio'],
+      gate: 'Checklist de sincronización bidireccional',
+    },
+    {
+      month: 'Agosto',
+      phase: 'Fase 4 - Producción',
+      focus: 'Migración y go-live controlado',
+      cadences: ['Progress semanal', 'Steering semana 4'],
+      gate: 'Capacitación concluida',
+    },
+    {
+      month: 'Octubre',
+      phase: 'Fase 5 - Monitoreo',
+      focus: 'KPIs del DMS como "heart monitor"',
+      cadences: ['Progress quincenal', 'Steering de cierre'],
+      gate: 'Transición a operación regular',
+    },
+  ];
+
+  const raciMatrix = [
+    { deliverable: 'F-007 digital en Odoo', alteridad: 'R', promedTI: 'A', gateway: 'C', finanzas: 'I' },
+    { deliverable: 'Conector directo Odoo ↔ NAF', alteridad: 'C', promedTI: 'I', gateway: 'R', finanzas: 'A' },
+    { deliverable: 'Motor de reglas y alertas (DMS)', alteridad: 'R', promedTI: 'C', gateway: 'C', finanzas: 'I' },
+    { deliverable: 'Go-live y plan de soporte', alteridad: 'A', promedTI: 'R', gateway: 'C', finanzas: 'C' },
+    { deliverable: 'KPIs y monitoreo continuo', alteridad: 'R', promedTI: 'C', gateway: 'I', finanzas: 'A' },
+  ];
+
+  const kpis = [
+    {
+      name: 'Porcentaje de facturas validadas en origen',
+      baseline: '35%',
+      target: '>=95% al cierre de Fase 3',
+      cadence: 'Semanal (DMS)',
+    },
+    {
+      name: 'Tiempo medio desde F-007 digital a GL',
+      baseline: '72 h',
+      target: '<=12 h al finalizar Fase 4',
+      cadence: 'Quincenal',
+    },
+    {
+      name: 'Alertas críticas resueltas < 24h',
+      baseline: 'Sin medición',
+      target: '100% en Fase 5',
+      cadence: 'Diaria',
+    },
+    {
+      name: 'Dispersión de marcas (artículos críticos)',
+      baseline: '898 SKUs',
+      target: '-80% al finalizar Fase 2',
+      cadence: 'Mensual',
+    },
+  ];
+
   const riesgos = [
     { riesgo: 'Retrasos en acceso a sistemas', probabilidad: 'Media', impacto: 'Alto', mitigacion: 'Solicitar accesos en kick-off' },
     { riesgo: 'Cambios en alcance', probabilidad: 'Media', impacto: 'Medio', mitigacion: 'Control de cambios formal' },
@@ -124,13 +197,42 @@ export default function PlanTrabajo() {
         </section>
 
         <section className="mb-12">
+          <h3 className="text-3xl font-bold text-foreground mb-4">Calendario Visual 2026</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            Cada mes resalta la fase técnica activa y la puerta conceptual que se valida. Este heatmap ayuda a los equipos a sincronizar
+            prioridades de TI, Gateway y Alteridad bajo una única taxonomía.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {calendarBlocks.map((block) => (
+              <Card key={block.month} className="border border-dashed">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">{block.month}</CardTitle>
+                  <p className="text-sm text-muted-foreground">{block.phase}</p>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-sm text-foreground"><strong>Foco:</strong> {block.focus}</p>
+                  <ul className="list-disc list-inside text-xs text-muted-foreground space-y-0.5">
+                    {block.cadences.map((cadence) => (
+                      <li key={cadence}>{cadence}</li>
+                    ))}
+                  </ul>
+                  <div className="text-xs font-semibold text-primary/80 uppercase tracking-widest">
+                    Puerta: {block.gate}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-12">
           <h2 className="text-3xl font-bold mb-4 flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-green-600" />
             Listado de Tareas Detalladas
           </h2>
           <p className="text-muted-foreground mb-2">
             Abrí cada fase para revisar sus actividades. Cuando una tarea dependa de aprobaciones o disponibilidad,
-            aparecerá como “Por confirmar”.
+            aparecerá como "Por confirmar".
           </p>
           <p className="text-xs text-muted-foreground mb-6">
             Nota: las fases se comportan como puertas encadenadas; sin la validación de Nov-Dic 2025 no se activa el cronograma 2026.
@@ -171,6 +273,54 @@ export default function PlanTrabajo() {
               </AccordionItem>
             ))}
           </Accordion>
+        </section>
+
+        <section className="mb-12">
+          <h3 className="text-3xl font-bold text-foreground mb-8">KPIs Operativos (DMS como "heart monitor")</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {kpis.map((kpi) => (
+              <Card key={kpi.name}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">{kpi.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 text-sm space-y-1">
+                  <p><strong>Línea base:</strong> {kpi.baseline}</p>
+                  <p><strong>Meta:</strong> {kpi.target}</p>
+                  <p className="text-muted-foreground"><strong>Frecuencia:</strong> {kpi.cadence}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-12">
+          <h3 className="text-3xl font-bold text-foreground mb-8">Matriz RACI</h3>
+          <Card>
+            <CardContent className="p-0 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr>
+                    <th className="p-4 text-left font-semibold">Entregable</th>
+                    <th className="p-4 text-left font-semibold">Alteridad</th>
+                    <th className="p-4 text-left font-semibold">Promed TI</th>
+                    <th className="p-4 text-left font-semibold">Gateway Resources</th>
+                    <th className="p-4 text-left font-semibold">Finanzas Promed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {raciMatrix.map((row) => (
+                    <tr key={row.deliverable} className="border-b last:border-none">
+                      <td className="p-4">{row.deliverable}</td>
+                      <td className="p-4 font-semibold">{row.alteridad}</td>
+                      <td className="p-4 font-semibold">{row.promedTI}</td>
+                      <td className="p-4 font-semibold">{row.gateway}</td>
+                      <td className="p-4 font-semibold">{row.finanzas}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
         </section>
 
         <section>

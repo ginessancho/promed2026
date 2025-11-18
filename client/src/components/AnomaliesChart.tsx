@@ -30,15 +30,24 @@ export default function AnomaliesChart() {
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
+                  const datasetTotal = typeof data.total === 'number' ? data.total : 739251;
                   return (
-                    <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-                      <p className="font-semibold text-sm mb-1">{data.name}</p>
-                      <p className="text-sm">
-                        <span className="font-medium">Porcentaje:</span> {typeof data.value === 'number' ? data.value.toFixed(1) : data.value}%
+                    <div className="bg-popover border border-border rounded-lg p-3 shadow-lg max-w-xs space-y-1.5">
+                      <p className="font-semibold text-sm">{data.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Base analizada: {datasetTotal.toLocaleString()} registros (2023-2025)
                       </p>
                       <p className="text-sm">
-                        <span className="font-medium">Registros afectados:</span> {data.count} de {data.total}
+                        <span className="font-medium">Porcentaje:</span>{' '}
+                        {typeof data.value === 'number' ? data.value.toFixed(2) : data.value}%
                       </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Registros afectados:</span>{' '}
+                        {typeof data.count === 'number' ? data.count.toLocaleString() : data.count}
+                      </p>
+                      {data.context && (
+                        <p className="text-xs text-muted-foreground leading-snug">{data.context}</p>
+                      )}
                       <p className="text-sm">
                         <span className="font-medium">Impacto:</span>{' '}
                         <span className={`font-semibold ${
@@ -83,8 +92,11 @@ export default function AnomaliesChart() {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
-                {typeof anomaly.count === 'number' ? `${anomaly.count.toLocaleString()} de ${typeof anomaly.total === 'number' ? anomaly.total.toLocaleString() : anomaly.total} registros` : `${anomaly.count} líneas ${anomaly.total}`}
+                {typeof anomaly.count === 'number'
+                  ? `${anomaly.count.toLocaleString()} de ${typeof anomaly.total === 'number' ? anomaly.total.toLocaleString() : anomaly.total} registros`
+                  : `${anomaly.count}`}
               </p>
+              {anomaly.context && <p className="text-xs text-muted-foreground mt-1">{anomaly.context}</p>}
             </div>
           ))}
         </div>
