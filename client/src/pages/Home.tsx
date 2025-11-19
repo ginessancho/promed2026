@@ -173,7 +173,12 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
-              <div className="flex w-full justify-start md:justify-end">
+              <div className="flex w-full flex-wrap gap-3 justify-start md:justify-end">
+                <Link href="/analisis-costos">
+                  <Button size="lg" variant="outline">
+                    Ver análisis de costos
+                  </Button>
+                </Link>
                 <Link href="/plan-de-trabajo">
                   <Button size="lg" variant="secondary">
                     Ver plan anual
@@ -191,6 +196,14 @@ export default function Home() {
               <img src={APP_LOGO} alt="Alteridad" className="h-10 object-contain mb-3" />
               <p className="text-xs font-semibold text-muted-foreground">Alteridad</p>
               <p className="text-xs text-muted-foreground">support@alteridad.org</p>
+              <a
+                href="https://alteridad.org"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] text-muted-foreground/70 underline-offset-2 hover:underline hover:text-foreground transition-colors"
+              >
+                alteridad.org
+              </a>
             </div>
             <div className="text-right text-xs text-muted-foreground">
               <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>

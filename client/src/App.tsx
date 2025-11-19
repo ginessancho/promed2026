@@ -14,6 +14,7 @@ import ProcesoActual from "./pages/ProcesoActual";
 import Propuesta2026 from "./pages/Propuesta2026";
 import DetallesTecnicos from "./pages/DetallesTecnicos";
 import MantenimientoDMS from "./pages/MantenimientoDMS";
+import CostosAnalisis from "./pages/CostosAnalisis";
 
 import Demonstracion from "./pages/Demonstracion";
 import PlanTrabajo from "./pages/PlanTrabajo";
@@ -30,6 +31,7 @@ function Router() {
       <Route path={"/propuesta-2026"} component={Propuesta2026} />
       <Route path={"/detalles-tecnicos"} component={DetallesTecnicos} />
       <Route path={"/mantenimiento-dms"} component={MantenimientoDMS} />
+      <Route path={"/analisis-costos"} component={CostosAnalisis} />
       
       <Route path={"/demonstracion"} component={Demonstracion} />
       <Route path={"/plan-de-trabajo"} component={PlanTrabajo} />
