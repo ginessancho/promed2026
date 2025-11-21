@@ -121,21 +121,42 @@ graph LR
 `;
 
 export const asIsDiagram = `
-graph LR
-    B1["F-007:<br/>Manual"] --> B2["Especialista:<br/>Revisión"]
-    B2 --> B3["Odoo:<br/>Manual"]
-    B3 --> B4["Facturación:<br/>Revisión"]
-    B4 --> B5["NAF:<br/>Manual"]
-    B5 --> B6{Errores?}
-    B6 -->|Sí| B7[Reproceso]
-    B7 --> B3
-    B6 -->|No| B8[Dashboard]
-    
-    style B1 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
-    style B3 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
-    style B5 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
-    style B7 fill:#FF6B6B,stroke:#DC143C,stroke-width:2px
-    style B6 fill:#FFD700,stroke:#FFA500,stroke-width:2px
+graph TD
+    %% Flujo operativo manual
+    subgraph MANUAL["❌ Flujo manual - Costos por etapa"]
+        B1["F-007<br/>KAM / Especialista<br/>50 min · $8"] --> B2["Revisión Especialista<br/>30 min · $5"]
+        B2 --> B3["Carga Odoo<br/>10 Admins<br/>40 min · $6"]
+        B3 --> B4["Validación Facturación<br/>Sale Support<br/>25 min · $4"]
+        B4 --> B5["Digitación NAF<br/>Admins<br/>35 min · $5"]
+        B5 --> B6{"¿Errores / Faltantes?"}
+        B6 -->|Sí · 31% casos| B7["Reproceso<br/>+65 min · +$10"]
+        B7 --> B3
+        B6 -->|No| B8["Reporte manual / Correos"]
+    end
+
+    %% Costos fijos mensuales
+    subgraph COSTO["Carga mensual aproximada"]
+        C1["14 KAM · $21k/mes"]
+        C2["10 Admins · $15k/mes"]
+        C3["Especialista · $1.5k/mes"]
+        C4["Sale Support · $1.5k/mes"]
+        C5["Usuarios Odoo activos: 222"]
+    end
+
+    B1 -.-> C1
+    B2 -.-> C3
+    B3 -.-> C2
+    B4 -.-> C4
+    B5 -.-> C2
+    B7 -.-> C2
+
+    classDef manual fill:#ff6b6b,stroke:#dc143c,stroke-width:2px,color:#fff;
+    classDef decision fill:#ffd700,stroke:#ffa500,stroke-width:2px,color:#593400;
+    classDef costo fill:#ffe4c4,stroke:#ff9c33,stroke-width:2px,color:#6b3a00;
+
+    class B1,B2,B3,B4,B5,B7 manual;
+    class B6 decision;
+    class C1,C2,C3,C4,C5 costo;
 `;
 
 export const toBeDiagram = `
@@ -162,29 +183,31 @@ graph LR
 // Compact horizontal purchase order flow with enhanced colors
 export const purchaseOrderDiagram = `
 graph LR
-    subgraph KAM["👤 KAM"]
-        A1[Oportunidad] --> A2["Cliente<br/>Aprueba"]
+    %% Roles con costos
+    subgraph KAM["👤 14 KAM · $21k/mes"]
+        A1["Oportunidad<br/>25 min · $4"] --> A2["Cliente aprueba<br/>15 min · $2"]
     end
-    
-    subgraph ESP["👤 Especialista"]
-        B1[Propuesta]
-        B2["F-007<br/>APEX"]
+
+    subgraph ESP["👤 Especialista · $1.5k/mes"]
+        B1["Propuesta técnica<br/>40 min · $6"]
+        B2["F-007 APEX<br/>35 min · $5"]
     end
-    
-    subgraph ADM["👤 Admin"]
-        C1["Registro<br/>NAF"]
-        C2["Tiquete<br/>NAF"]
+
+    subgraph ADM["👤 10 Administradores · $15k/mes"]
+        C1["Registro NAF<br/>30 min · $5"]
+        C2["Tiquete NAF<br/>45 min · $7"]
     end
-    
-    subgraph GER["👤 Gerente"]
-        D1{"Margen<br/>< 10%?"}
-        D2[Aprueba]
+
+    subgraph GER["👤 Gerente / Sale Support · $1.5k/mes"]
+        D1{"Margen < 10%?<br/>15 min · $2"}
+        D2["Aprobación<br/>10 min · $1.5"]
     end
-    
-    subgraph BOD["📦 Bodega"]
-        E1[Despacho]
+
+    subgraph BOD["📦 Bodega / WMS"]
+        E1["Despacho<br/>60 min · $10"]
     end
-    
+
+    %% Flujo principal
     A1 --> B1
     B1 --> A2
     A2 --> C1
@@ -192,9 +215,14 @@ graph LR
     B2 --> C2
     C2 --> D1
     D1 -->|Sí| D2
-    D1 -->|No| E1
+    D1 -->|No (pedido cancelado)| R1[Retrabajo + comunicación]
+    R1 --> A1
     D2 --> E1
-    
+
+    %% Reproceso por errores de captura
+    B2 -->|Campos faltantes (22%)| R2["Reproceso F-007<br/>+50 min · +$8"]
+    R2 --> B2
+
     style KAM fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
     style ESP fill:#fff3e0,stroke:#FF9800,stroke-width:2px
     style ADM fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
@@ -202,4 +230,5 @@ graph LR
     style BOD fill:#fce4ec,stroke:#E91E63,stroke-width:2px
     style D1 fill:#FFD700,stroke:#FFA500,stroke-width:2px
     style E1 fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style R1,R2 fill:#ffcdd2,stroke:#e53935,stroke-width:2px
 `;
