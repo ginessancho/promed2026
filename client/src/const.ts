@@ -4,7 +4,7 @@ export const APP_TITLE = import.meta.env.VITE_APP_TITLE || "App";
 
 export const APP_LOGO = "/logo-alteridad.png";
 export const PROJECT_STATUS =
-  "Necesidad fundamental de automatización con ejecutivos de Promed";
+  "Portafolio de iniciativas de transformación 2026";
 
 // Generate login URL at runtime so redirect URI reflects the current origin.
 export const getLoginUrl = () => {

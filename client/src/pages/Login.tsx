@@ -36,20 +36,20 @@ export default function Login() {
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center mb-4">
-            <img src={APP_LOGO} alt="Alteridad" className="h-16 object-contain" />
+            <img src="/logo-promed.webp" alt="Promed" className="h-16 object-contain" />
           </div>
           <div>
-            <CardTitle className="text-3xl font-bold">Proyecto: Integración de Facturación en Odoo</CardTitle>
+            <CardTitle className="text-2xl font-bold">Consultoría Estratégica PROMED</CardTitle>
             <CardDescription className="text-base mt-2">
-              Reporte, propuesta, plan y timeline del proyecto de integración entre Odoo y NAF en un solo espacio.
+              Portal de iniciativas de transformación: ERP, Facturación y Procesos Críticos.
             </CardDescription>
-            <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+            <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <span className="inline-flex items-center justify-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs font-medium text-foreground">
-                <span className="h-2 w-2 rounded-full bg-primary" />
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 Actualizado {formattedDate}
               </span>
               <p className="text-sm leading-snug text-foreground">
-                <span className="text-muted-foreground">Estado:</span> {PROJECT_STATUS}
+                {PROJECT_STATUS}
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function Login() {
               size="lg"
               disabled={isLoading || !password}
             >
-              {isLoading ? 'Verificando...' : 'Acceder a la Propuesta'}
+              {isLoading ? 'Verificando...' : 'Acceder al Portal'}
             </Button>
           </form>
 
