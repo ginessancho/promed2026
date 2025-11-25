@@ -1,216 +1,311 @@
-import { FileSearch, BarChart3, Settings, Lightbulb, Wrench, Monitor, Calendar } from 'lucide-react';
-import { APP_LOGO, PROJECT_STATUS } from '@/const';
-import PillarCard from '@/components/PillarCard';
+import { 
+  FileText, 
+  Database, 
+  Cog, 
+  ArrowRight, 
+  TrendingUp,
+  DollarSign,
+  AlertTriangle,
+  Building2
+} from 'lucide-react';
+import { APP_LOGO } from '@/const';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PORTAL PRINCIPAL - CONSULTORÍA ESTRATÉGICA PROMED 2026
+// Mega Dashboard con acceso a todas las iniciativas
+// ═══════════════════════════════════════════════════════════════════════════════
+
+interface InitiativeConfig {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  href: string;
+  icon: React.ElementType;
+  status: 'activo' | 'en-desarrollo' | 'planificado';
+  metrics: Array<{ label: string; value: string; trend?: 'up' | 'down' | 'neutral'; }>;
+  color: {
+    bg: string;
+    border: string;
+    icon: string;
+    badge: string;
+  };
+}
+
+const initiatives: InitiativeConfig[] = [
+  {
+    id: 'facturacion',
+    title: 'Integración de Facturación',
+    subtitle: 'Odoo ↔ NAF',
+    description: 'Automatización del flujo de facturación entre Odoo y NAF. Eliminación de procesos manuales y reducción de errores.',
+    href: '/facturacion',
+    icon: FileText,
+    status: 'activo',
+    metrics: [
+      { label: 'Registros analizados', value: '739K' },
+      { label: 'Anomalías detectadas', value: '14.4%' },
+      { label: 'ROI proyectado', value: '<3 meses' },
+    ],
+    color: {
+      bg: 'from-sky-50 to-sky-100 dark:from-sky-950 dark:to-sky-900',
+      border: 'border-sky-200 dark:border-sky-800',
+      icon: 'text-sky-600',
+      badge: 'bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-300',
+    },
+  },
+  {
+    id: 'erp',
+    title: 'Migración ERP',
+    subtitle: 'NAF 6.0 → NetSuite',
+    description: 'Evaluación estratégica para reemplazar el ERP legacy con Oracle NetSuite. Análisis costo-beneficio completo.',
+    href: '/erp',
+    icon: Database,
+    status: 'en-desarrollo',
+    metrics: [
+      { label: 'Usuarios impactados', value: '600+' },
+      { label: 'Países', value: '7' },
+      { label: 'Timeline', value: '12-14 meses' },
+    ],
+    color: {
+      bg: 'from-orange-50 to-amber-100 dark:from-orange-950 dark:to-amber-900',
+      border: 'border-orange-200 dark:border-orange-800',
+      icon: 'text-orange-600',
+      badge: 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
+    },
+  },
+  {
+    id: 'procesos',
+    title: 'Procesos Críticos',
+    subtitle: 'Comodatos, Activos, Servicio',
+    description: 'Análisis de fugas operacionales en procesos clave más allá de facturación. Metodología estandarizada.',
+    href: '/procesos',
+    icon: Cog,
+    status: 'planificado',
+    metrics: [
+      { label: 'Procesos identificados', value: '4' },
+      { label: 'Fricciones', value: 'Por mapear' },
+      { label: 'Impacto', value: 'Por cuantificar' },
+    ],
+    color: {
+      bg: 'from-violet-50 to-purple-100 dark:from-violet-950 dark:to-purple-900',
+      border: 'border-violet-200 dark:border-violet-800',
+      icon: 'text-violet-600',
+      badge: 'bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300',
+    },
+  },
+];
+
+const getStatusBadge = (status: InitiativeConfig['status']) => {
+  const styles = {
+    'activo': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300',
+    'en-desarrollo': 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
+    'planificado': 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+  };
+  const labels = {
+    'activo': 'Activo',
+    'en-desarrollo': 'En desarrollo',
+    'planificado': 'Planificado',
+  };
+  return (
+    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${styles[status]}`}>
+      {labels[status]}
+    </span>
+  );
+};
+
+// Resumen ejecutivo global
+const executiveSummary = {
+  totalInitiatives: 3,
+  activeProjects: 1,
+  estimatedSavings: '$250K+',
+  timeline: '2026',
+};
+
 export default function Home() {
-  const pilares = [
-    // Fila 1: DIAGNÓSTICO (Pasado y Presente)
-    {
-      title: 'Hallazgos 2025',
-      description: 'Análisis preliminar, entrevistas y metodología que llevó a la identificación de la necesidad de automatización.',
-      icon: FileSearch,
-      href: '/hallazgos-2025',
-      highlight: 'Trabajo preliminar documentado',
-    },
-    {
-      title: 'Volumen del Problema',
-      description: 'Análisis cuantitativo de anomalías detectadas en 739,251 registros de facturación.',
-      icon: BarChart3,
-      href: '/volumen-problema',
-      highlight: '14.4% dispersión de marcas',
-    },
-    {
-      title: 'Proceso Actual',
-      description: 'Flujo actual detallado, roles, responsables, fricciones y blockers identificados.',
-      icon: Settings,
-      href: '/proceso-actual',
-      highlight: 'Proceso manual sin integración',
-    },
-    
-    // Fila 2: SOLUCIÓN (Futuro)
-    {
-      title: 'Propuesta 2026',
-      description: 'Integración Odoo-NAF alineada con la operación actual, modelo de servicio mensual y beneficios esperados.',
-      icon: Lightbulb,
-      href: '/propuesta-2026',
-      highlight: 'Cadena de cinco fases técnicas',
-    },
-    {
-      title: 'Detalles Técnicos',
-      description: 'Arquitectura de integración, coordinación de equipos, campos críticos y documentación Odoo/NAF.',
-      icon: Wrench,
-      href: '/detalles-tecnicos',
-      highlight: 'Integración Odoo-NAF vía DMS',
-    },
-    {
-      title: 'Sistema de Gestión de Datos',
-      description: 'DMS que aprende del negocio, extrae conocimiento en reglas accionables y genera alertas para eficiencia de procesos.',
-      icon: Monitor,
-      href: '/mantenimiento-dms',
-      highlight: 'Aprendizaje continuo + Reglas dinámicas',
-    },
-  ];
-  const planHighlights = [
-    { label: 'Cobertura', value: '5 fases técnicas' },
-    { label: 'Hitos', value: '67 hitos programados' },
-    { label: 'Gobernanza', value: 'Alteridad + Gateway + Promed' },
-  ];
   const formattedDate = new Intl.DateTimeFormat('es-PA', {
     dateStyle: 'long',
   }).format(new Date());
- 
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-slate-50/50 to-primary/5 dark:via-slate-950/50 dark:to-primary/5">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+      <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 py-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-wrap items-center gap-4">
-              <img src="/logo-promed.webp" alt="Promed" className="h-16 object-contain" />
-              <div className="space-y-1 text-left">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground/70">Proyecto</p>
-                <p className="text-lg font-semibold text-foreground leading-snug">Integración de Facturación en Odoo</p>
-                <p className="text-xs text-muted-foreground">Reporte, propuesta, plan y timeline en un solo sitio</p>
+            <div className="flex items-center gap-4">
+              <img src="/logo-promed.webp" alt="Promed" className="h-14 object-contain" />
+              <div className="border-l pl-4">
+                <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                  Consultoría Estratégica
+                </p>
+                <h1 className="text-lg font-bold text-foreground">
+                  Iniciativas de Transformación 2026
+                </h1>
               </div>
             </div>
-            <div className="text-left text-xs text-muted-foreground space-y-1 md:text-right md:flex md:flex-col md:items-end">
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-3 py-1 font-medium text-foreground">
-                <span className="h-2 w-2 rounded-full bg-primary" />
+            <div className="text-left md:text-right">
+              <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs font-medium">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                 Actualizado {formattedDate}
-              </span>
-              <p className="max-w-md leading-snug text-foreground">
-                <span className="text-muted-foreground">Estado:</span> {PROJECT_STATUS}
-              </p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-        {/* Intro */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Integración de Facturación en Odoo
-          </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Promed ya cuenta con automatizaciones sólidas en NAF gracias al trabajo del equipo de TI. Esta fase
-            consolida la llegada de Odoo, conectando ambos mundos para profundizar la integración, reducir las
-            tareas manuales que quedan y asegurar que los datos críticos continuen fluyendo al General Ledger.
-          </p>
-        </div>
-
-        {/* Pilares - Fila 1: DIAGNÓSTICO */}
-        <div className="mb-10">
-          <div className="mb-5">
-            <h3 className="text-2xl font-bold text-foreground mb-1.5">Diagnóstico</h3>
-            <p className="text-sm text-muted-foreground">Análisis del estado actual y problemas identificados</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {pilares.slice(0, 3).map((pilar) => (
-              <PillarCard key={pilar.href} {...pilar} />
-            ))}
-          </div>
-        </div>
-
-        {/* Pilares - Fila 2: SOLUCIÓN */}
-        <div className="mb-10">
-          <div className="mb-5">
-            <h3 className="text-2xl font-bold text-foreground mb-1.5">Solución</h3>
-            <p className="text-sm text-muted-foreground">Propuesta técnica y modelo de servicio</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {pilares.slice(3, 6).map((pilar) => (
-              <PillarCard key={pilar.href} {...pilar} />
-            ))}
-          </div>
-        </div>
-
-
-
-        {/* CTA Plan de Trabajo */}
-        <section className="mb-12">
-          <div className="relative overflow-hidden rounded-3xl border bg-gradient-to-r from-primary/40 via-primary/20 to-blue-200 text-slate-900 dark:text-slate-50">
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_white,_transparent_60%)] pointer-events-none" />
-            <div className="relative z-10 grid gap-6 md:grid-cols-[3fr,1fr] items-center px-8 py-10">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold uppercase tracking-widest text-slate-700/90 dark:text-slate-200">
-                  Plan de Trabajo 2026
-                  </p>
-                  <h3 className="text-3xl font-bold leading-snug text-slate-900 dark:text-white">
-                    Integración y monitoreo coordinados en cinco fases técnicas.
-                  </h3>
-                  <p className="text-base text-slate-800 dark:text-slate-100 max-w-2xl">
-                    Consulta el roadmap completo, los 67 hitos y el esquema de reuniones que sostienen la operación conjunta
-                    entre Alteridad, Gateway y Promed.
-                  </p>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {planHighlights.map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-2xl bg-white/70 px-4 py-3 shadow-sm backdrop-blur text-slate-900 dark:bg-slate-900/40 dark:text-white"
-                    >
-                      <p className="text-xs uppercase tracking-wide text-slate-600 dark:text-slate-300">{item.label}</p>
-                      <p className="text-base font-semibold text-slate-900 dark:text-white">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <ul className="list-disc space-y-2 pl-5 text-sm text-slate-800 dark:text-slate-100">
-                  <li>
-                    Cada fase técnica se alinea con los hitos conceptuales: fundación, expansión, sincronización, capacitación
-                    y monitoreo.
-                  </li>
-                  <li>
-                    Las puertas de aprobación mantienen la cadencia del roadmap y evitan solapamientos entre equipos.
-                  </li>
-                  <li>
-                    Abrimos una fase únicamente cuando la puerta conceptual asociada queda aprobada, asegurando entregables listos
-                    para auditoría.
-                  </li>
-                </ul>
+      <main className="container mx-auto px-4 py-10 space-y-10">
+        {/* Executive Summary */}
+        <section className="grid gap-4 md:grid-cols-4">
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <CardContent className="pt-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Building2 className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Iniciativas</span>
               </div>
-              <div className="flex w-full flex-wrap gap-3 justify-start md:justify-end">
-                <Link href="/analisis-costos">
-                  <Button size="lg" variant="outline">
-                    Ver análisis de costos
-                  </Button>
-                </Link>
-                <Link href="/plan-de-trabajo">
-                  <Button size="lg" variant="secondary">
-                    Ver plan anual
-                  </Button>
-                </Link>
+              <p className="text-3xl font-bold text-foreground">{executiveSummary.totalInitiatives}</p>
+              <p className="text-xs text-muted-foreground">proyectos estratégicos</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-5">
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Activos</span>
               </div>
-            </div>
+              <p className="text-3xl font-bold text-foreground">{executiveSummary.activeProjects}</p>
+              <p className="text-xs text-muted-foreground">en ejecución</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-5">
+              <div className="flex items-center gap-2 mb-2">
+                <DollarSign className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Ahorro Potencial</span>
+              </div>
+              <p className="text-3xl font-bold text-emerald-600">{executiveSummary.estimatedSavings}</p>
+              <p className="text-xs text-muted-foreground">estimado anual</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-5">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-4 h-4 text-amber-600" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Horizonte</span>
+              </div>
+              <p className="text-3xl font-bold text-foreground">{executiveSummary.timeline}</p>
+              <p className="text-xs text-muted-foreground">año de ejecución</p>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Initiatives Grid */}
+        <section className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground mb-1">Portafolio de Iniciativas</h2>
+            <p className="text-sm text-muted-foreground">
+              Proyectos de mejora continua enfocados en eficiencia operacional y reducción de costos
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {initiatives.map((initiative) => {
+              const Icon = initiative.icon;
+              return (
+                <Link key={initiative.id} href={initiative.href}>
+                  <Card 
+                    className={`h-full bg-gradient-to-br ${initiative.color.bg} ${initiative.color.border} 
+                      hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer`}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className={`p-2.5 rounded-xl bg-white/60 dark:bg-black/20`}>
+                          <Icon className={`w-6 h-6 ${initiative.color.icon}`} />
+                        </div>
+                        {getStatusBadge(initiative.status)}
+                      </div>
+                      <div className="space-y-1 pt-2">
+                        <CardTitle className="text-xl">{initiative.title}</CardTitle>
+                        <p className="text-sm font-medium text-muted-foreground">{initiative.subtitle}</p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {initiative.description}
+                      </p>
+
+                      {/* Metrics */}
+                      <div className="grid grid-cols-3 gap-2">
+                        {initiative.metrics.map((metric) => (
+                          <div 
+                            key={metric.label} 
+                            className="text-center p-2 rounded-lg bg-white/50 dark:bg-black/10"
+                          >
+                            <p className="text-lg font-bold text-foreground">{metric.value}</p>
+                            <p className="text-xs text-muted-foreground leading-tight">{metric.label}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* CTA */}
+                      <div className="flex items-center justify-end pt-2">
+                        <Button variant="ghost" size="sm" className={`gap-1 ${initiative.color.icon}`}>
+                          Explorar
+                          <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
-        {/* Footer Info */}
-        <div className="mt-12 border-t pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <img src={APP_LOGO} alt="Alteridad" className="h-10 object-contain mb-3" />
-              <p className="text-xs font-semibold text-muted-foreground">Alteridad</p>
-              <p className="text-xs text-muted-foreground">support@alteridad.org</p>
-              <a
-                href="https://alteridad.org"
-                target="_blank"
-                rel="noreferrer"
-                className="text-[10px] text-muted-foreground/70 underline-offset-2 hover:underline hover:text-foreground transition-colors"
-              >
-                alteridad.org
-              </a>
+        {/* Context Note */}
+        <Card className="bg-muted/30 border-dashed">
+          <CardContent className="pt-5">
+            <div className="flex flex-col md:flex-row md:items-start gap-4">
+              <div className="flex-1 space-y-2">
+                <h3 className="font-semibold text-foreground">Contexto del Portafolio</h3>
+                <p className="text-sm text-muted-foreground">
+                  Estas iniciativas surgen del análisis preliminar realizado durante 2025. Cada proyecto 
+                  sigue una metodología consistente: diagnóstico del estado actual, cuantificación del 
+                  impacto financiero, y propuesta de solución con ROI estimado.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 md:w-48">
+                <p className="text-xs text-muted-foreground">Metodología</p>
+                <div className="flex flex-wrap gap-2">
+                  {['Diagnóstico', 'Cuantificación', 'Solución', 'ROI'].map((step) => (
+                    <span key={step} className="px-2 py-1 rounded bg-muted text-xs">
+                      {step}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="text-right text-xs text-muted-foreground">
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <footer className="pt-6 border-t">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <img src={APP_LOGO} alt="Alteridad" className="h-10 object-contain" />
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground">Alteridad</p>
+                <p className="text-xs text-muted-foreground">support@alteridad.org</p>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground md:text-right">
               <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>
-              <p className="mt-1">Noviembre 2025 • Versión 4.0</p>
+              <p className="mt-1">Noviembre 2025 • Portal v5.0</p>
             </div>
           </div>
-        </div>
+        </footer>
       </main>
     </div>
   );
