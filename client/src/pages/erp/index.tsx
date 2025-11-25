@@ -1,13 +1,13 @@
-import { ArrowLeft, ArrowRight, Database, DollarSign, AlertTriangle, CheckCircle2, Building2, Globe } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Database, DollarSign, AlertTriangle, CheckCircle2, Building2, Globe, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'wouter';
 
 const keyStats = [
-  { label: 'Usuarios afectados', value: '600+', detail: 'Transacciones, finanzas, servicio técnico' },
+  { label: 'Usuarios según RFP', value: '899', detail: '⚠️ Requiere validación - ver Mapeo de Módulos', warning: true },
   { label: 'Países operando', value: '7', detail: 'Panamá, CR, SV, HN, GT, NI, RD' },
-  { label: 'Artículos en master', value: '313K', detail: 'Items activos en inventario' },
-  { label: 'Transacciones/año', value: '200K+', detail: 'Facturas, OC, movimientos' },
+  { label: 'Artículos en master', value: '313,787', detail: 'Clientes 8,095 • Proveedores 3,945' },
+  { label: 'Transacciones 2024', value: '212K', detail: 'Facturas 35K • Inventario 92K • OC 51K • Tickets 34K' },
 ];
 
 const timeline = [
@@ -19,10 +19,10 @@ const timeline = [
 ];
 
 const keyRisks = [
-  { title: 'Migración de datos', impact: 'Alto', description: '313K items + 5 años de historia financiera' },
-  { title: 'Adopción del cambio', impact: 'Alto', description: '600+ usuarios con procesos establecidos' },
+  { title: 'Migración de datos', impact: 'Alto', description: '313,787 items + 8,095 clientes + 5 años historia' },
+  { title: 'Adopción del cambio', impact: 'Alto', description: '899 usuarios en 5 módulos con procesos establecidos' },
   { title: 'Compliance multi-país', impact: 'Medio', description: '7 jurisdicciones con reglas fiscales distintas' },
-  { title: 'Integraciones críticas', impact: 'Medio', description: 'Shopify, WMS, Oracle EPM, Odoo' },
+  { title: 'Integraciones críticas', impact: 'Alto', description: '11 sistemas: Shopify, Kbox, WMS, EPM, Odoo + Quick Suite' },
 ];
 
 export default function ERPIndex() {
@@ -80,11 +80,11 @@ export default function ERPIndex() {
         {/* Stats */}
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {keyStats.map((stat) => (
-            <Card key={stat.label} className="bg-card/50">
+            <Card key={stat.label} className={`bg-card/50 ${stat.warning ? 'border-amber-300 dark:border-amber-700' : ''}`}>
               <CardContent className="pt-5">
-                <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                <p className={`text-3xl font-bold ${stat.warning ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>{stat.value}</p>
                 <p className="text-sm font-medium text-foreground mt-1">{stat.label}</p>
-                <p className="text-xs text-muted-foreground">{stat.detail}</p>
+                <p className={`text-xs ${stat.warning ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'}`}>{stat.detail}</p>
               </CardContent>
             </Card>
           ))}
@@ -107,14 +107,15 @@ export default function ERPIndex() {
                 (NAF 6.0) está fragmentado con múltiples herramientas satelitales.
               </p>
               <div className="space-y-2">
-                <p className="font-medium text-foreground">Sistemas actuales:</p>
-                <div className="flex flex-wrap gap-2">
-                  {['NAF 6.0', 'Odoo', 'Shopify', 'WMS Manhattan', 'Oracle EPM', 'Google Sheets'].map((sys) => (
-                    <span key={sys} className="px-2 py-1 rounded bg-muted text-xs">
+                <p className="font-medium text-foreground">Integraciones críticas (11):</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {['NAF 6.0', 'Shopify', 'Kbox', 'Odoo', 'Boston', 'WMS Eflow', 'Simpli-Route', 'Bitua', 'WMS Manhattan', 'Smartlog Galys', 'Google', 'Oracle EPM'].map((sys) => (
+                    <span key={sys} className="px-2 py-0.5 rounded bg-muted text-xs">
                       {sys}
                     </span>
                   ))}
                 </div>
+                <p className="text-xs text-muted-foreground">Data Lake: <strong>Quick Suite</strong></p>
               </div>
               <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
                 <p className="text-amber-800 dark:text-amber-200 text-xs">
@@ -179,7 +180,28 @@ export default function ERPIndex() {
         </section>
 
         {/* CTA */}
-        <section className="grid gap-4 md:grid-cols-2">
+        <section className="grid gap-4 md:grid-cols-3">
+          <Link href="/erp/mapeo-modulos">
+            <Card className="h-full bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-950 dark:to-orange-900 border-amber-200 dark:border-amber-800 hover:border-amber-400 transition-colors cursor-pointer">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 rounded-lg bg-amber-200 dark:bg-amber-800">
+                    <Users className="w-5 h-5 text-amber-700 dark:text-amber-300" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">Mapeo de Módulos</h3>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  ⚠️ <strong>Crítico:</strong> Definir usuarios reales por módulo NAF → NetSuite.
+                  El RFP dice 899, pero ¿cuántos necesitan licencia?
+                </p>
+                <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300 text-sm font-medium">
+                  Mapear módulos
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
           <Link href="/erp/costo-beneficio">
             <Card className="h-full bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 transition-colors cursor-pointer">
               <CardContent className="pt-6">
@@ -187,14 +209,14 @@ export default function ERPIndex() {
                   <div className="p-2 rounded-lg bg-emerald-200 dark:bg-emerald-800">
                     <DollarSign className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
                   </div>
-                  <h3 className="font-semibold text-foreground">Análisis Costo-Beneficio</h3>
+                  <h3 className="font-semibold text-foreground">Estimación de Costos</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Calculadora interactiva con variables reales: licencias, implementación, 
-                  ROI proyectado y comparativa con escenario actual.
+                  Calculadora de licencias NetSuite y rangos de implementación.
+                  Muestra qué datos necesitamos de PROMED para calcular ROI real.
                 </p>
                 <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
-                  Explorar análisis
+                  Ver costos
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </CardContent>

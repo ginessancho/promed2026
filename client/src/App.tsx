@@ -31,6 +31,7 @@ import Demonstracion from "./pages/facturacion/Demonstracion";
 // ═══════════════════════════════════════════════════════════════════════════════
 import ERPIndex from "./pages/erp/index";
 import ERPCostoBeneficio from "./pages/erp/CostoBeneficio";
+import ERPMapeoModulos from "./pages/erp/MapeoModulos";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MÓDULO: PROCESOS CRÍTICOS
@@ -77,6 +78,7 @@ function Router() {
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       <Route path="/erp" component={ERPIndex} />
       <Route path="/erp/costo-beneficio" component={ERPCostoBeneficio} />
+      <Route path="/erp/mapeo-modulos" component={ERPMapeoModulos} />
 
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       {/* PROCESOS - Rutas del módulo de procesos críticos */}

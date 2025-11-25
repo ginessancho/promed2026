@@ -25,7 +25,7 @@ interface InitiativeConfig {
   description: string;
   href: string;
   icon: React.ElementType;
-  status: 'activo' | 'en-desarrollo' | 'planificado';
+  status: 'activo' | 'en-desarrollo' | 'planificado' | 'pausa';
   metrics: Array<{ label: string; value: string; trend?: 'up' | 'down' | 'neutral'; }>;
   color: {
     bg: string;
@@ -43,7 +43,7 @@ const initiatives: InitiativeConfig[] = [
     description: 'Automatización del flujo de facturación entre Odoo y NAF. Eliminación de procesos manuales y reducción de errores.',
     href: '/facturacion',
     icon: FileText,
-    status: 'activo',
+    status: 'pausa',
     metrics: [
       { label: 'Registros analizados', value: '739K' },
       { label: 'Anomalías detectadas', value: '14.4%' },
@@ -103,11 +103,13 @@ const getStatusBadge = (status: InitiativeConfig['status']) => {
     'activo': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300',
     'en-desarrollo': 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
     'planificado': 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+    'pausa': 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
   };
   const labels = {
     'activo': 'Activo',
     'en-desarrollo': 'En desarrollo',
     'planificado': 'Planificado',
+    'pausa': 'En pausa',
   };
   return (
     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${styles[status]}`}>
@@ -119,7 +121,7 @@ const getStatusBadge = (status: InitiativeConfig['status']) => {
 // Resumen ejecutivo global
 const executiveSummary = {
   totalInitiatives: 3,
-  activeProjects: 1,
+  activeProjects: 0,
   estimatedSavings: '$250K+',
   timeline: '2026',
 };
