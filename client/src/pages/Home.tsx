@@ -122,7 +122,7 @@ const getStatusBadge = (status: InitiativeConfig['status']) => {
 const executiveSummary = {
   totalInitiatives: 3,
   activeProjects: 0,
-  estimatedSavings: '$250K+',
+  estimatedSavings: 'Por cuantificar',
   timeline: '2026',
 };
 
@@ -181,14 +181,14 @@ export default function Home() {
               <p className="text-xs text-muted-foreground">en ejecución</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-dashed">
             <CardContent className="pt-5">
               <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="w-4 h-4 text-emerald-600" />
+                <DollarSign className="w-4 h-4 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground uppercase tracking-wide">Ahorro Potencial</span>
               </div>
-              <p className="text-3xl font-bold text-emerald-600">{executiveSummary.estimatedSavings}</p>
-              <p className="text-xs text-muted-foreground">estimado anual</p>
+              <p className="text-xl font-bold text-muted-foreground">{executiveSummary.estimatedSavings}</p>
+              <p className="text-xs text-muted-foreground">pendiente análisis</p>
             </CardContent>
           </Card>
           <Card>
@@ -298,13 +298,13 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <img src={APP_LOGO} alt="Alteridad" className="h-10 object-contain" />
               <div>
-                <p className="text-xs font-semibold text-muted-foreground">Alteridad</p>
-                <p className="text-xs text-muted-foreground">support@alteridad.org</p>
+                <p className="text-xs font-semibold text-muted-foreground">Consultoría: Alteridad</p>
+                <p className="text-xs text-muted-foreground">gsanchezarias@promed-sa.com</p>
               </div>
             </div>
             <div className="text-xs text-muted-foreground md:text-right">
               <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>
-              <p className="mt-1">Noviembre 2025 • Portal v5.0</p>
+              <p className="mt-1">Noviembre 2025 • Portal v5.1</p>
             </div>
           </div>
         </footer>
