@@ -179,6 +179,58 @@ export default function ERPIndex() {
           </div>
         </section>
 
+        {/* Featured: Modelo ROI */}
+        <Link href="/erp/modelo-roi">
+          <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-emerald-950 dark:to-teal-900 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 transition-colors cursor-pointer">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-lg bg-emerald-200 dark:bg-emerald-800">
+                    <DollarSign className="w-6 h-6 text-emerald-700 dark:text-emerald-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground text-lg">📊 Modelo ROI Completo</h3>
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Dashboard ejecutivo</strong> con TCO actual vs NetSuite, beneficios, 
+                      y todas las variables editables para calcular el retorno de inversión.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-medium">
+                  Ver modelo
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Featured: Resumen de Decisiones */}
+        <Link href="/erp/resumen-decisiones">
+          <Card className="bg-gradient-to-br from-blue-50 to-sky-100 dark:from-blue-950 dark:to-sky-900 border-blue-200 dark:border-blue-800 hover:border-blue-400 transition-colors cursor-pointer">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-lg bg-blue-200 dark:bg-blue-800">
+                    <AlertTriangle className="w-6 h-6 text-blue-700 dark:text-blue-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground text-lg">📋 Resumen de Decisiones</h3>
+                    <p className="text-sm text-muted-foreground">
+                      <strong>8 preguntas clave</strong> que definen costo, alcance y licenciamiento.
+                      3 decididas, 2 pendientes, <span className="text-red-600 font-medium">3 bloqueadas</span>.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 font-medium">
+                  Ver matriz
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+
         {/* CTA */}
         <section className="grid gap-4 md:grid-cols-3">
           <Link href="/erp/mapeo-modulos">
@@ -202,44 +254,46 @@ export default function ERPIndex() {
             </Card>
           </Link>
 
-          <Link href="/erp/costo-beneficio">
-            <Card className="h-full bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 transition-colors cursor-pointer">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 rounded-lg bg-emerald-200 dark:bg-emerald-800">
-                    <DollarSign className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
-                  </div>
-                  <h3 className="font-semibold text-foreground">Estimación de Costos</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Calculadora de licencias NetSuite y rangos de implementación.
-                  Muestra qué datos necesitamos de PROMED para calcular ROI real.
-                </p>
-                <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
-                  Ver costos
-                  <ArrowRight className="w-4 h-4" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
           <Card className="h-full bg-muted/30 border-dashed">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-2 rounded-lg bg-muted">
                   <CheckCircle2 className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <h3 className="font-semibold text-foreground">Recomendación</h3>
+                <h3 className="font-semibold text-foreground">Decisiones Confirmadas</h3>
               </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                Los beneficios a largo plazo de NetSuite superan los costos, siempre que se 
-                gestionen activamente los riesgos de migración y cambio organizacional.
-              </p>
+              <ul className="text-sm text-muted-foreground space-y-1 mb-3">
+                <li>✅ Facturación → NetSuite</li>
+                <li>✅ CRM Odoo → NetSuite CRM</li>
+                <li>✅ Data lake AWS se mantiene</li>
+                <li>✅ NAF se elimina completamente</li>
+              </ul>
               <p className="text-xs text-muted-foreground italic">
-                Fuente: ERP Transition Evaluation for PROMED (2025)
+                Ver matriz completa para decisiones pendientes
               </p>
             </CardContent>
           </Card>
+
+          <Link href="/erp/costo-beneficio">
+            <Card className="h-full bg-muted/50 hover:bg-muted/70 transition-colors cursor-pointer">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 rounded-lg bg-muted">
+                    <DollarSign className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">Calculadora Legacy</h3>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Versión anterior de la calculadora de costos.
+                  <strong> Usar Modelo ROI</strong> para análisis completo.
+                </p>
+                <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium">
+                  Ver versión anterior
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </section>
 
         {/* Footer Note */}

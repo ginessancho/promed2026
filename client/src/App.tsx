@@ -30,8 +30,10 @@ import Demonstracion from "./pages/facturacion/Demonstracion";
 // MÓDULO: ERP (NAF → NetSuite)
 // ═══════════════════════════════════════════════════════════════════════════════
 import ERPIndex from "./pages/erp/index";
+import ERPModeloROI from "./pages/erp/ModeloROI";
 import ERPCostoBeneficio from "./pages/erp/CostoBeneficio";
 import ERPMapeoModulos from "./pages/erp/MapeoModulos";
+import ERPResumenDecisiones from "./pages/erp/ResumenDecisiones";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MÓDULO: PROCESOS CRÍTICOS
@@ -39,6 +41,9 @@ import ERPMapeoModulos from "./pages/erp/MapeoModulos";
 import ProcesosIndex from "./pages/procesos/index";
 import Comodatos from "./pages/procesos/Comodatos";
 import Activos from "./pages/procesos/Activos";
+import AdministracionOperacional from "./pages/procesos/AdministracionOperacional";
+import ServicioTecnico from "./pages/procesos/ServicioTecnico";
+import Importaciones from "./pages/procesos/Importaciones";
 
 function Router() {
   return (
@@ -77,8 +82,10 @@ function Router() {
       {/* ERP - Rutas del módulo de migración ERP */}
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       <Route path="/erp" component={ERPIndex} />
+      <Route path="/erp/modelo-roi" component={ERPModeloROI} />
       <Route path="/erp/costo-beneficio" component={ERPCostoBeneficio} />
       <Route path="/erp/mapeo-modulos" component={ERPMapeoModulos} />
+      <Route path="/erp/resumen-decisiones" component={ERPResumenDecisiones} />
 
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       {/* PROCESOS - Rutas del módulo de procesos críticos */}
@@ -86,6 +93,9 @@ function Router() {
       <Route path="/procesos" component={ProcesosIndex} />
       <Route path="/procesos/comodatos" component={Comodatos} />
       <Route path="/procesos/activos" component={Activos} />
+      <Route path="/procesos/administracion" component={AdministracionOperacional} />
+      <Route path="/procesos/servicio-tecnico" component={ServicioTecnico} />
+      <Route path="/procesos/importaciones" component={Importaciones} />
 
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       {/* FALLBACKS */}
