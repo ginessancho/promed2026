@@ -1,3 +1,38 @@
+CREATE TABLE `businessProcesses` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`department` text NOT NULL,
+	`criticality` text DEFAULT 'medium' NOT NULL,
+	`description` text,
+	`updatedAt` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `impactEstimates` (
+	`id` text PRIMARY KEY NOT NULL,
+	`metricId` text NOT NULL,
+	`processId` text,
+	`amount` real NOT NULL,
+	`amountMin` real,
+	`amountMax` real,
+	`confidence` text DEFAULT 'low' NOT NULL,
+	`source` text,
+	`assumptions` text,
+	`followUpRequired` integer DEFAULT false NOT NULL,
+	`updatedAt` integer NOT NULL,
+	`updatedBy` text,
+	FOREIGN KEY (`metricId`) REFERENCES `metricDefinitions`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`processId`) REFERENCES `businessProcesses`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `metricDefinitions` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`category` text NOT NULL,
+	`unit` text NOT NULL,
+	`description` text,
+	`updatedAt` integer NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE `proposalIntro` (
 	`id` text PRIMARY KEY NOT NULL,
 	`title` text DEFAULT 'Propuesta 2026' NOT NULL,
@@ -30,3 +65,17 @@ CREATE TABLE `proposalPhases` (
 	`updatedAt` integer NOT NULL,
 	`updatedBy` text
 );
+--> statement-breakpoint
+CREATE TABLE `users` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`openId` text NOT NULL,
+	`name` text,
+	`email` text,
+	`loginMethod` text,
+	`role` text DEFAULT 'user' NOT NULL,
+	`createdAt` integer NOT NULL,
+	`updatedAt` integer NOT NULL,
+	`lastSignedIn` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `users_openId_unique` ON `users` (`openId`);

@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, real } from "drizzle-orm/sqlite-core";
 
 /**
  * Core user table backing auth flow.
@@ -22,73 +22,78 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Process estimates for tracking USD impact of operational inefficiencies.
- * Used by the Procesos Críticos page for interview data collection.
+ * Definitions of ROI variables and metrics.
+ * Defines what we are measuring (e.g., "Licensing Cost", "Processing Time").
  */
-export const processEstimates = sqliteTable("processEstimates", {
-  /** Process identifier: 'comodatos', 'consignacion', 'admin', etc. */
+export const metricDefinitions = sqliteTable("metricDefinitions", {
+  /** Unique key for the metric, e.g., 'license_cost', 'efficiency_gain' */
   id: text("id").primaryKey(),
-  /** Estimated annual loss in USD. NULL means no data yet. */
-  estimatedAnnualLossUSD: integer("estimatedAnnualLossUSD"),
-  /** Confidence level of the estimate */
-  confidenceLevel: text("confidenceLevel", { enum: ["confirmed", "estimated", "unknown"] }).default("unknown").notNull(),
-  /** Interview notes and assumptions */
+  /** Human readable name */
+  name: text("name").notNull(),
+  /** Category of the metric */
+  category: text("category", { enum: ["financial_cost", "financial_benefit", "operational_kpi", "risk_factor"] }).notNull(),
+  /** Unit of measurement */
+  unit: text("unit", { enum: ["USD", "hours", "count", "percent", "days", "score"] }).notNull(),
+  /** Detailed description of what this metric represents */
+  description: text("description"),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+});
+
+export type MetricDefinition = typeof metricDefinitions.$inferSelect;
+export type InsertMetricDefinition = typeof metricDefinitions.$inferInsert;
+
+/**
+ * Business processes that are being analyzed or improved.
+ */
+export const businessProcesses = sqliteTable("businessProcesses", {
+  /** Unique key for the process, e.g., 'invoice_processing' */
+  id: text("id").primaryKey(),
+  /** Human readable name */
+  name: text("name").notNull(),
+  /** Department owning the process */
+  department: text("department").notNull(), // Finance, Operations, etc.
+  /** Criticality level */
+  criticality: text("criticality", { enum: ["low", "medium", "high", "critical"] }).default("medium").notNull(),
+  /** Description of the process */
+  description: text("description"),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+});
+
+export type BusinessProcess = typeof businessProcesses.$inferSelect;
+export type InsertBusinessProcess = typeof businessProcesses.$inferInsert;
+
+/**
+ * Actual data points or estimates connecting metrics to processes (or global).
+ */
+export const impactEstimates = sqliteTable("impactEstimates", {
+  /** Unique ID */
+  id: text("id").primaryKey(),
+  /** The metric being measured */
+  metricId: text("metricId").notNull().references(() => metricDefinitions.id),
+  /** The process this applies to (nullable for global project metrics like License Fee) */
+  processId: text("processId").references(() => businessProcesses.id),
+  
+  /** The estimated or measured value */
+  amount: real("amount").notNull(),
+  /** Range estimates if uncertain */
+  amountMin: real("amountMin"),
+  amountMax: real("amountMax"),
+  
+  /** Confidence in this number */
+  confidence: text("confidence", { enum: ["low", "medium", "high", "confirmed"] }).default("low").notNull(),
+  /** Source of the data */
+  source: text("source"), // e.g., "Interview with CFO", "Vendor Quote"
+  /** Assumptions made */
   assumptions: text("assumptions"),
-  /** Last update timestamp */
+  /** Whether this needs follow-up */
+  followUpRequired: integer("followUpRequired", { mode: "boolean" }).default(false).notNull(),
+  
   updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  /** Who updated this estimate */
   updatedBy: text("updatedBy"),
 });
 
-export type ProcessEstimate = typeof processEstimates.$inferSelect;
-export type InsertProcessEstimate = typeof processEstimates.$inferInsert;
-
-/**
- * Data source identifiers for process metrics.
- * Each represents a tool or method used to collect data.
- */
-export const DATA_SOURCES = [
-  "kawak",      // 600+ procedimientos formalizados
-  "bamboohr",   // People, headcount, salaries
-  "quicksight", // Finance dashboards
-  "odoo",       // CRM, operations
-  "apex",       // Current system transactions
-  "redshift",   // AWS data warehouse
-  "naf",        // Legacy ERP data
-  "interview",  // Entrevista with person
-] as const;
-
-export type DataSource = (typeof DATA_SOURCES)[number];
-
-/**
- * Individual data points for process cost analysis.
- * Each metric can be tracked with its source and confidence level.
- */
-export const processDataPoints = sqliteTable("processDataPoints", {
-  /** Composite key: processId:metricKey (e.g., "comodatos:contracts_active") */
-  id: text("id").primaryKey(),
-  /** Process identifier: 'comodatos', 'consignacion', 'admin', etc. */
-  processId: text("processId").notNull(),
-  /** Metric key: 'contracts_active', 'monthly_fee_avg', etc. */
-  metricKey: text("metricKey").notNull(),
-  /** The numeric value */
-  value: integer("value"),
-  /** Unit of measurement: 'USD', 'count', 'hours', 'percent', 'days' */
-  unit: text("unit", { enum: ["USD", "count", "hours", "percent", "days"] }).notNull(),
-  /** Data source tool or method */
-  source: text("source", { enum: ["kawak", "bamboohr", "quicksight", "odoo", "apex", "redshift", "naf", "interview"] }),
-  /** Additional source detail (e.g., "Entrevista con Gerente Ops, 10/12/2025") */
-  sourceDetail: text("sourceDetail"),
-  /** Confidence level of the value */
-  confidenceLevel: text("confidenceLevel", { enum: ["confirmed", "estimated", "unknown"] }).default("unknown").notNull(),
-  /** Last update timestamp */
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  /** Who updated this data point */
-  updatedBy: text("updatedBy"),
-});
-
-export type ProcessDataPoint = typeof processDataPoints.$inferSelect;
-export type InsertProcessDataPoint = typeof processDataPoints.$inferInsert;
+export type ImpactEstimate = typeof impactEstimates.$inferSelect;
+export type InsertImpactEstimate = typeof impactEstimates.$inferInsert;
 
 /**
  * Content for the Proposal Introduction page.

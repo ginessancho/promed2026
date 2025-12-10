@@ -3,7 +3,13 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import { drizzle as drizzleLibsql } from "drizzle-orm/libsql";
 import Database from "better-sqlite3";
 import { createClient } from "@libsql/client";
-import { InsertUser, InsertProcessEstimate, ProcessEstimate, InsertProcessDataPoint, ProcessDataPoint, users, processEstimates, processDataPoints, proposalIntro, proposalPhases, InsertProposalIntro, ProposalIntro, InsertProposalPhase, ProposalPhase } from "../drizzle/schema";
+import { 
+  InsertUser, users, 
+  InsertMetricDefinition, MetricDefinition, metricDefinitions,
+  InsertBusinessProcess, BusinessProcess, businessProcesses,
+  InsertImpactEstimate, ImpactEstimate, impactEstimates,
+  proposalIntro, proposalPhases, InsertProposalIntro, ProposalIntro, InsertProposalPhase, ProposalPhase 
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 import { existsSync, mkdirSync } from "fs";
 import { dirname } from "path";
@@ -114,147 +120,90 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Process Estimates
+// Metric Definitions
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listProcessEstimates(): ProcessEstimate[] {
+export function listMetricDefinitions(): MetricDefinition[] {
   const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot list process estimates: database not available");
-    return [];
-  }
-
-  return db.select().from(processEstimates).all();
+  if (!db) return [];
+  return db.select().from(metricDefinitions).all();
 }
 
-export function getProcessEstimate(id: string): ProcessEstimate | undefined {
+export function upsertMetricDefinition(metric: InsertMetricDefinition): void {
   const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get process estimate: database not available");
-    return undefined;
-  }
+  if (!db || !metric.id) return;
 
-  const result = db.select().from(processEstimates).where(eq(processEstimates.id, id)).limit(1).all();
-  return result.length > 0 ? result[0] : undefined;
-}
+  const updateSet: Record<string, unknown> = { updatedAt: new Date() };
+  if (metric.name) updateSet.name = metric.name;
+  if (metric.category) updateSet.category = metric.category;
+  if (metric.unit) updateSet.unit = metric.unit;
+  if (metric.description) updateSet.description = metric.description;
 
-export function upsertProcessEstimate(estimate: InsertProcessEstimate): void {
-  if (!estimate.id) {
-    throw new Error("Process estimate id is required");
-  }
-
-  const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot upsert process estimate: database not available");
-    return;
-  }
-
-  const updateSet: Record<string, unknown> = {
-    updatedAt: new Date(),
-  };
-
-  if (estimate.estimatedAnnualLossUSD !== undefined) {
-    updateSet.estimatedAnnualLossUSD = estimate.estimatedAnnualLossUSD;
-  }
-  if (estimate.confidenceLevel !== undefined) {
-    updateSet.confidenceLevel = estimate.confidenceLevel;
-  }
-  if (estimate.assumptions !== undefined) {
-    updateSet.assumptions = estimate.assumptions;
-  }
-  if (estimate.updatedBy !== undefined) {
-    updateSet.updatedBy = estimate.updatedBy;
-  }
-
-  db.insert(processEstimates).values({
-    ...estimate,
-    updatedAt: new Date(),
-  }).onConflictDoUpdate({
-    target: processEstimates.id,
-    set: updateSet,
-  }).run();
+  db.insert(metricDefinitions).values({ ...metric, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: metricDefinitions.id, set: updateSet }).run();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Process Data Points - Individual metrics per process
+// Business Processes
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listProcessDataPoints(processId?: string): ProcessDataPoint[] {
+export function listBusinessProcesses(): BusinessProcess[] {
   const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot list process data points: database not available");
-    return [];
-  }
+  if (!db) return [];
+  return db.select().from(businessProcesses).all();
+}
+
+export function upsertBusinessProcess(process: InsertBusinessProcess): void {
+  const db = getDb();
+  if (!db || !process.id) return;
+
+  const updateSet: Record<string, unknown> = { updatedAt: new Date() };
+  if (process.name) updateSet.name = process.name;
+  if (process.department) updateSet.department = process.department;
+  if (process.criticality) updateSet.criticality = process.criticality;
+  if (process.description) updateSet.description = process.description;
+
+  db.insert(businessProcesses).values({ ...process, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: businessProcesses.id, set: updateSet }).run();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Impact Estimates
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export function listImpactEstimates(processId?: string): ImpactEstimate[] {
+  const db = getDb();
+  if (!db) return [];
 
   if (processId) {
-    return db.select().from(processDataPoints).where(eq(processDataPoints.processId, processId)).all();
+    return db.select().from(impactEstimates).where(eq(impactEstimates.processId, processId)).all();
   }
-  return db.select().from(processDataPoints).all();
+  return db.select().from(impactEstimates).all();
 }
 
-export function getProcessDataPoint(id: string): ProcessDataPoint | undefined {
+export function upsertImpactEstimate(estimate: InsertImpactEstimate): void {
   const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get process data point: database not available");
-    return undefined;
-  }
+  if (!db || !estimate.id) return;
 
-  const result = db.select().from(processDataPoints).where(eq(processDataPoints.id, id)).limit(1).all();
-  return result.length > 0 ? result[0] : undefined;
+  const updateSet: Record<string, unknown> = { updatedAt: new Date() };
+  // Only update fields provided
+  const keys = Object.keys(estimate) as (keyof InsertImpactEstimate)[];
+  keys.forEach(key => {
+    if (key !== 'id' && estimate[key] !== undefined) {
+      updateSet[key] = estimate[key];
+    }
+  });
+
+  db.insert(impactEstimates).values({ ...estimate, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: impactEstimates.id, set: updateSet }).run();
 }
 
-export function upsertProcessDataPoint(dataPoint: InsertProcessDataPoint): void {
-  if (!dataPoint.id || !dataPoint.processId || !dataPoint.metricKey) {
-    throw new Error("Data point id, processId, and metricKey are required");
-  }
-
+export function deleteImpactEstimate(id: string): void {
   const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot upsert data point: database not available");
-    return;
-  }
-
-  const updateSet: Record<string, unknown> = {
-    updatedAt: new Date(),
-  };
-
-  if (dataPoint.value !== undefined) {
-    updateSet.value = dataPoint.value;
-  }
-  if (dataPoint.unit !== undefined) {
-    updateSet.unit = dataPoint.unit;
-  }
-  if (dataPoint.source !== undefined) {
-    updateSet.source = dataPoint.source;
-  }
-  if (dataPoint.sourceDetail !== undefined) {
-    updateSet.sourceDetail = dataPoint.sourceDetail;
-  }
-  if (dataPoint.confidenceLevel !== undefined) {
-    updateSet.confidenceLevel = dataPoint.confidenceLevel;
-  }
-  if (dataPoint.updatedBy !== undefined) {
-    updateSet.updatedBy = dataPoint.updatedBy;
-  }
-
-  db.insert(processDataPoints).values({
-    ...dataPoint,
-    updatedAt: new Date(),
-  }).onConflictDoUpdate({
-    target: processDataPoints.id,
-    set: updateSet,
-  }).run();
+  if (!db) return;
+  db.delete(impactEstimates).where(eq(impactEstimates.id, id)).run();
 }
 
-export function deleteProcessDataPoint(id: string): void {
-  const db = getDb();
-  if (!db) {
-    console.warn("[Database] Cannot delete process data point: database not available");
-    return;
-  }
-
-  db.delete(processDataPoints).where(eq(processDataPoints.id, id)).run();
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Proposal Intro Content

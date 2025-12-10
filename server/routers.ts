@@ -2,7 +2,13 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { listProcessEstimates, upsertProcessEstimate, listProcessDataPoints, upsertProcessDataPoint, getProposalIntro, upsertProposalIntro, listProposalPhases, upsertProposalPhase, deleteProposalPhase } from "./db";
+import { 
+  listMetricDefinitions, upsertMetricDefinition,
+  listBusinessProcesses, upsertBusinessProcess,
+  listImpactEstimates, upsertImpactEstimate, deleteImpactEstimate,
+  getProposalIntro, upsertProposalIntro, 
+  listProposalPhases, upsertProposalPhase, deleteProposalPhase 
+} from "./db";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -19,60 +25,85 @@ export const appRouter = router({
     }),
   }),
 
-  processEstimates: router({
-    list: publicProcedure.query(() => listProcessEstimates()),
-    update: publicProcedure
-      .input(
-        z.object({
-          id: z.string(),
-          estimatedAnnualLossUSD: z.number().nullable().optional(),
-          confidenceLevel: z.enum(["confirmed", "estimated", "unknown"]).optional(),
-          assumptions: z.string().nullable().optional(),
-          updatedBy: z.string().nullable().optional(),
-        })
-      )
+  // ROI & Metric Definitions
+  metricDefinitions: router({
+    list: publicProcedure.query(() => listMetricDefinitions()),
+    upsert: publicProcedure
+      .input(z.object({
+        id: z.string(),
+        name: z.string(),
+        category: z.enum(["financial_cost", "financial_benefit", "operational_kpi", "risk_factor"]),
+        unit: z.enum(["USD", "hours", "count", "percent", "days", "score"]),
+        description: z.string().optional().nullable(),
+      }))
       .mutation(({ input }) => {
-        upsertProcessEstimate({
-          id: input.id,
-          estimatedAnnualLossUSD: input.estimatedAnnualLossUSD ?? null,
-          confidenceLevel: input.confidenceLevel,
-          assumptions: input.assumptions ?? null,
-          updatedBy: input.updatedBy ?? null,
+        upsertMetricDefinition({
+          ...input,
+          description: input.description ?? null,
         });
         return { success: true };
       }),
   }),
 
-  processDataPoints: router({
+  // Business Processes
+  businessProcesses: router({
+    list: publicProcedure.query(() => listBusinessProcesses()),
+    upsert: publicProcedure
+      .input(z.object({
+        id: z.string(),
+        name: z.string(),
+        department: z.string(),
+        criticality: z.enum(["low", "medium", "high", "critical"]),
+        description: z.string().optional().nullable(),
+      }))
+      .mutation(({ input }) => {
+        upsertBusinessProcess({
+          ...input,
+          description: input.description ?? null,
+        });
+        return { success: true };
+      }),
+  }),
+
+  // Impact Estimates (Data Points)
+  impactEstimates: router({
     list: publicProcedure
       .input(z.object({ processId: z.string().optional() }).optional())
-      .query(({ input }) => listProcessDataPoints(input?.processId)),
-    update: publicProcedure
-      .input(
-        z.object({
-          id: z.string(),
-          processId: z.string(),
-          metricKey: z.string(),
-          value: z.number().nullable().optional(),
-          unit: z.enum(["USD", "count", "hours", "percent", "days"]),
-          source: z.enum(["kawak", "bamboohr", "quicksight", "odoo", "apex", "redshift", "naf", "interview"]).nullable().optional(),
-          sourceDetail: z.string().nullable().optional(),
-          confidenceLevel: z.enum(["confirmed", "estimated", "unknown"]).optional(),
-          updatedBy: z.string().nullable().optional(),
-        })
-      )
+      .query(({ input }) => listImpactEstimates(input?.processId)),
+    upsert: publicProcedure
+      .input(z.object({
+        id: z.string(),
+        metricId: z.string(),
+        processId: z.string().optional().nullable(),
+        amount: z.number(),
+        amountMin: z.number().optional().nullable(),
+        amountMax: z.number().optional().nullable(),
+        confidence: z.enum(["low", "medium", "high", "confirmed"]),
+        source: z.string().optional().nullable(),
+        assumptions: z.string().optional().nullable(),
+        followUpRequired: z.boolean().optional(),
+        updatedBy: z.string().optional().nullable(),
+      }))
       .mutation(({ input }) => {
-        upsertProcessDataPoint({
+        upsertImpactEstimate({
           id: input.id,
-          processId: input.processId,
-          metricKey: input.metricKey,
-          value: input.value ?? null,
-          unit: input.unit,
+          metricId: input.metricId,
+          processId: input.processId ?? null,
+          amount: input.amount,
+          amountMin: input.amountMin ?? null,
+          amountMax: input.amountMax ?? null,
+          confidence: input.confidence,
           source: input.source ?? null,
-          sourceDetail: input.sourceDetail ?? null,
-          confidenceLevel: input.confidenceLevel,
+          assumptions: input.assumptions ?? null,
+          followUpRequired: input.followUpRequired ?? false,
           updatedBy: input.updatedBy ?? null,
         });
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input(z.object({ id: z.string() }))
+      .mutation(({ input }) => {
+        deleteImpactEstimate(input.id);
         return { success: true };
       }),
   }),
@@ -139,3 +170,4 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
