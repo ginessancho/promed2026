@@ -1,27 +1,6 @@
 import { integer, sqliteTable, text, real } from "drizzle-orm/sqlite-core";
 
 /**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- */
-export const users = sqliteTable("users", {
-  /** Surrogate primary key. Auto-incremented numeric value managed by the database. */
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
-  openId: text("openId").notNull().unique(),
-  name: text("name"),
-  email: text("email"),
-  loginMethod: text("loginMethod"),
-  role: text("role", { enum: ["user", "admin"] }).default("user").notNull(),
-  createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  lastSignedIn: integer("lastSignedIn", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-});
-
-export type User = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
-
-/**
  * Definitions of ROI variables and metrics.
  * Defines what we are measuring (e.g., "Licensing Cost", "Processing Time").
  */
