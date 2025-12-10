@@ -1,12 +1,19 @@
 {
   "version": "7",
-  "dialect": "mysql",
+  "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1763121568061,
-      "tag": "0000_sad_maximus",
+      "when": 1733846400000,
+      "tag": "0000_init",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1765373585415,
+      "tag": "0001_happy_gambit",
       "breakpoints": true
     }
   ]

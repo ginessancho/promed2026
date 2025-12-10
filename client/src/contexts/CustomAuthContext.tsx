@@ -9,7 +9,7 @@ interface CustomAuthContextType {
 
 const CustomAuthContext = createContext<CustomAuthContextType | undefined>(undefined);
 
-const CORRECT_PASSWORD = import.meta.env.VITE_PROPOSAL_PASSWORD || 'default_password_change_me';
+const CORRECT_PASSWORD = import.meta.env.VITE_PROPOSAL_PASSWORD || 'Prmd2026!';
 const AUTH_KEY = 'propuesta_f007_auth';
 
 export function CustomAuthProvider({ children }: { children: ReactNode }) {

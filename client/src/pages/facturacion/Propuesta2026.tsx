@@ -6,8 +6,13 @@ import MermaidDiagram from '@/components/MermaidDiagram';
 import { comparisonDiagram } from '@/data/diagrams';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import PhaseTimeline from '@/components/PhaseTimeline';
+import { trpc } from '@/lib/trpc';
+
 
 export default function Propuesta2026() {
+  const { data: intro } = trpc.proposal.getIntro.useQuery();
+  const { data: phasesData } = trpc.proposal.listPhases.useQuery();
+
   const beneficios = [
     'Eliminación de entrada manual duplicada',
     'Reducción de errores de transcripción',
@@ -21,40 +26,40 @@ export default function Propuesta2026() {
 
   const accentStyles = {
     blue: {
-      border: 'border-l-blue-600',
-      badge: 'bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800',
-      badgeTitle: 'text-blue-900 dark:text-blue-100',
-      badgeBody: 'text-blue-800 dark:text-blue-200',
+      border: 'border-l-slate-600',
+      badge: 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800',
+      badgeTitle: 'text-slate-900 dark:text-slate-100',
+      badgeBody: 'text-slate-800 dark:text-slate-200',
     },
     emerald: {
-      border: 'border-l-emerald-600',
-      badge: 'bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800',
-      badgeTitle: 'text-emerald-900 dark:text-emerald-100',
-      badgeBody: 'text-emerald-800 dark:text-emerald-200',
+      border: 'border-l-slate-600',
+      badge: 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800',
+      badgeTitle: 'text-slate-900 dark:text-slate-100',
+      badgeBody: 'text-slate-800 dark:text-slate-200',
     },
     purple: {
-      border: 'border-l-purple-600',
-      badge: 'bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800',
-      badgeTitle: 'text-purple-900 dark:text-purple-100',
-      badgeBody: 'text-purple-800 dark:text-purple-200',
+      border: 'border-l-slate-600',
+      badge: 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800',
+      badgeTitle: 'text-slate-900 dark:text-slate-100',
+      badgeBody: 'text-slate-800 dark:text-slate-200',
     },
     amber: {
-      border: 'border-l-amber-600',
-      badge: 'bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800',
-      badgeTitle: 'text-amber-900 dark:text-amber-100',
-      badgeBody: 'text-amber-800 dark:text-amber-200',
+      border: 'border-l-slate-600',
+      badge: 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800',
+      badgeTitle: 'text-slate-900 dark:text-slate-100',
+      badgeBody: 'text-slate-800 dark:text-slate-200',
     },
     rose: {
-      border: 'border-l-rose-600',
-      badge: 'bg-rose-50 dark:bg-rose-950 border border-rose-200 dark:border-rose-800',
-      badgeTitle: 'text-rose-900 dark:text-rose-100',
-      badgeBody: 'text-rose-800 dark:text-rose-200',
+      border: 'border-l-slate-600',
+      badge: 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800',
+      badgeTitle: 'text-slate-900 dark:text-slate-100',
+      badgeBody: 'text-slate-800 dark:text-slate-200',
     },
   } as const;
 
   type AccentKey = keyof typeof accentStyles;
 
-  const phases: Array<{
+  const staticPhases: Array<{
     technical: string;
     concept: string;
     duration: string;
@@ -136,6 +141,17 @@ export default function Propuesta2026() {
     },
   ];
 
+  const phases = phasesData && phasesData.length > 0 ? phasesData.map((p, i) => ({
+    technical: p.technicalName,
+    concept: p.conceptName,
+    duration: p.duration,
+    gate: p.gate,
+    accentKey: (['blue', 'emerald', 'purple', 'amber', 'rose'][i % 5]) as AccentKey,
+    objective: p.objective,
+    deliverables: p.deliverables as { category: string; items: string[] }[],
+    outcome: p.outcome,
+  })) : staticPhases;
+
   const conceptualBridges = phases.map(({ technical, concept, gate }) => ({
     technical,
     concept,
@@ -161,8 +177,8 @@ export default function Propuesta2026() {
               <Lightbulb className="w-7 h-7 text-green-600" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold">Propuesta 2026</h2>
-              <p className="text-base text-muted-foreground">Evolución estratégica del ecosistema Odoo</p>
+              <h2 className="text-3xl font-bold">{intro?.title ?? "Propuesta 2026"}</h2>
+              <p className="text-base text-muted-foreground">{intro?.subtitle ?? "Evolución estratégica del ecosistema Odoo"}</p>
             </div>
           </div>
         </div>
@@ -172,21 +188,21 @@ export default function Propuesta2026() {
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
               
-              <div className="text-3xl font-bold text-green-700 dark:text-green-300">Valor Estratégico</div>
-              <div className="text-sm text-green-600 dark:text-green-400">Impacto en el Negocio</div>
-              <div className="text-xs text-muted-foreground mt-1">Eficiencia, Precisión y Escalabilidad</div>
+              <div className="text-3xl font-bold text-green-700 dark:text-green-300">{intro?.strategicValueTitle ?? "Valor Estratégico"}</div>
+              <div className="text-sm text-green-600 dark:text-green-400">{intro?.strategicValueSubtitle ?? "Impacto en el Negocio"}</div>
+              <div className="text-xs text-muted-foreground mt-1">{intro?.strategicValueDetail ?? "Eficiencia, Precisión y Escalabilidad"}</div>
             </Card>
             <Card className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
               <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-700 dark:text-blue-400" />
-              <div className="text-3xl font-bold text-blue-700 dark:text-blue-300">12 Meses</div>
-              <div className="text-sm text-blue-600 dark:text-blue-400">Timeline Completo</div>
-              <div className="text-xs text-muted-foreground mt-1">Ene - Dic 2026</div>
+              <div className="text-3xl font-bold text-blue-700 dark:text-blue-300">{intro?.timelineTitle ?? "12 Meses"}</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">{intro?.timelineSubtitle ?? "Timeline Completo"}</div>
+              <div className="text-xs text-muted-foreground mt-1">{intro?.timelineDetail ?? "Ene - Dic 2026"}</div>
             </Card>
             <Card className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 border-purple-200 dark:border-purple-800">
               <Layers className="w-8 h-8 mx-auto mb-2 text-purple-700 dark:text-purple-400" />
-              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">5 Fases</div>
-              <div className="text-sm text-purple-600 dark:text-purple-400">Taxonomía única</div>
-              <div className="text-xs text-muted-foreground mt-1">Valor continuo</div>
+              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">{intro?.phasesTitle ?? "5 Fases"}</div>
+              <div className="text-sm text-purple-600 dark:text-purple-400">{intro?.phasesSubtitle ?? "Taxonomía única"}</div>
+              <div className="text-xs text-muted-foreground mt-1">{intro?.phasesDetail ?? "Valor continuo"}</div>
             </Card>
           </div>
         </section>
@@ -219,9 +235,9 @@ export default function Propuesta2026() {
             <div className="flex items-start gap-3">
               <Zap className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Visión Estratégica</h3>
+                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">{intro?.visionTitle ?? "Visión Estratégica"}</h3>
                 <p className="text-blue-800 dark:text-blue-200 leading-relaxed text-sm">
-                  Este proyecto representa una <strong>evolución natural</strong> de la inversión en Odoo. El objetivo es convertir a Odoo en el centro del ciclo de ventas, desde la cotización hasta la facturación, <strong>eliminando el formulario F-007</strong> y los procesos manuales asociados. Esto desbloqueará un nuevo nivel de eficiencia operativa y reducirá errores significativamente.
+                  {intro?.visionText ?? "Este proyecto representa una evolución natural de la inversión en Odoo. El objetivo es convertir a Odoo en el centro del ciclo de ventas, desde la cotización hasta la facturación, eliminando el formulario F-007 y los procesos manuales asociados. Esto desbloqueará un nuevo nivel de eficiencia operativa y reducirá errores significativamente."}
                 </p>
               </div>
             </div>
