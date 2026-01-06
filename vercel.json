@@ -3,7 +3,8 @@
   "outputDirectory": "dist/public",
   "functions": {
     "api/trpc/[trpc].ts": {
-      "maxDuration": 10
+      "maxDuration": 10,
+      "includeFiles": "server/**/*.ts,drizzle/**/*.ts,shared/**/*.ts"
     }
   },
   "rewrites": [
