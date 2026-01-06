@@ -194,6 +194,9 @@ export default function ERPIndex() {
                       <strong>Dashboard ejecutivo</strong> con TCO actual vs NetSuite, beneficios, 
                       y todas las variables editables para calcular el retorno de inversión.
                     </p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
+                      ✓ Actualizado con pricing Oracle confirmado: <strong>$504/usuario/año</strong> (682 usuarios)
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-medium">
