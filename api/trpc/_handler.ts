@@ -419,9 +419,27 @@ export default async function handler(req: Request): Promise<Response> {
   console.log("[tRPC Handler] Received request:", req.url);
   
   try {
+    // Vercel may pass a path-only URL, tRPC needs a full URL
+    let requestUrl = req.url;
+    if (requestUrl.startsWith('/')) {
+      // Construct full URL from path
+      const host = req.headers.get('host') || req.headers.get('x-forwarded-host') || 'localhost';
+      const protocol = req.headers.get('x-forwarded-proto') || 'https';
+      requestUrl = `${protocol}://${host}${requestUrl}`;
+    }
+    
+    // Create a new request with the proper URL
+    const properRequest = new Request(requestUrl, {
+      method: req.method,
+      headers: req.headers,
+      body: req.body,
+      // @ts-ignore - duplex is needed for streaming bodies
+      duplex: 'half',
+    });
+    
     const response = await fetchRequestHandler({
       endpoint: "/api/trpc",
-      req,
+      req: properRequest,
       router: appRouter,
       createContext: () => ({}),
       onError: ({ error, path }) => {

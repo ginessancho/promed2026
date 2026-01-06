@@ -24162,9 +24162,22 @@ var appRouter = router({
 async function handler(req) {
   console.log("[tRPC Handler] Received request:", req.url);
   try {
+    let requestUrl = req.url;
+    if (requestUrl.startsWith("/")) {
+      const host = req.headers.get("host") || req.headers.get("x-forwarded-host") || "localhost";
+      const protocol = req.headers.get("x-forwarded-proto") || "https";
+      requestUrl = `${protocol}://${host}${requestUrl}`;
+    }
+    const properRequest = new Request(requestUrl, {
+      method: req.method,
+      headers: req.headers,
+      body: req.body,
+      // @ts-ignore - duplex is needed for streaming bodies
+      duplex: "half"
+    });
     const response = await fetchRequestHandler({
       endpoint: "/api/trpc",
-      req,
+      req: properRequest,
       router: appRouter,
       createContext: () => ({}),
       onError: ({ error: error46, path }) => {
