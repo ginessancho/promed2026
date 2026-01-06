@@ -10,6 +10,10 @@
     {
       "source": "/api/trpc/:path*",
       "destination": "/api/trpc/:path*"
+    },
+    {
+      "source": "/((?!api|assets|.*\\.).*)",
+      "destination": "/index.html"
     }
   ]
 }
