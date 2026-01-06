@@ -1,19 +1,9 @@
 {
-  "buildCommand": "pnpm install && pnpm build",
+  "buildCommand": "pnpm install && vite build",
   "outputDirectory": "dist/public",
-  "functions": {
-    "api/trpc/[trpc].js": {
-      "maxDuration": 10,
-      "memory": 256
-    }
-  },
   "rewrites": [
     {
-      "source": "/api/trpc/:path*",
-      "destination": "/api/trpc/[trpc].js"
-    },
-    {
-      "source": "/((?!api|assets|.*\\.).*)",
+      "source": "/((?!assets|.*\\.).*)",
       "destination": "/index.html"
     }
   ]

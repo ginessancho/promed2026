@@ -38,10 +38,15 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
+// API URL: use env var for production (Railway), relative path for local dev
+const apiUrl = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api/trpc`
+  : "/api/trpc";
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: "/api/trpc",
+      url: apiUrl,
       transformer: superjson,
       fetch(input, init) {
         return globalThis.fetch(input, {
