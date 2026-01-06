@@ -134,3 +134,24 @@ export const proposalPhases = sqliteTable("proposalPhases", {
 
 export type ProposalPhase = typeof proposalPhases.$inferSelect;
 export type InsertProposalPhase = typeof proposalPhases.$inferInsert;
+
+/**
+ * ROI Model Data - stores the complete ROI calculation model as JSON.
+ * Single-row table (id='default') that persists the user's inputs.
+ */
+export const roiModelData = sqliteTable("roiModelData", {
+  /** Singleton row identifier */
+  id: text("id").primaryKey(), // 'default'
+  
+  /** Complete model data as JSON blob - mirrors ModelData interface in frontend */
+  data: text("data", { mode: "json" }).notNull(),
+  
+  /** Version for future schema evolution */
+  version: integer("version").default(1).notNull(),
+  
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+  updatedBy: text("updatedBy"),
+});
+
+export type RoiModelData = typeof roiModelData.$inferSelect;
+export type InsertRoiModelData = typeof roiModelData.$inferInsert;

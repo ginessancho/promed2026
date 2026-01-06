@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { 
   ArrowLeft, ChevronDown, ChevronRight, DollarSign, TrendingUp, 
   Clock, Percent, Calculator, CheckCircle2, AlertCircle, XCircle,
-  Server, Users, Settings, Link2, Eye, Wallet, ShieldCheck, Package, HelpCircle, Info
+  Server, Users, Settings, Link2, Eye, Wallet, ShieldCheck, Package, HelpCircle, Info,
+  Cloud, CloudOff, Loader2
 } from 'lucide-react';
+import { trpc } from '@/lib/trpc';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Link } from 'wouter';
+import { NETSUITE_PRICING, PROMED_USERS } from '@/const';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TIPOS Y CONSTANTES
@@ -144,7 +147,16 @@ const fieldDefinitions: Record<string, FieldDefinition> = {
     formula: 'Salario promedio ÷ 160 hrs',
   },
   
-  // 2A. Licencias NetSuite
+  // 2A. Licencias NetSuite (CONFIRMADO - Oracle Dic 2025)
+  usuariosNetSuite: {
+    definition: 'Total de usuarios que accederán a NetSuite.',
+    example: 'PROMED confirmó 682 usuarios totales (colaboradores, practicantes, servicios profesionales).',
+  },
+  costoUsuarioAnual: {
+    definition: 'Costo anual por usuario de NetSuite.',
+    formula: '$504/usuario/año (65% descuento sobre precio lista $1,440)',
+    example: 'Precio confirmado por Oracle (Janette Barria, 30 Dic 2025). Fijo por 3 años.',
+  },
   baseNetSuite: {
     definition: 'Costo base mensual de NetSuite Mid-Market Edition.',
     formula: 'Precio estándar de Oracle NetSuite',
@@ -160,21 +172,10 @@ const fieldDefinitions: Record<string, FieldDefinition> = {
   fixedAssets: {
     definition: 'Módulo de gestión de activos fijos y depreciación.',
   },
-  fullUsers: {
-    definition: 'Usuarios con acceso completo a NetSuite (crear, editar, aprobar transacciones).',
-    example: 'Contadores, compradores, gerentes, analistas.',
-  },
-  costoFullUser: {
-    definition: 'Costo mensual por usuario Full.',
-    formula: '$129/usuario/mes (precio Oct 2025)',
-  },
-  selfServiceUsers: {
-    definition: 'Usuarios con acceso limitado (consultas, aprobaciones simples, timesheet).',
-    example: 'Empleados que solo consultan o hacen tareas básicas.',
-  },
-  costoSelfService: {
-    definition: 'Costo mensual por usuario Self-Service.',
-    formula: '$49/usuario/mes (precio Oct 2025)',
+  escalacionAnual: {
+    definition: 'Porcentaje de incremento anual después del período inicial del contrato.',
+    formula: '7% anual después del año 3',
+    example: 'Ej: $504 → $539.28 en año 4 → $577.03 en año 5',
   },
   
   // 2B. Soporte
@@ -257,38 +258,41 @@ const fieldDefinitions: Record<string, FieldDefinition> = {
     example: '60% es benchmark típico. Automatización elimina errores de digitación.',
   },
   
-  // 4D. Working Capital
+  // 4D. Working Capital (Capital de Trabajo)
   cuentasPorCobrarPromedio: {
-    definition: 'Saldo promedio de Cuentas por Cobrar (CxC o AR - Accounts Receivable).',
-    formula: 'Promedio de los últimos 12 meses de CxC',
-    example: 'Si CxC fluctúa entre $4M y $6M, promedio = $5M',
+    definition: '💰 Dinero que te deben los clientes. Es el saldo promedio de "Cuentas por Cobrar" (CxC).',
+    formula: 'Suma de CxC de los últimos 12 meses ÷ 12',
+    example: 'Si clientes te deben entre $4M y $6M según el mes, promedio ≈ $5M',
   },
   dsoActual: {
-    definition: 'DSO = Days Sales Outstanding. Días promedio que tardas en cobrar a clientes.',
+    definition: '📅 DSO = "Days Sales Outstanding". Cuántos días en promedio tardas en cobrar una factura.',
     formula: 'DSO = (CxC ÷ Ventas Anuales) × 365',
-    example: 'DSO de 60 días significa que en promedio cobras a 2 meses.',
+    example: 'DSO de 60 días = cobras en promedio a 2 meses. Mientras más bajo, mejor.',
   },
   dsoObjetivo: {
-    definition: 'DSO objetivo después de implementar NetSuite.',
-    example: 'Reducción típica: 15-20%. Si DSO actual = 60, objetivo = 45-50.',
+    definition: '🎯 DSO que esperas lograr con NetSuite gracias a mejor facturación y seguimiento.',
+    formula: 'Reducción típica: 15-20% del DSO actual',
+    example: 'Si hoy DSO = 60 días, objetivo realista = 48-51 días',
   },
   inventarioPromedio: {
-    definition: 'Valor promedio del inventario durante el año.',
-    formula: 'Promedio de los últimos 12 meses de inventario valorizado',
+    definition: '📦 Valor del inventario que tienes en bodega (dinero "atrapado" en productos).',
+    formula: 'Suma del valor de inventario de 12 meses ÷ 12',
+    example: 'Si inventario fluctúa entre $2M y $3M, promedio ≈ $2.5M',
   },
   dioActual: {
-    definition: 'DIO = Days Inventory Outstanding. Días promedio que el inventario permanece en bodega.',
+    definition: '📅 DIO = "Days Inventory Outstanding". Cuántos días permanece un producto en bodega antes de venderse.',
     formula: 'DIO = (Inventario ÷ Costo de Ventas) × 365',
-    example: 'DIO de 90 días significa que rotas inventario cada 3 meses.',
+    example: 'DIO de 90 días = rotas inventario cada 3 meses. Menor = mejor.',
   },
   dioObjetivo: {
-    definition: 'DIO objetivo con mejor gestión de inventario.',
-    example: 'Reducción típica: 10-20%. Mayor rotación = menos capital atrapado.',
+    definition: '🎯 DIO que esperas lograr con mejor visibilidad y gestión de inventario.',
+    formula: 'Reducción típica: 10-20% del DIO actual',
+    example: 'Si hoy DIO = 90 días, objetivo realista = 72-81 días',
   },
   costoCapital: {
-    definition: 'Costo de oportunidad del capital. Tasa que podrías ganar si ese dinero estuviera invertido.',
-    formula: 'Beneficio WC = Capital Liberado × Costo de Capital',
-    example: '8% es típico. Puede ser tasa de préstamo bancario o costo de equity.',
+    definition: '💵 Costo de oportunidad: qué ganarías si ese dinero estuviera invertido en vez de atrapado.',
+    formula: 'Beneficio = Capital Liberado × Costo de Capital',
+    example: '8% es típico. Si liberas $500K de WC, beneficio = $40K/año',
   },
   
   // 4E. Compliance
@@ -367,15 +371,14 @@ interface ModelData {
   costoHoraOperacional: number;
   
   // 2. COSTOS NETSUITE
-  // 2A. Licencias
+  // 2A. Licencias (CONFIRMADO - Oracle Dic 2025)
+  usuariosNetSuite: number;
+  costoUsuarioAnual: number;
   baseNetSuite: number;
   oneWorld: number;
   advancedInventory: number;
   fixedAssets: number;
-  fullUsers: number;
-  costoFullUser: number;
-  selfServiceUsers: number;
-  costoSelfService: number;
+  escalacionAnual: number;
   
   // 2B. Soporte Ongoing
   soporteAnualNetSuite: number | null;
@@ -463,15 +466,14 @@ const initialData: ModelData = {
   erroresPorMes: 15,
   costoHoraOperacional: 15,
   
-  // 2A. Licencias NetSuite (CONFIRMADO)
-  baseNetSuite: 2500,
-  oneWorld: 1500,
-  advancedInventory: 500,
-  fixedAssets: 300,
-  fullUsers: 100,
-  costoFullUser: 129,
-  selfServiceUsers: 50,
-  costoSelfService: 49,
+  // 2A. Licencias NetSuite (CONFIRMADO - Oracle Dic 2025)
+  usuariosNetSuite: PROMED_USERS.total,                    // Confirmado: 682 usuarios totales PROMED
+  costoUsuarioAnual: NETSUITE_PRICING.precioUsuarioAnual,  // Confirmado: $504/usuario/año (65% descuento)
+  baseNetSuite: 2500,                                      // Base mensual Mid-Market Edition
+  oneWorld: 1500,                                          // Multi-país (7 países)
+  advancedInventory: 500,                                  // Inventario avanzado
+  fixedAssets: 300,                                        // Activos fijos
+  escalacionAnual: NETSUITE_PRICING.escalacionAnual * 100, // 7% incremento anual después año 3
   
   // 2B. Soporte Ongoing (ESTIMADO)
   soporteAnualNetSuite: 35000,
@@ -502,14 +504,14 @@ const initialData: ModelData = {
   costoAnualCorrecciones: 50000,
   pctReduccionErrores: 60,
   
-  // 4D. Working Capital (TBD)
-  cuentasPorCobrarPromedio: null,
-  dsoActual: null,
-  dsoObjetivo: null,
-  inventarioPromedio: null,
-  dioActual: null,
-  dioObjetivo: null,
-  costoCapital: 8,
+  // 4D. Working Capital (Valores hipotéticos para distribuidora médica regional)
+  cuentasPorCobrarPromedio: 8_000_000,  // $8M - típico para distribuidora regional
+  dsoActual: 55,                         // 55 días - promedio B2B Latam
+  dsoObjetivo: 45,                       // 45 días - mejora 18% con mejor facturación
+  inventarioPromedio: 4_000_000,         // $4M - dispositivos médicos en bodega
+  dioActual: 75,                         // 75 días - rotación típica dispositivos
+  dioObjetivo: 60,                       // 60 días - mejora 20% con mejor visibilidad
+  costoCapital: 8,                       // 8% - costo de oportunidad típico
   
   // 4E. Compliance (ESTIMADO)
   costoPreparacionAuditorias: 30000,
@@ -748,10 +750,67 @@ function KPICard({
 
 export default function ModeloROI() {
   const [data, setData] = useState<ModelData>(initialData);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const initialLoadDone = useRef(false);
+  
+  // Load data from backend
+  const { data: savedData, isLoading } = trpc.roiModel.get.useQuery();
+  
+  // Mutation for saving
+  const saveMutation = trpc.roiModel.update.useMutation({
+    onSuccess: () => {
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    },
+    onError: () => {
+      setSaveStatus('error');
+    },
+  });
+  
+  // Load saved data on mount
+  useEffect(() => {
+    // Mark as loaded once the query completes (even if no data)
+    if (!isLoading && !initialLoadDone.current) {
+      if (savedData?.data) {
+        // Merge saved data with defaults (in case new fields were added)
+        setData(prev => ({ ...prev, ...(savedData.data as Partial<ModelData>) }));
+      }
+      initialLoadDone.current = true;
+    }
+  }, [savedData, isLoading]);
+  
+  // Auto-save with debounce
+  const debouncedSave = useCallback((newData: ModelData) => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
+    setSaveStatus('saving');
+    saveTimeoutRef.current = setTimeout(() => {
+      saveMutation.mutate({ data: newData as unknown as Record<string, unknown> });
+    }, 1000); // 1 second debounce
+  }, [saveMutation]);
   
   const updateField = <K extends keyof ModelData>(key: K, value: ModelData[K]) => {
-    setData(prev => ({ ...prev, [key]: value }));
+    setData(prev => {
+      const newData = { ...prev, [key]: value };
+      // Only auto-save after initial load is done
+      if (initialLoadDone.current) {
+        debouncedSave(newData);
+      }
+      return newData;
+    });
   };
+  
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // ═══════════════════════════════════════════════════════════════════════════════
   // CÁLCULOS
@@ -783,11 +842,11 @@ export default function ModeloROI() {
     
     const totalCostosActuales = infraLicencias + personalIT + administracion + integraciones + costosOcultos;
     
-    // 2. COSTOS NETSUITE
-    const licenciasNetSuiteMes = 
-      data.baseNetSuite + data.oneWorld + data.advancedInventory + data.fixedAssets +
-      (data.fullUsers * data.costoFullUser) + (data.selfServiceUsers * data.costoSelfService);
-    const licenciasNetSuiteAnual = licenciasNetSuiteMes * 12;
+    // 2. COSTOS NETSUITE (Pricing confirmado Oracle Dic 2025)
+    const modulosNetSuiteMes = data.baseNetSuite + data.oneWorld + data.advancedInventory + data.fixedAssets;
+    const modulosNetSuiteAnual = modulosNetSuiteMes * 12;
+    const usuariosNetSuiteAnual = data.usuariosNetSuite * data.costoUsuarioAnual;
+    const licenciasNetSuiteAnual = modulosNetSuiteAnual + usuariosNetSuiteAnual;
     
     const soporteOngoing = 
       (data.soporteAnualNetSuite ?? 0) +
@@ -855,9 +914,28 @@ export default function ModeloROI() {
     // Payback
     const paybackPeriod = beneficioNetoAnual > 0 ? totalInversion / beneficioNetoAnual : Infinity;
     
-    // TCO Comparison (5 años)
+    // TCO Comparison (N años) - Con escalación 7% anual después del año 3
     const tcoActual5Anos = totalCostosActuales * data.aniosAnalisis;
-    const tcoNetSuite5Anos = totalInversion + (totalCostosNetSuiteAnual * (data.aniosAnalisis - 1));
+    
+    // Calcular TCO NetSuite con escalación después de año 3
+    let tcoNetSuite5Anos = totalInversion; // Año 1 incluye implementación
+    const contratoFijo = NETSUITE_PRICING.contratoAnios; // 3 años
+    const escalacion = data.escalacionAnual / 100; // 7%
+    
+    for (let year = 2; year <= data.aniosAnalisis; year++) {
+      if (year <= contratoFijo) {
+        // Años 2-3: precio fijo
+        tcoNetSuite5Anos += totalCostosNetSuiteAnual;
+      } else {
+        // Años 4+: con escalación
+        const yearsEscalados = year - contratoFijo;
+        const factorEscalacion = Math.pow(1 + escalacion, yearsEscalados);
+        const usuariosConEscalacion = data.usuariosNetSuite * data.costoUsuarioAnual * factorEscalacion;
+        const costoAnualEscalado = modulosNetSuiteAnual + usuariosConEscalacion + soporteOngoing;
+        tcoNetSuite5Anos += costoAnualEscalado;
+      }
+    }
+    
     const beneficios5Anos = (totalBeneficiosAnuales * 0.25) + (totalBeneficiosAnuales * (data.aniosAnalisis - 1));
     const tcoNetSuiteNeto5Anos = tcoNetSuite5Anos - beneficios5Anos;
     
@@ -871,7 +949,8 @@ export default function ModeloROI() {
       totalCostosActuales,
       
       // Costos NetSuite
-      licenciasNetSuiteMes,
+      modulosNetSuiteAnual,
+      usuariosNetSuiteAnual,
       licenciasNetSuiteAnual,
       soporteOngoing,
       totalCostosNetSuiteAnual,
@@ -923,9 +1002,44 @@ export default function ModeloROI() {
                   Módulo ERP
                 </Button>
               </Link>
-              <div className="text-right">
-                <h1 className="text-lg font-bold">Modelo ROI</h1>
-                <p className="text-xs text-muted-foreground">NAF → NetSuite • {formattedDate}</p>
+              <div className="flex items-center gap-4">
+                {/* Save Status Indicator */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  {isLoading && (
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Cargando...
+                    </span>
+                  )}
+                  {saveStatus === 'saving' && (
+                    <span className="flex items-center gap-1 text-blue-500">
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Guardando...
+                    </span>
+                  )}
+                  {saveStatus === 'saved' && (
+                    <span className="flex items-center gap-1 text-emerald-500">
+                      <Cloud className="w-3 h-3" />
+                      Guardado
+                    </span>
+                  )}
+                  {saveStatus === 'error' && (
+                    <span className="flex items-center gap-1 text-red-500">
+                      <CloudOff className="w-3 h-3" />
+                      Error al guardar
+                    </span>
+                  )}
+                  {saveStatus === 'idle' && initialLoadDone.current && (
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <Cloud className="w-3 h-3" />
+                      Auto-guardado
+                    </span>
+                  )}
+                </div>
+                <div className="text-right">
+                  <h1 className="text-lg font-bold">Modelo ROI</h1>
+                  <p className="text-xs text-muted-foreground">NAF → NetSuite • {formattedDate}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1186,26 +1300,45 @@ export default function ModeloROI() {
               variant="success"
             >
               <div className="space-y-6">
-                {/* 2A. Licencias */}
+                {/* 2A. Licencias - CONFIRMADO Oracle Dic 2025 */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-medium">2A. Licencias NetSuite</h4>
+                    <h4 className="text-sm font-medium flex items-center gap-2">
+                      2A. Licencias NetSuite
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                        Confirmado Oracle
+                      </span>
+                    </h4>
                     <span className="text-sm font-semibold">{formatMoney(calculations.licenciasNetSuiteAnual)}/año</span>
                   </div>
+                  
+                  {/* Pricing confirmado */}
+                  <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+                    <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">
+                      Pricing Oracle confirmado (Janette Barria, 30 Dic 2025)
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <InputField label="Usuarios totales PROMED" value={data.usuariosNetSuite} onChange={(v) => updateField('usuariosNetSuite', v ?? 0)} status="confirmed" unit="number" fieldKey="usuariosNetSuite" />
+                      <InputField label="Costo/usuario/año" value={data.costoUsuarioAnual} onChange={(v) => updateField('costoUsuarioAnual', v ?? 0)} status="confirmed" fieldKey="costoUsuarioAnual" />
+                      <InputField label="Escalación anual (año 4+)" value={data.escalacionAnual} onChange={(v) => updateField('escalacionAnual', v ?? 0)} status="confirmed" unit="percent" fieldKey="escalacionAnual" />
+                    </div>
+                    <div className="mt-2 p-2 rounded bg-emerald-100 dark:bg-emerald-900/50 text-sm">
+                      <span className="text-emerald-800 dark:text-emerald-200">
+                        Costo usuarios: <strong>{formatMoney(data.usuariosNetSuite * data.costoUsuarioAnual)}/año</strong>
+                        <span className="text-xs ml-2">(65% descuento sobre ${NETSUITE_PRICING.precioLista} lista)</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Módulos */}
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <InputField label="Base NetSuite/mes" value={data.baseNetSuite} onChange={(v) => updateField('baseNetSuite', v ?? 0)} status="confirmed" fieldKey="baseNetSuite" />
                     <InputField label="OneWorld/mes" value={data.oneWorld} onChange={(v) => updateField('oneWorld', v ?? 0)} status="confirmed" fieldKey="oneWorld" />
                     <InputField label="Adv. Inventory/mes" value={data.advancedInventory} onChange={(v) => updateField('advancedInventory', v ?? 0)} status="confirmed" fieldKey="advancedInventory" />
                     <InputField label="Fixed Assets/mes" value={data.fixedAssets} onChange={(v) => updateField('fixedAssets', v ?? 0)} status="confirmed" fieldKey="fixedAssets" />
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                    <InputField label="Full Users" value={data.fullUsers} onChange={(v) => updateField('fullUsers', v ?? 0)} status="estimated" unit="number" fieldKey="fullUsers" />
-                    <InputField label="Costo Full User/mes" value={data.costoFullUser} onChange={(v) => updateField('costoFullUser', v ?? 0)} status="confirmed" fieldKey="costoFullUser" />
-                    <InputField label="Self-Service Users" value={data.selfServiceUsers} onChange={(v) => updateField('selfServiceUsers', v ?? 0)} status="estimated" unit="number" fieldKey="selfServiceUsers" />
-                    <InputField label="Costo Self-Service/mes" value={data.costoSelfService} onChange={(v) => updateField('costoSelfService', v ?? 0)} status="confirmed" fieldKey="costoSelfService" />
-                  </div>
                   <div className="p-2 rounded bg-muted/50 text-sm">
-                    Costo mensual licencias: <strong>{formatMoney(calculations.licenciasNetSuiteMes)}</strong>
+                    Módulos: <strong>{formatMoney(calculations.modulosNetSuiteAnual)}/año</strong> + Usuarios: <strong>{formatMoney(calculations.usuariosNetSuiteAnual)}/año</strong>
                   </div>
                 </div>
                 
@@ -1327,18 +1460,88 @@ export default function ModeloROI() {
                 {/* 4D. Working Capital */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-medium">4D. Working Capital</h4>
+                    <h4 className="text-sm font-medium">4D. Working Capital (Capital de Trabajo)</h4>
                     <span className="text-sm font-semibold text-emerald-600">{formatMoney(calculations.workingCapitalBenefit)}</span>
                   </div>
+                  
+                  {/* Explicación de Working Capital - Colapsable */}
+                  <Collapsible>
+                    <CollapsibleTrigger asChild>
+                      <button className="w-full p-2 rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 text-sm flex items-center justify-between hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-colors">
+                        <span className="text-purple-800 dark:text-purple-200 font-medium flex items-center gap-2">
+                          <HelpCircle className="w-4 h-4" />
+                          ¿Qué es Working Capital? <span className="text-xs font-normal">(click para ver)</span>
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-purple-600" />
+                      </button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="p-3 rounded-b-lg bg-purple-50 dark:bg-purple-950/30 border border-t-0 border-purple-200 dark:border-purple-800 text-sm -mt-1">
+                        <p className="text-purple-800 dark:text-purple-200 mb-2">
+                          Es el dinero "atrapado" en tu operación:
+                        </p>
+                        <ul className="text-xs text-purple-700 dark:text-purple-300 space-y-1 ml-4">
+                          <li>• <strong>CxC (Cuentas por Cobrar)</strong>: Lo que te deben clientes → cobras más rápido = liberas capital</li>
+                          <li>• <strong>Inventario</strong>: Productos en bodega → rotas más rápido = menos dinero atrapado</li>
+                        </ul>
+                        <div className="mt-2 p-2 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200">
+                          <p className="text-xs font-medium">⚠️ Importante:</p>
+                          <ul className="text-xs space-y-0.5 ml-3">
+                            <li>• <strong>Montos en USD completos</strong>: $7M = escribir <code className="bg-white/50 px-1 rounded">7000000</code></li>
+                            <li>• <strong>Objetivo debe ser MENOR</strong> que actual (es la mejora esperada)</li>
+                          </ul>
+                        </div>
+                        <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 italic">
+                          Si no tienes estos datos, déjalos vacíos. El modelo funciona sin ellos.
+                        </p>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                  
+                  {/* Nota sobre valores hipotéticos */}
+                  <div className="p-2 rounded bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 text-xs text-blue-700 dark:text-blue-300">
+                    📊 <strong>Valores pre-poblados son hipotéticos</strong> basados en benchmarks de distribuidoras regionales. Ajustar con datos reales de PROMED.
+                  </div>
+                  
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <InputField label="CxC promedio" value={data.cuentasPorCobrarPromedio} onChange={(v) => updateField('cuentasPorCobrarPromedio', v)} status="required" fieldKey="cuentasPorCobrarPromedio" />
-                    <InputField label="DSO actual" value={data.dsoActual} onChange={(v) => updateField('dsoActual', v)} status="required" unit="days" fieldKey="dsoActual" />
-                    <InputField label="DSO objetivo" value={data.dsoObjetivo} onChange={(v) => updateField('dsoObjetivo', v)} status="required" unit="days" fieldKey="dsoObjetivo" />
-                    <InputField label="Inventario promedio" value={data.inventarioPromedio} onChange={(v) => updateField('inventarioPromedio', v)} status="required" fieldKey="inventarioPromedio" />
-                    <InputField label="DIO actual" value={data.dioActual} onChange={(v) => updateField('dioActual', v)} status="required" unit="days" fieldKey="dioActual" />
-                    <InputField label="DIO objetivo" value={data.dioObjetivo} onChange={(v) => updateField('dioObjetivo', v)} status="required" unit="days" fieldKey="dioObjetivo" />
+                    <div className="space-y-1">
+                      <InputField label="CxC promedio" value={data.cuentasPorCobrarPromedio} onChange={(v) => updateField('cuentasPorCobrarPromedio', v)} status="estimated" fieldKey="cuentasPorCobrarPromedio" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: $8M</p>
+                    </div>
+                    <div className="space-y-1">
+                      <InputField label="DSO actual" value={data.dsoActual} onChange={(v) => updateField('dsoActual', v)} status="estimated" unit="days" fieldKey="dsoActual" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: 55 días</p>
+                    </div>
+                    <div className="space-y-1">
+                      <InputField label="DSO objetivo" value={data.dsoObjetivo} onChange={(v) => updateField('dsoObjetivo', v)} status="estimated" unit="days" fieldKey="dsoObjetivo" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: 45 días (-18%)</p>
+                    </div>
+                    <div className="space-y-1">
+                      <InputField label="Inventario promedio" value={data.inventarioPromedio} onChange={(v) => updateField('inventarioPromedio', v)} status="estimated" fieldKey="inventarioPromedio" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: $4M</p>
+                    </div>
+                    <div className="space-y-1">
+                      <InputField label="DIO actual" value={data.dioActual} onChange={(v) => updateField('dioActual', v)} status="estimated" unit="days" fieldKey="dioActual" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: 75 días</p>
+                    </div>
+                    <div className="space-y-1">
+                      <InputField label="DIO objetivo" value={data.dioObjetivo} onChange={(v) => updateField('dioObjetivo', v)} status="estimated" unit="days" fieldKey="dioObjetivo" />
+                      <p className="text-[10px] text-muted-foreground ml-5">Hipotético: 60 días (-20%)</p>
+                    </div>
                   </div>
                   <InputField label="Costo de capital (%)" value={data.costoCapital} onChange={(v) => updateField('costoCapital', v ?? 0)} status="estimated" unit="percent" fieldKey="costoCapital" />
+                  
+                  {/* Validación visual */}
+                  {data.dsoActual && data.dsoObjetivo && data.dsoObjetivo >= data.dsoActual && (
+                    <div className="p-2 rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs">
+                      ⚠️ <strong>DSO objetivo ({data.dsoObjetivo})</strong> debe ser menor que DSO actual ({data.dsoActual})
+                    </div>
+                  )}
+                  {data.dioActual && data.dioObjetivo && data.dioObjetivo >= data.dioActual && (
+                    <div className="p-2 rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs">
+                      ⚠️ <strong>DIO objetivo ({data.dioObjetivo})</strong> debe ser menor que DIO actual ({data.dioActual})
+                    </div>
+                  )}
                 </div>
                 
                 {/* 4E. Compliance */}

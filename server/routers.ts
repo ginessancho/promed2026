@@ -5,7 +5,8 @@ import {
   listBusinessProcesses, upsertBusinessProcess,
   listImpactEstimates, upsertImpactEstimate, deleteImpactEstimate,
   getProposalIntro, upsertProposalIntro, 
-  listProposalPhases, upsertProposalPhase, deleteProposalPhase 
+  listProposalPhases, upsertProposalPhase, deleteProposalPhase,
+  getRoiModelData, upsertRoiModelData
 } from "./db";
 import { z } from "zod";
 
@@ -152,6 +153,23 @@ export const appRouter = router({
       .input(z.object({ id: z.string() }))
       .mutation(({ input }) => {
         deleteProposalPhase(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // ROI Model for NAF → NetSuite transition
+  roiModel: router({
+    get: publicProcedure.query(async () => {
+      const result = await getRoiModelData();
+      return result ? { data: result.data, updatedAt: result.updatedAt } : null;
+    }),
+    update: publicProcedure
+      .input(z.object({
+        data: z.record(z.string(), z.unknown()),
+        updatedBy: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await upsertRoiModelData(input.data, input.updatedBy);
         return { success: true };
       }),
   }),

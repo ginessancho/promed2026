@@ -1,21 +1,19 @@
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/better-sqlite3";
 import { drizzle as drizzleLibsql } from "drizzle-orm/libsql";
-import Database from "better-sqlite3";
 import { createClient } from "@libsql/client";
 import { 
   InsertMetricDefinition, MetricDefinition, metricDefinitions,
   InsertBusinessProcess, BusinessProcess, businessProcesses,
   InsertImpactEstimate, ImpactEstimate, impactEstimates,
-  proposalIntro, proposalPhases, InsertProposalIntro, ProposalIntro, InsertProposalPhase, ProposalPhase 
+  proposalIntro, proposalPhases, InsertProposalIntro, ProposalIntro, InsertProposalPhase, ProposalPhase,
+  roiModelData, RoiModelData, InsertRoiModelData
 } from "../drizzle/schema";
-import { ENV } from './_core/env';
 import { existsSync, mkdirSync } from "fs";
 import { dirname } from "path";
 
 const DB_PATH = "./data/promed.db";
 
-// Use any to support both BetterSQLite3 and LibSQL instances
+// Use any to support LibSQL instances
 let _db: any = null;
 
 // Lazily create the drizzle instance.
@@ -31,15 +29,17 @@ export function getDb() {
         });
         _db = drizzleLibsql(client);
       } else {
-        // Local Development Mode
-        console.log("[Database] Connecting to local SQLite...");
+        // Local Development Mode - use libsql with local file
+        console.log("[Database] Connecting to local SQLite via libsql...");
         const dir = dirname(DB_PATH);
         if (!existsSync(dir)) {
           mkdirSync(dir, { recursive: true });
         }
         
-        const sqlite = new Database(DB_PATH);
-        _db = drizzle(sqlite);
+        const client = createClient({
+          url: `file:${DB_PATH}`,
+        });
+        _db = drizzleLibsql(client);
       }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
@@ -226,4 +226,56 @@ export function deleteProposalPhase(id: string): void {
   }
   
   db.delete(proposalPhases).where(eq(proposalPhases.id, id)).run();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ROI Model Data
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export async function getRoiModelData(): Promise<RoiModelData | undefined> {
+  const db = getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get ROI model data: database not available");
+    return undefined;
+  }
+  
+  try {
+    const result = await db.select().from(roiModelData).where(eq(roiModelData.id, 'default')).limit(1);
+    console.log("[ROI Model] Query result:", result?.length, "rows");
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[ROI Model] Error reading data:", error);
+    return undefined;
+  }
+}
+
+export async function upsertRoiModelData(data: Record<string, unknown>, updatedBy?: string): Promise<void> {
+  const db = getDb();
+  if (!db) {
+    console.warn("[Database] Cannot upsert ROI model data: database not available");
+    return;
+  }
+
+  const values: InsertRoiModelData = {
+    id: 'default',
+    data: data,
+    version: 1,
+    updatedAt: new Date(),
+    updatedBy: updatedBy ?? null,
+  };
+
+  try {
+    await db.insert(roiModelData).values(values).onConflictDoUpdate({
+      target: roiModelData.id,
+      set: {
+        data: data,
+        updatedAt: new Date(),
+        updatedBy: updatedBy ?? null,
+      },
+    });
+    console.log("[ROI Model] Data saved successfully");
+  } catch (error) {
+    console.error("[ROI Model] Error saving data:", error);
+    throw error;
+  }
 }
