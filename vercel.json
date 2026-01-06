@@ -3,7 +3,6 @@
   "outputDirectory": "dist/public",
   "functions": {
     "api/trpc/[trpc].js": {
-      "runtime": "nodejs20.x",
       "maxDuration": 10,
       "memory": 256
     }
