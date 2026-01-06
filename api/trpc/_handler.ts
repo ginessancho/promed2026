@@ -7,7 +7,8 @@
 
 import { initTRPC } from "@trpc/server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { createClient } from "@libsql/client/web";
+// Use /http directly to avoid WebSocket dependencies entirely
+import { createClient } from "@libsql/client/http";
 // Use driver-core to avoid pulling in native @libsql/client dependencies
 import { LibSQLDatabase } from "drizzle-orm/libsql/driver-core";
 import { eq } from "drizzle-orm";
@@ -102,7 +103,7 @@ let _db: LibSQLDatabase<Record<string, never>> | null = null;
 
 function getDb() {
   if (!_db) {
-    const url = process.env.DATABASE_URL;
+    let url = process.env.DATABASE_URL;
     const authToken = process.env.DATABASE_AUTH_TOKEN;
     
     if (!url) {
@@ -110,7 +111,12 @@ function getDb() {
       return null;
     }
     
-    console.log("[Serverless DB] Connecting to Turso via HTTP...");
+    // Convert libsql:// to https:// for the HTTP-only client
+    if (url.startsWith("libsql://")) {
+      url = url.replace("libsql://", "https://");
+    }
+    
+    console.log("[Serverless DB] Connecting to Turso via HTTP...", url.substring(0, 30) + "...");
     const client = createClient({ url, authToken });
     
     // Construct drizzle instance using driver-core to avoid native imports
