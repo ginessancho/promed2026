@@ -600,13 +600,13 @@ GROUP BY tipo_doc;`,
 
         {/* Navigation */}
         <div className="flex justify-between items-center pt-8 border-t">
-          <Link href="/hallazgos-2025">
+          <Link href="/facturacion/hallazgos-2025">
             <Button variant="outline">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Anterior: Hallazgos 2025
             </Button>
           </Link>
-          <Link href="/proceso-actual">
+          <Link href="/facturacion/proceso-actual">
             <Button>
               Siguiente: Proceso Actual
               <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />

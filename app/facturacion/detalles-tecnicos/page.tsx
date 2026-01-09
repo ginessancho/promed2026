@@ -621,7 +621,7 @@ export default function DetallesTecnicos() {
                   <CardTitle className="text-lg">Vea la Solución en Acción</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">Acceda a nuestra página de demostración para ver un ejemplo práctico.</p>
                 </div>
-                <Link href="/demonstracion">
+                <Link href="/facturacion/demonstracion">
                   <Button size="sm">Ir a la Demo</Button>
                 </Link>
               </div>
@@ -630,8 +630,8 @@ export default function DetallesTecnicos() {
         </section>
 
         <div className="flex justify-between pt-6 border-t">
-          <Link href="/propuesta-2026"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
-          <Link href="/mantenimiento-dms"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
+          <Link href="/facturacion/propuesta-2026"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
+          <Link href="/facturacion/mantenimiento-dms"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
         </div>
       </main>
     </div>

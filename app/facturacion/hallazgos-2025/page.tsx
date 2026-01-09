@@ -375,7 +375,7 @@ export default function Hallazgos2025() {
               Volver al Inicio
             </Button>
           </Link>
-          <Link href="/volumen-problema">
+          <Link href="/facturacion/volumen-problema">
             <Button>
               Siguiente: Volumen del Problema
               <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />

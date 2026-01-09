@@ -1300,13 +1300,13 @@ export default function CostosAnalisis() {
         </section>
 
         <div className="flex justify-between pt-6 border-t">
-          <Link href="/propuesta-2026">
+          <Link href="/facturacion/propuesta-2026">
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver a la propuesta
             </Button>
           </Link>
-          <Link href="/plan-de-trabajo">
+          <Link href="/facturacion/plan-de-trabajo">
             <Button size="sm">Ver plan anual</Button>
           </Link>
         </div>

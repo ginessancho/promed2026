@@ -163,8 +163,8 @@ export default function ProcesoActual() {
         </section>
 
         <div className="flex justify-between pt-6 border-t">
-          <Link href="/volumen-problema"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
-          <Link href="/propuesta-2026"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
+          <Link href="/facturacion/volumen-problema"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
+          <Link href="/facturacion/propuesta-2026"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
         </div>
       </main>
     </div>

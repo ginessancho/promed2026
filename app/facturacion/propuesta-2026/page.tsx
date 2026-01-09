@@ -363,8 +363,8 @@ export default function Propuesta2026() {
         </section>
 
         <div className="flex justify-between pt-6 border-t">
-          <Link href="/proceso-actual"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
-          <Link href="/detalles-tecnicos"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
+          <Link href="/facturacion/proceso-actual"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
+          <Link href="/facturacion/detalles-tecnicos"><Button size="sm">Siguiente<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
         </div>
       </main>
     </div>

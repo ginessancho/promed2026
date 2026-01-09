@@ -10,7 +10,7 @@ export default function Demonstracion() {
       <header className="border-b bg-card sticky top-0 z-40">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Link href="/detalles-tecnicos"><Button variant="ghost" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Volver a Detalles Técnicos</Button></Link>
+            <Link href="/facturacion/detalles-tecnicos"><Button variant="ghost" size="sm"><ArrowLeft className="w-4 h-4 mr-2" />Volver a Detalles Técnicos</Button></Link>
             <div className="text-right"><h1 className="text-lg font-bold">Demostración</h1></div>
           </div>
         </div>

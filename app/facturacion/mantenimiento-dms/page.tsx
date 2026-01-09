@@ -152,8 +152,8 @@ graph TD
         </section>
 
         <div className="flex justify-between pt-8 border-t">
-          <Link href="/detalles-tecnicos"><Button variant="outline"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
-          <Link href="/plan-de-trabajo"><Button>Siguiente: Plan de Trabajo<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
+          <Link href="/facturacion/detalles-tecnicos"><Button variant="outline"><ArrowLeft className="w-4 h-4 mr-2" />Anterior</Button></Link>
+          <Link href="/facturacion/plan-de-trabajo"><Button>Siguiente: Plan de Trabajo<ArrowLeft className="w-4 h-4 ml-2 rotate-180" /></Button></Link>
         </div>
       </main>
     </div>
