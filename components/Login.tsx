@@ -18,19 +18,22 @@ export default function Login() {
     dateStyle: 'long',
   }).format(new Date());
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    setTimeout(() => {
-      const success = login(password);
+    try {
+      const success = await login(password);
       if (!success) {
         setError('Contraseña incorrecta. Por favor, inténtelo de nuevo.');
         setPassword('');
       }
+    } catch {
+      setError('Error de conexión. Por favor, inténtelo de nuevo.');
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (

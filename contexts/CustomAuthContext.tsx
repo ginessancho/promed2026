@@ -1,45 +1,61 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 
 interface CustomAuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => boolean;
-  logout: () => void;
+  login: (password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
   loading: boolean;
 }
 
 const CustomAuthContext = createContext<CustomAuthContextType | undefined>(undefined);
 
-const CORRECT_PASSWORD = process.env.NEXT_PUBLIC_PROPOSAL_PASSWORD || 'Prmd2026!';
-const AUTH_KEY = 'propuesta_f007_auth';
-
 export function CustomAuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Check auth status on mount
   useEffect(() => {
-    // Check if already authenticated
-    const authToken = sessionStorage.getItem(AUTH_KEY);
-    if (authToken === 'authenticated') {
-      setIsAuthenticated(true);
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/auth');
+        const data = await res.json();
+        setIsAuthenticated(data.authenticated);
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
+    checkAuth();
   }, []);
 
-  const login = (password: string): boolean => {
-    if (password === CORRECT_PASSWORD) {
-      sessionStorage.setItem(AUTH_KEY, 'authenticated');
-      setIsAuthenticated(true);
-      return true;
+  const login = useCallback(async (password: string): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      
+      if (res.ok) {
+        setIsAuthenticated(true);
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
     }
-    return false;
-  };
+  }, []);
 
-  const logout = () => {
-    sessionStorage.removeItem(AUTH_KEY);
-    setIsAuthenticated(false);
-  };
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/auth', { method: 'DELETE' });
+    } finally {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   return (
     <CustomAuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
