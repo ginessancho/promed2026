@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { drizzle as drizzleLibsql } from "drizzle-orm/libsql";
+import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import { 
   InsertMetricDefinition, MetricDefinition, metricDefinitions,
@@ -8,38 +8,30 @@ import {
   proposalIntro, proposalPhases, InsertProposalIntro, ProposalIntro, InsertProposalPhase, ProposalPhase,
   roiModelData, RoiModelData, InsertRoiModelData
 } from "../drizzle/schema";
-import { existsSync, mkdirSync } from "fs";
-import { dirname } from "path";
 
-const DB_PATH = "./data/promed.db";
+// Use libsql client that works in both serverless (Vercel) and local dev
+let _db: ReturnType<typeof drizzle> | null = null;
 
-// Use any to support LibSQL instances
-let _db: any = null;
-
-// Lazily create the drizzle instance.
 export function getDb() {
   if (!_db) {
     try {
-      if (process.env.DATABASE_URL) {
+      let url = process.env.DATABASE_URL;
+      const authToken = process.env.DATABASE_AUTH_TOKEN;
+
+      if (url) {
         // Production / Turso Mode
-        console.log("[Database] Connecting to Turso/LibSQL...");
-        const client = createClient({
-          url: process.env.DATABASE_URL,
-          authToken: process.env.DATABASE_AUTH_TOKEN,
-        });
-        _db = drizzleLibsql(client);
-      } else {
-        // Local Development Mode - use libsql with local file
-        console.log("[Database] Connecting to local SQLite via libsql...");
-        const dir = dirname(DB_PATH);
-        if (!existsSync(dir)) {
-          mkdirSync(dir, { recursive: true });
+        // Convert libsql:// to https:// for HTTP-only compatibility (serverless)
+        if (url.startsWith("libsql://")) {
+          url = url.replace("libsql://", "https://");
         }
-        
-        const client = createClient({
-          url: `file:${DB_PATH}`,
-        });
-        _db = drizzleLibsql(client);
+        console.log("[Database] Connecting to Turso...", url.substring(0, 30) + "...");
+        const client = createClient({ url, authToken });
+        _db = drizzle(client);
+      } else {
+        // Local Development Mode - use local SQLite file
+        console.log("[Database] Connecting to local SQLite...");
+        const client = createClient({ url: "file:./data/promed.db" });
+        _db = drizzle(client);
       }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
@@ -53,13 +45,13 @@ export function getDb() {
 // Metric Definitions
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listMetricDefinitions(): MetricDefinition[] {
+export async function listMetricDefinitions(): Promise<MetricDefinition[]> {
   const db = getDb();
   if (!db) return [];
-  return db.select().from(metricDefinitions).all();
+  return db.select().from(metricDefinitions);
 }
 
-export function upsertMetricDefinition(metric: InsertMetricDefinition): void {
+export async function upsertMetricDefinition(metric: InsertMetricDefinition): Promise<void> {
   const db = getDb();
   if (!db || !metric.id) return;
 
@@ -69,21 +61,21 @@ export function upsertMetricDefinition(metric: InsertMetricDefinition): void {
   if (metric.unit) updateSet.unit = metric.unit;
   if (metric.description) updateSet.description = metric.description;
 
-  db.insert(metricDefinitions).values({ ...metric, updatedAt: new Date() })
-    .onConflictDoUpdate({ target: metricDefinitions.id, set: updateSet }).run();
+  await db.insert(metricDefinitions).values({ ...metric, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: metricDefinitions.id, set: updateSet });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Business Processes
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listBusinessProcesses(): BusinessProcess[] {
+export async function listBusinessProcesses(): Promise<BusinessProcess[]> {
   const db = getDb();
   if (!db) return [];
-  return db.select().from(businessProcesses).all();
+  return db.select().from(businessProcesses);
 }
 
-export function upsertBusinessProcess(process: InsertBusinessProcess): void {
+export async function upsertBusinessProcess(process: InsertBusinessProcess): Promise<void> {
   const db = getDb();
   if (!db || !process.id) return;
 
@@ -93,30 +85,29 @@ export function upsertBusinessProcess(process: InsertBusinessProcess): void {
   if (process.criticality) updateSet.criticality = process.criticality;
   if (process.description) updateSet.description = process.description;
 
-  db.insert(businessProcesses).values({ ...process, updatedAt: new Date() })
-    .onConflictDoUpdate({ target: businessProcesses.id, set: updateSet }).run();
+  await db.insert(businessProcesses).values({ ...process, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: businessProcesses.id, set: updateSet });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Impact Estimates
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listImpactEstimates(processId?: string): ImpactEstimate[] {
+export async function listImpactEstimates(processId?: string): Promise<ImpactEstimate[]> {
   const db = getDb();
   if (!db) return [];
 
   if (processId) {
-    return db.select().from(impactEstimates).where(eq(impactEstimates.processId, processId)).all();
+    return db.select().from(impactEstimates).where(eq(impactEstimates.processId, processId));
   }
-  return db.select().from(impactEstimates).all();
+  return db.select().from(impactEstimates);
 }
 
-export function upsertImpactEstimate(estimate: InsertImpactEstimate): void {
+export async function upsertImpactEstimate(estimate: InsertImpactEstimate): Promise<void> {
   const db = getDb();
   if (!db || !estimate.id) return;
 
   const updateSet: Record<string, unknown> = { updatedAt: new Date() };
-  // Only update fields provided
   const keys = Object.keys(estimate) as (keyof InsertImpactEstimate)[];
   keys.forEach(key => {
     if (key !== 'id' && estimate[key] !== undefined) {
@@ -124,34 +115,32 @@ export function upsertImpactEstimate(estimate: InsertImpactEstimate): void {
     }
   });
 
-  db.insert(impactEstimates).values({ ...estimate, updatedAt: new Date() })
-    .onConflictDoUpdate({ target: impactEstimates.id, set: updateSet }).run();
+  await db.insert(impactEstimates).values({ ...estimate, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: impactEstimates.id, set: updateSet });
 }
 
-export function deleteImpactEstimate(id: string): void {
+export async function deleteImpactEstimate(id: string): Promise<void> {
   const db = getDb();
   if (!db) return;
-  db.delete(impactEstimates).where(eq(impactEstimates.id, id)).run();
+  await db.delete(impactEstimates).where(eq(impactEstimates.id, id));
 }
-
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Proposal Intro Content
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function getProposalIntro(): ProposalIntro | undefined {
+export async function getProposalIntro(): Promise<ProposalIntro | undefined> {
   const db = getDb();
   if (!db) {
     console.warn("[Database] Cannot get proposal intro: database not available");
     return undefined;
   }
   
-  // We assume a single row with id='default'
-  const result = db.select().from(proposalIntro).where(eq(proposalIntro.id, 'default')).limit(1).all();
+  const result = await db.select().from(proposalIntro).where(eq(proposalIntro.id, 'default')).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
 
-export function upsertProposalIntro(intro: InsertProposalIntro): void {
+export async function upsertProposalIntro(intro: InsertProposalIntro): Promise<void> {
   const db = getDb();
   if (!db) {
     console.warn("[Database] Cannot upsert proposal intro: database not available");
@@ -160,33 +149,32 @@ export function upsertProposalIntro(intro: InsertProposalIntro): void {
 
   const values = {
     ...intro,
-    id: 'default', // Enforce singleton
+    id: 'default',
     updatedAt: new Date(),
   };
 
-  db.insert(proposalIntro).values(values).onConflictDoUpdate({
+  await db.insert(proposalIntro).values(values).onConflictDoUpdate({
     target: proposalIntro.id,
     set: values,
-  }).run();
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Proposal Phases
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function listProposalPhases(): ProposalPhase[] {
+export async function listProposalPhases(): Promise<ProposalPhase[]> {
   const db = getDb();
   if (!db) {
     console.warn("[Database] Cannot list proposal phases: database not available");
     return [];
   }
   
-  const phases = db.select().from(proposalPhases).all();
-  // Sort by order in memory to avoid import complexity
+  const phases = await db.select().from(proposalPhases);
   return phases.sort((a: ProposalPhase, b: ProposalPhase) => a.order - b.order);
 }
 
-export function upsertProposalPhase(phase: InsertProposalPhase): void {
+export async function upsertProposalPhase(phase: InsertProposalPhase): Promise<void> {
   if (!phase.id) {
     throw new Error("Proposal phase id is required");
   }
@@ -197,35 +185,31 @@ export function upsertProposalPhase(phase: InsertProposalPhase): void {
     return;
   }
 
-  const updateSet: Record<string, unknown> = {
-    updatedAt: new Date(),
-  };
-  
-  // Dynamic update set construction
+  const updateSet: Record<string, unknown> = { updatedAt: new Date() };
   const keys = Object.keys(phase) as (keyof InsertProposalPhase)[];
   keys.forEach(key => {
-      if (key !== 'id' && phase[key] !== undefined) {
-          updateSet[key] = phase[key];
-      }
+    if (key !== 'id' && phase[key] !== undefined) {
+      updateSet[key] = phase[key];
+    }
   });
 
-  db.insert(proposalPhases).values({
+  await db.insert(proposalPhases).values({
     ...phase,
     updatedAt: new Date(),
   }).onConflictDoUpdate({
     target: proposalPhases.id,
     set: updateSet,
-  }).run();
+  });
 }
 
-export function deleteProposalPhase(id: string): void {
+export async function deleteProposalPhase(id: string): Promise<void> {
   const db = getDb();
   if (!db) {
     console.warn("[Database] Cannot delete proposal phase: database not available");
     return;
   }
   
-  db.delete(proposalPhases).where(eq(proposalPhases.id, id)).run();
+  await db.delete(proposalPhases).where(eq(proposalPhases.id, id));
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

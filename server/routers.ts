@@ -11,12 +11,11 @@ import {
 import { z } from "zod";
 
 export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
 
   // ROI & Metric Definitions
   metricDefinitions: router({
-    list: publicProcedure.query(() => listMetricDefinitions()),
+    list: publicProcedure.query(async () => listMetricDefinitions()),
     upsert: publicProcedure
       .input(z.object({
         id: z.string(),
@@ -25,8 +24,8 @@ export const appRouter = router({
         unit: z.enum(["USD", "hours", "count", "percent", "days", "score"]),
         description: z.string().optional().nullable(),
       }))
-      .mutation(({ input }) => {
-        upsertMetricDefinition({
+      .mutation(async ({ input }) => {
+        await upsertMetricDefinition({
           ...input,
           description: input.description ?? null,
         });
@@ -36,7 +35,7 @@ export const appRouter = router({
 
   // Business Processes
   businessProcesses: router({
-    list: publicProcedure.query(() => listBusinessProcesses()),
+    list: publicProcedure.query(async () => listBusinessProcesses()),
     upsert: publicProcedure
       .input(z.object({
         id: z.string(),
@@ -45,8 +44,8 @@ export const appRouter = router({
         criticality: z.enum(["low", "medium", "high", "critical"]),
         description: z.string().optional().nullable(),
       }))
-      .mutation(({ input }) => {
-        upsertBusinessProcess({
+      .mutation(async ({ input }) => {
+        await upsertBusinessProcess({
           ...input,
           description: input.description ?? null,
         });
@@ -58,7 +57,7 @@ export const appRouter = router({
   impactEstimates: router({
     list: publicProcedure
       .input(z.object({ processId: z.string().optional() }).optional())
-      .query(({ input }) => listImpactEstimates(input?.processId)),
+      .query(async ({ input }) => listImpactEstimates(input?.processId)),
     upsert: publicProcedure
       .input(z.object({
         id: z.string(),
@@ -73,8 +72,8 @@ export const appRouter = router({
         followUpRequired: z.boolean().optional(),
         updatedBy: z.string().optional().nullable(),
       }))
-      .mutation(({ input }) => {
-        upsertImpactEstimate({
+      .mutation(async ({ input }) => {
+        await upsertImpactEstimate({
           id: input.id,
           metricId: input.metricId,
           processId: input.processId ?? null,
@@ -91,14 +90,14 @@ export const appRouter = router({
       }),
     delete: publicProcedure
       .input(z.object({ id: z.string() }))
-      .mutation(({ input }) => {
-        deleteImpactEstimate(input.id);
+      .mutation(async ({ input }) => {
+        await deleteImpactEstimate(input.id);
         return { success: true };
       }),
   }),
 
   proposal: router({
-    getIntro: publicProcedure.query(() => getProposalIntro()),
+    getIntro: publicProcedure.query(async () => getProposalIntro()),
     updateIntro: publicProcedure
       .input(
         z.object({
@@ -118,15 +117,15 @@ export const appRouter = router({
           updatedBy: z.string().optional(),
         })
       )
-      .mutation(({ input }) => {
-        upsertProposalIntro({
+      .mutation(async ({ input }) => {
+        await upsertProposalIntro({
           id: 'default',
           ...input
         });
         return { success: true };
       }),
 
-    listPhases: publicProcedure.query(() => listProposalPhases()),
+    listPhases: publicProcedure.query(async () => listProposalPhases()),
     upsertPhase: publicProcedure
       .input(
         z.object({
@@ -145,14 +144,14 @@ export const appRouter = router({
           updatedBy: z.string().optional(),
         })
       )
-      .mutation(({ input }) => {
-        upsertProposalPhase(input);
+      .mutation(async ({ input }) => {
+        await upsertProposalPhase(input);
         return { success: true };
       }),
     deletePhase: publicProcedure
       .input(z.object({ id: z.string() }))
-      .mutation(({ input }) => {
-        deleteProposalPhase(input.id);
+      .mutation(async ({ input }) => {
+        await deleteProposalPhase(input.id);
         return { success: true };
       }),
   }),
@@ -176,4 +175,3 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
-

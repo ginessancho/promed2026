@@ -1,16 +1,12 @@
-import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
+/**
+ * tRPC Context - works with both Express and Next.js (fetch adapter)
+ * In serverless mode, req/res are not available, so we use an empty context.
+ */
 
 export type TrpcContext = {
-  req: CreateExpressContextOptions["req"];
-  res: CreateExpressContextOptions["res"];
+  // Empty context for now - can be extended for auth, etc.
 };
 
-export async function createContext(
-  opts: CreateExpressContextOptions
-): Promise<TrpcContext> {
-  // Authentication removed as part of Manus removal
-  return {
-    req: opts.req,
-    res: opts.res,
-  };
+export async function createContext(): Promise<TrpcContext> {
+  return {};
 }

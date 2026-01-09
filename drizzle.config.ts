@@ -1,18 +1,18 @@
 import { defineConfig } from "drizzle-kit";
-import * as dotenv from "dotenv";
 
-dotenv.config();
+// Load environment variables (Next.js handles this automatically during build)
+const databaseUrl = process.env.DATABASE_URL;
 
 export default defineConfig({
   schema: "./drizzle/schema.ts",
   out: "./drizzle",
   dialect: "turso",
-  dbCredentials: process.env.DATABASE_URL
+  dbCredentials: databaseUrl
     ? {
-        url: process.env.DATABASE_URL,
+        url: databaseUrl,
         authToken: process.env.DATABASE_AUTH_TOKEN,
-      } as any
+      }
     : {
-        url: "./data/promed.db",
+        url: "file:./data/promed.db",
       },
 });
