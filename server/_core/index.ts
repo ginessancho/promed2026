@@ -57,6 +57,11 @@ async function startServer() {
   // CORS - must be before other middleware
   app.use(corsMiddleware);
   
+  // Simple health check for Railway (not tRPC)
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+  
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
