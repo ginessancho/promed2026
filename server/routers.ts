@@ -8,7 +8,41 @@ import {
   listProposalPhases, upsertProposalPhase, deleteProposalPhase,
   getRoiModelData, upsertRoiModelData
 } from "./db";
+import {
+  getComodatoSummary, getActivosComodato, getComodatosPorCompania,
+  getComodatosPorEstado, getActivosHuerfanos, getBaseInstaladaComodatos,
+  getBaseInstaladaSinActivo, getDepreciacionDistribucion, getCohortesEdad,
+  getTrazabilidad, getStatusDetallado,
+} from "./comodatos";
+import {
+  getCachedSummary, getCachedPorCompania, getCachedPorEstado,
+  getCachedHuerfanos, getCachedActivos, getCachedBaseInstalada,
+  getCachedBaseInstaladaSinActivo, getCachedDepreciacion, getCachedCohortes,
+  getCachedTrazabilidad, getCachedStatusDetallado, getCacheStatus, refreshAllCaches,
+} from "./comodatos-cache";
 import { z } from "zod";
+
+// Helper: try Redshift first (local dev), fall back to cache (production/Vercel)
+const hasRedshift = !!(process.env.PROMED_AWS_URL && process.env.PROMED_AWS_PASSWORD);
+
+async function withCacheFallback<T>(
+  redshiftFn: () => Promise<T>,
+  cacheFn: () => Promise<{ data: T; updatedAt: Date } | null>,
+): Promise<{ data: T; fromCache: boolean; cacheDate: Date | null }> {
+  if (hasRedshift) {
+    try {
+      const data = await redshiftFn();
+      return { data, fromCache: false, cacheDate: null };
+    } catch (err) {
+      console.warn("[Comodatos] Redshift failed, trying cache:", err);
+    }
+  }
+  const cached = await cacheFn();
+  if (cached) {
+    return { data: cached.data, fromCache: true, cacheDate: cached.updatedAt };
+  }
+  throw new Error("No data available — cache is empty and Redshift is not accessible. Run refresh from local.");
+}
 
 export const appRouter = router({
   system: systemRouter,
@@ -153,6 +187,148 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await deleteProposalPhase(input.id);
         return { success: true };
+      }),
+  }),
+
+  // Comodatos & Activos - Cache-first (Turso), falls back to Redshift when available
+  comodatos: router({
+    summary: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getComodatoSummary, getCachedSummary);
+      return { ...result.data, _fromCache: result.fromCache, _cacheDate: result.cacheDate };
+    }),
+    activos: publicProcedure
+      .input(z.object({
+        cia: z.string().optional(),
+        soloHuerfanos: z.boolean().optional(),
+        search: z.string().optional(),
+        limit: z.number().optional(),
+        offset: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { cia, soloHuerfanos, search, limit = 25, offset = 0 } = input ?? {};
+        // Always use cache for search (needs full dataset), otherwise try Redshift
+        if (hasRedshift && !search) {
+          try { return await getActivosComodato({ cia, soloHuerfanos, limit, offset }); } catch {}
+        }
+        const cached = await getCachedActivos();
+        if (!cached) throw new Error("No activos data — run refresh from local.");
+        let rows = cached.data.rows;
+        if (cia) rows = rows.filter(r => r.no_cia === cia);
+        if (soloHuerfanos) rows = rows.filter(r => !r.no_comodato);
+        if (search) {
+          const term = search.toLowerCase();
+          rows = rows.filter(r =>
+            r.descri?.toLowerCase().includes(term) ||
+            r.no_acti?.toLowerCase().includes(term) ||
+            r.cliente?.toLowerCase().includes(term) ||
+            r.no_comodato?.toLowerCase().includes(term) ||
+            r.marca?.toLowerCase().includes(term) ||
+            r.modelo?.toLowerCase().includes(term)
+          );
+        }
+        const total = rows.length;
+        return { rows: rows.slice(offset, offset + limit), total };
+      }),
+    porCompania: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getComodatosPorCompania, getCachedPorCompania);
+      return result.data;
+    }),
+    porEstado: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getComodatosPorEstado, getCachedPorEstado);
+      return result.data;
+    }),
+    huerfanos: publicProcedure
+      .input(z.object({
+        cia: z.string().optional(),
+        search: z.string().optional(),
+        limit: z.number().optional(),
+        offset: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { cia, search, limit = 25, offset = 0 } = input ?? {};
+        if (hasRedshift && !search) {
+          try { return await getActivosHuerfanos({ cia, limit, offset }); } catch {}
+        }
+        const cached = await getCachedHuerfanos();
+        if (!cached) throw new Error("No huerfanos data — run refresh from local.");
+        let rows = cached.data.rows;
+        if (cia) rows = rows.filter(r => r.no_cia === cia);
+        if (search) {
+          const term = search.toLowerCase();
+          rows = rows.filter(r =>
+            r.descri?.toLowerCase().includes(term) ||
+            r.no_acti?.toLowerCase().includes(term) ||
+            r.marca?.toLowerCase().includes(term) ||
+            r.modelo?.toLowerCase().includes(term)
+          );
+        }
+        const total = rows.length;
+        return { rows: rows.slice(offset, offset + limit), total };
+      }),
+    baseInstalada: publicProcedure
+      .input(z.object({
+        cia: z.string().optional(),
+        limit: z.number().optional(),
+        offset: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { cia, limit = 25, offset = 0 } = input ?? {};
+        if (hasRedshift) {
+          try { return await getBaseInstaladaComodatos({ cia, limit, offset }); } catch {}
+        }
+        const cached = await getCachedBaseInstalada();
+        if (!cached) throw new Error("No base instalada data — run refresh from local.");
+        let rows = cached.data.rows;
+        if (cia) rows = rows.filter(r => r.no_cia === cia);
+        const total = rows.length;
+        return { rows: rows.slice(offset, offset + limit), total };
+      }),
+    baseInstaladaSinActivo: publicProcedure
+      .input(z.object({
+        cia: z.string().optional(),
+        limit: z.number().optional(),
+        offset: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { cia, limit = 25, offset = 0 } = input ?? {};
+        if (hasRedshift) {
+          try { return await getBaseInstaladaSinActivo({ cia, limit, offset }); } catch {}
+        }
+        const cached = await getCachedBaseInstaladaSinActivo();
+        if (!cached) throw new Error("No base instalada sin activo data — run refresh from local.");
+        let rows = cached.data.rows;
+        if (cia) rows = rows.filter(r => r.no_cia === cia);
+        const total = rows.length;
+        return { rows: rows.slice(offset, offset + limit), total };
+      }),
+
+    // Analytical endpoints
+    depreciacion: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getDepreciacionDistribucion, getCachedDepreciacion);
+      return result.data;
+    }),
+    cohortes: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getCohortesEdad, getCachedCohortes);
+      return result.data;
+    }),
+    trazabilidad: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getTrazabilidad, getCachedTrazabilidad);
+      return result.data;
+    }),
+    statusDetallado: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getStatusDetallado, getCachedStatusDetallado);
+      return result.data;
+    }),
+
+    // Cache management
+    cacheStatus: publicProcedure.query(async () => getCacheStatus()),
+    refresh: publicProcedure
+      .input(z.object({ secret: z.string() }))
+      .mutation(async ({ input }) => {
+        const expected = process.env.COMODATOS_REFRESH_SECRET || "promed-refresh-2026";
+        if (input.secret !== expected) throw new Error("Invalid refresh secret");
+        if (!hasRedshift) throw new Error("Redshift not configured — can only refresh from local dev");
+        return refreshAllCaches();
       }),
   }),
 

@@ -155,3 +155,21 @@ export const roiModelData = sqliteTable("roiModelData", {
 
 export type RoiModelData = typeof roiModelData.$inferSelect;
 export type InsertRoiModelData = typeof roiModelData.$inferInsert;
+
+/**
+ * Cache for Redshift comodatos/activos data.
+ * Stores full query results as JSON so the deployed app doesn't need Redshift access.
+ * Refreshed from local machine via script.
+ */
+export const comodatosCache = sqliteTable("comodatosCache", {
+  /** Dataset key: 'summary', 'porCompania', 'porEstado', 'huerfanos', 'activos', 'baseInstalada', 'baseInstaladaSinActivo' */
+  key: text("key").primaryKey(),
+  /** Full query result as JSON */
+  data: text("data", { mode: "json" }).notNull(),
+  /** Number of rows in the dataset (for display) */
+  rowCount: integer("rowCount").default(0).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+});
+
+export type ComodatosCache = typeof comodatosCache.$inferSelect;
+export type InsertComodatosCache = typeof comodatosCache.$inferInsert;

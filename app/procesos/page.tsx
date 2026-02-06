@@ -27,14 +27,14 @@ const procesos: ProcesoConfig[] = [
     title: 'Comodatos',
     subtitle: 'Equipos en préstamo a clientes',
     icon: Box,
-    description: 'Equipos médicos entregados en comodato a hospitales y clínicas. Trazabilidad de contratos, facturación de fees mensuales y consumibles asociados.',
+    description: 'Dashboard en vivo conectado a NAF6 (Redshift). Cruce de ARAFMA, ARAFCOM y Base Instalada para visualizar activos en comodato y detectar los que son invisibles para ejecutivos.',
     href: '/procesos/comodatos',
     priority: 1,
     status: 'analysis',
     keyQuestions: [
-      '¿Cuántos contratos de comodato activos existen hoy?',
-      '¿Cuál es el fee mensual promedio por equipo?',
-      '¿Qué porcentaje de comodatos tienen facturación al día?',
+      '¿Cuántos activos de comodato no tienen contrato asociado?',
+      '¿Qué valor representan los activos "huérfanos"?',
+      '¿Qué porcentaje de comodatos son invisibles por compañía?',
     ],
   },
   {

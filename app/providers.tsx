@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { UNAUTHED_ERR_MSG } from "@/shared/const";
 
 function getBaseUrl() {
@@ -91,6 +92,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <CustomAuthProvider>
               <TooltipProvider>
                 <Toaster />
+                <ThemeToggle />
                 <ProtectedRoute>{children}</ProtectedRoute>
               </TooltipProvider>
             </CustomAuthProvider>

@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
+    "refresh-comodatos": "tsx scripts/refresh-comodatos.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
@@ -60,6 +61,8 @@
     "mermaid": "^11.12.1",
     "nanoid": "^5.1.5",
     "next": "^15.3.6",
+    "next-themes": "^0.4.6",
+    "pg": "^8.18.0",
     "react": "^19.1.1",
     "react-day-picker": "^9.11.1",
     "react-dom": "^19.1.1",
@@ -71,16 +74,17 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "next-themes": "^0.4.6",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^24.7.0",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^17.2.4",
     "drizzle-kit": "^0.31.4",
     "postcss": "^8.4.47",
     "prettier": "^3.6.2",
