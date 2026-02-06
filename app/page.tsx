@@ -27,7 +27,7 @@ interface InitiativeConfig {
   description: string;
   href: string;
   icon: React.ElementType;
-  status: 'activo' | 'en-desarrollo' | 'planificado' | 'pausa';
+  status: 'activo' | 'en-desarrollo' | 'en-evaluacion' | 'planificado' | 'pausa';
   metrics: Array<{ label: string; value: string; trend?: 'up' | 'down' | 'neutral'; }>;
   color: {
     bg: string;
@@ -65,7 +65,7 @@ const initiatives: InitiativeConfig[] = [
     description: 'Evaluación estratégica para reemplazar el ERP legacy. Análisis costo-beneficio y mapeo de módulos.',
     href: '/erp',
     icon: Database,
-    status: 'en-desarrollo',
+    status: 'en-evaluacion',
     metrics: [
       { label: 'Usuarios impactados', value: '600+' },
       { label: 'Países', value: '7' },
@@ -104,12 +104,14 @@ const getStatusBadge = (status: InitiativeConfig['status']) => {
   const styles = {
     'activo': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300',
     'en-desarrollo': 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
+    'en-evaluacion': 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
     'planificado': 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
     'pausa': 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
   };
   const labels = {
     'activo': 'Activo',
     'en-desarrollo': 'En desarrollo',
+    'en-evaluacion': 'En evaluación',
     'planificado': 'Planificado',
     'pausa': 'En pausa',
   };
