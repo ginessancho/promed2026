@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   ArrowLeft,
   AlertTriangle,
@@ -94,6 +94,8 @@ export default function ComodatosDashboard() {
   const [activosPage, setActivosPage] = useState(0);
   const [baseInstaladaPage, setBaseInstaladaPage] = useState(0);
   const [baseSinActivoPage, setBaseSinActivoPage] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const PAGE_SIZE = 25;
 
   const formattedDate = new Intl.DateTimeFormat("es-PA", {
@@ -147,30 +149,41 @@ export default function ComodatosDashboard() {
   const cohortes = trpc.comodatos.cohortes.useQuery(undefined, { staleTime: 60_000 });
   const trazabilidad = trpc.comodatos.trazabilidad.useQuery(undefined, { staleTime: 60_000 });
   const statusDetallado = trpc.comodatos.statusDetallado.useQuery(undefined, { staleTime: 60_000 });
+  const refreshMutation = trpc.comodatos.refresh.useMutation();
 
   const s = summary.data;
 
-  // ─── Loading progress tracking ─────────────────────────────────────────
-  const loadingSteps = useMemo(() => [
-    { key: "summary", label: "Contando activos en comodato...", query: summary },
-    { key: "porCompania", label: "Agrupando por compañía...", query: porCompania },
-    { key: "porEstado", label: "Clasificando estados de contrato...", query: porEstado },
-    { key: "huerfanos", label: "Identificando activos sin contrato...", query: huerfanos },
-    { key: "activos", label: "Cargando detalle de activos...", query: activos },
-    { key: "baseInstalada", label: "Cargando base instalada...", query: baseInstalada },
-    { key: "baseSinActivo", label: "Cruzando base instalada vs activos...", query: baseSinActivo },
-    { key: "depreciacion", label: "Analizando depreciación...", query: depreciacion },
-    { key: "cohortes", label: "Calculando cohortes de edad...", query: cohortes },
-    { key: "trazabilidad", label: "Cruzando 3 fuentes de datos...", query: trazabilidad },
-    { key: "statusDetallado", label: "Desglosando estados por ubicación...", query: statusDetallado },
-  ], [summary.status, porCompania.status, porEstado.status, huerfanos.status, activos.status, baseInstalada.status, baseSinActivo.status, depreciacion.status, cohortes.status, trazabilidad.status, statusDetallado.status]);
+  const anyLoading = summary.isLoading || porCompania.isLoading || porEstado.isLoading;
 
-  const completedCount = loadingSteps.filter(s => !s.query.isLoading).length;
-  const totalSteps = loadingSteps.length;
-  const progressPct = Math.round((completedCount / totalSteps) * 100);
-  const currentStep = loadingSteps.find(s => s.query.isLoading);
-  const isFullyLoaded = completedCount === totalSteps;
-  const anyLoading = completedCount < totalSteps;
+  const refetchAll = useCallback(() => {
+    summary.refetch();
+    porCompania.refetch();
+    porEstado.refetch();
+    huerfanos.refetch();
+    activos.refetch();
+    baseInstalada.refetch();
+    baseSinActivo.refetch();
+    depreciacion.refetch();
+    cohortes.refetch();
+    trazabilidad.refetch();
+    statusDetallado.refetch();
+  }, []);
+
+  const handleRefreshFromRedshift = useCallback(async () => {
+    const secret = prompt("Clave de refresco (COMODATOS_REFRESH_SECRET):");
+    if (!secret) return;
+    setIsRefreshing(true);
+    setRefreshResult(null);
+    try {
+      const result = await refreshMutation.mutateAsync({ secret });
+      setRefreshResult(`✅ ${result.results.length} datasets actualizados en ${(result.totalMs / 1000).toFixed(0)}s`);
+      refetchAll();
+    } catch (err) {
+      setRefreshResult(`❌ Error: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refreshMutation, refetchAll]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-background dark:from-blue-950/10">
@@ -185,17 +198,10 @@ export default function ComodatosDashboard() {
               </Button>
             </Link>
             <div className="flex items-center gap-3">
-              {s?._fromCache ? (
-                <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200">
-                  <Database className="w-3 h-3" />
-                  Caché {s._cacheDate ? new Intl.DateTimeFormat("es-PA", { dateStyle: "short", timeStyle: "short" }).format(new Date(s._cacheDate)) : ""}
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="gap-1 text-emerald-600 border-emerald-200">
-                  <Database className="w-3 h-3" />
-                  NAF6 + Inventario (Live)
-                </Badge>
-              )}
+              <Badge variant="outline" className="gap-1 text-muted-foreground border-muted">
+                <Database className="w-3 h-3" />
+                {s?._cacheDate ? `Datos: ${new Intl.DateTimeFormat("es-PA", { dateStyle: "short", timeStyle: "short" }).format(new Date(s._cacheDate))}` : "Caché"}
+              </Badge>
               <div className="text-right">
                 <h1 className="text-lg font-bold">Comodatos & Activos</h1>
                 <p className="text-xs text-muted-foreground">{formattedDate}</p>
@@ -206,60 +212,38 @@ export default function ComodatosDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
-        {/* Loading overlay */}
+        {/* Loading from cache */}
         {anyLoading && !s && (
-          <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/20 dark:to-card">
-            <CardContent className="py-12 px-8">
-              <div className="max-w-lg mx-auto space-y-6">
-                <div className="flex items-center gap-3">
-                  <Database className="w-6 h-6 text-blue-600 animate-pulse" />
-                  <div>
-                    <h3 className="font-semibold text-foreground">
-                      Consultando datos en vivo
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Conectando con la base de datos de activos fijos y contratos
-                    </p>
-                  </div>
-                </div>
+          <Card className="border-blue-200">
+            <CardContent className="py-8">
+              <div className="flex items-center justify-center gap-3">
+                <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                <span className="text-sm text-muted-foreground">Cargando datos desde caché...</span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{currentStep?.label ?? "Finalizando..."}</span>
-                    <span>{completedCount} de {totalSteps}</span>
-                  </div>
-                  <Progress value={progressPct} className="h-2" />
+        {/* Refresh bar */}
+        {isRefreshing && (
+          <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-950/20">
+            <CardContent className="py-4">
+              <div className="flex items-center gap-3">
+                <Loader2 className="w-5 h-5 animate-spin text-amber-600" />
+                <div>
+                  <p className="text-sm font-medium">Refrescando desde Redshift...</p>
+                  <p className="text-xs text-muted-foreground">Esto puede tomar 2-3 minutos. Los datos se guardan en Turso para producción.</p>
                 </div>
-
-                <div className="space-y-1.5">
-                  {loadingSteps.map((step) => (
-                    <div
-                      key={step.key}
-                      className="flex items-center gap-2 text-sm"
-                    >
-                      {step.query.isLoading ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500 shrink-0" />
-                      ) : step.query.isError ? (
-                        <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                      ) : (
-                        <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                          <svg className="w-2 h-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                      )}
-                      <span className={step.query.isLoading ? "text-foreground font-medium" : "text-muted-foreground"}>
-                        {step.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-xs text-muted-foreground/70 text-center pt-2">
-                  La primera carga puede tomar unos segundos — los datos vienen directo de Redshift.
-                  <br />
-                  Después de cargar, se mantienen en caché por 1 minuto.
-                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        {refreshResult && !isRefreshing && (
+          <Card className={refreshResult.startsWith("✅") ? "border-emerald-200 bg-emerald-50/50" : "border-rose-200 bg-rose-50/50"}>
+            <CardContent className="py-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm">{refreshResult}</p>
+                <Button variant="ghost" size="sm" onClick={() => setRefreshResult(null)} className="text-xs">✕</Button>
               </div>
             </CardContent>
           </Card>
@@ -271,15 +255,12 @@ export default function ComodatosDashboard() {
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
               Visibilidad Ejecutiva
             </p>
-            {anyLoading && s && (
-              <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
-            )}
           </div>
           <h2 className="text-2xl font-bold">
             Activos en Comodato: Brecha Sistémica en el Registro de Contratos
           </h2>
           <p className="text-sm text-muted-foreground">
-            Cruce en vivo de <strong>NAF6.ARAFMA</strong> (activos fijos),{" "}
+            Cruce de <strong>NAF6.ARAFMA</strong> (activos fijos),{" "}
             <strong>NAF6.ARAFCOM</strong> (contratos de comodato) y{" "}
             <strong>INVENTARIO.BASE_INSTALADA_PROMED</strong> (base instalada).
             El análisis revela que{" "}
@@ -287,7 +268,7 @@ export default function ComodatosDashboard() {
               el proceso de registro de contratos está fallando sistemáticamente
             </span>
             , no solo para activos antiguos — los activos de 2021-2024 tienen tasas
-            de orfandad del 70-72%. Solo el 32% de los activos son rastreables en
+            de orfandad del 70-72%. Solo el 46% de los activos son rastreables en
             los tres sistemas.
           </p>
         </section>
@@ -437,23 +418,13 @@ export default function ComodatosDashboard() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {
-              summary.refetch();
-              porCompania.refetch();
-              porEstado.refetch();
-              huerfanos.refetch();
-              activos.refetch();
-              baseInstalada.refetch();
-              baseSinActivo.refetch();
-              depreciacion.refetch();
-              cohortes.refetch();
-              trazabilidad.refetch();
-              statusDetallado.refetch();
-            }}
+            onClick={handleRefreshFromRedshift}
+            disabled={isRefreshing}
             className="gap-1"
+            title="Requiere acceso a Redshift (IP whitelisted + VPN)"
           >
-            <RefreshCw className="w-3 h-3" />
-            Actualizar
+            {isRefreshing ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+            {isRefreshing ? "Refrescando..." : "Refrescar desde Redshift"}
           </Button>
         </div>
 

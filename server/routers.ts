@@ -22,26 +22,28 @@ import {
 } from "./comodatos-cache";
 import { z } from "zod";
 
-// Helper: try Redshift first (local dev), fall back to cache (production/Vercel)
+// Helper: always try cache first (instant), only fall back to Redshift if cache is empty
 const hasRedshift = !!(process.env.PROMED_AWS_URL && process.env.PROMED_AWS_PASSWORD);
 
 async function withCacheFallback<T>(
   redshiftFn: () => Promise<T>,
   cacheFn: () => Promise<{ data: T; updatedAt: Date } | null>,
 ): Promise<{ data: T; fromCache: boolean; cacheDate: Date | null }> {
+  // Always try cache first — fast, works everywhere
+  const cached = await cacheFn();
+  if (cached) {
+    return { data: cached.data, fromCache: true, cacheDate: cached.updatedAt };
+  }
+  // Cache empty — try Redshift as fallback (only works on whitelisted IPs)
   if (hasRedshift) {
     try {
       const data = await redshiftFn();
       return { data, fromCache: false, cacheDate: null };
     } catch (err) {
-      console.warn("[Comodatos] Redshift failed, trying cache:", err);
+      console.warn("[Comodatos] Redshift failed and cache is empty:", err);
     }
   }
-  const cached = await cacheFn();
-  if (cached) {
-    return { data: cached.data, fromCache: true, cacheDate: cached.updatedAt };
-  }
-  throw new Error("No data available — cache is empty and Redshift is not accessible. Run refresh from local.");
+  throw new Error("No data available — cache is empty and Redshift is not accessible. Run: npx tsx scripts/refresh-comodatos.ts");
 }
 
 export const appRouter = router({
