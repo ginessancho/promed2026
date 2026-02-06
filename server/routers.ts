@@ -208,10 +208,6 @@ export const appRouter = router({
       }).optional())
       .query(async ({ input }) => {
         const { cia, soloHuerfanos, search, limit = 25, offset = 0 } = input ?? {};
-        // Always use cache for search (needs full dataset), otherwise try Redshift
-        if (hasRedshift && !search) {
-          try { return await getActivosComodato({ cia, soloHuerfanos, limit, offset }); } catch {}
-        }
         const cached = await getCachedActivos();
         if (!cached) throw new Error("No activos data — run refresh from local.");
         let rows = cached.data.rows;
@@ -248,9 +244,6 @@ export const appRouter = router({
       }).optional())
       .query(async ({ input }) => {
         const { cia, search, limit = 25, offset = 0 } = input ?? {};
-        if (hasRedshift && !search) {
-          try { return await getActivosHuerfanos({ cia, limit, offset }); } catch {}
-        }
         const cached = await getCachedHuerfanos();
         if (!cached) throw new Error("No huerfanos data — run refresh from local.");
         let rows = cached.data.rows;
@@ -275,9 +268,6 @@ export const appRouter = router({
       }).optional())
       .query(async ({ input }) => {
         const { cia, limit = 25, offset = 0 } = input ?? {};
-        if (hasRedshift) {
-          try { return await getBaseInstaladaComodatos({ cia, limit, offset }); } catch {}
-        }
         const cached = await getCachedBaseInstalada();
         if (!cached) throw new Error("No base instalada data — run refresh from local.");
         let rows = cached.data.rows;
@@ -293,9 +283,6 @@ export const appRouter = router({
       }).optional())
       .query(async ({ input }) => {
         const { cia, limit = 25, offset = 0 } = input ?? {};
-        if (hasRedshift) {
-          try { return await getBaseInstaladaSinActivo({ cia, limit, offset }); } catch {}
-        }
         const cached = await getCachedBaseInstaladaSinActivo();
         if (!cached) throw new Error("No base instalada sin activo data — run refresh from local.");
         let rows = cached.data.rows;
