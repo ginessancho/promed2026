@@ -61,8 +61,8 @@ const initiatives: InitiativeConfig[] = [
   {
     id: 'erp',
     title: 'Migración ERP',
-    subtitle: 'NAF 6.0 → NetSuite',
-    description: 'Evaluación estratégica para reemplazar el ERP legacy con Oracle NetSuite. Análisis costo-beneficio completo.',
+    subtitle: 'NAF 6.0 → Odoo',
+    description: 'Evaluación estratégica para reemplazar el ERP legacy. Análisis costo-beneficio y mapeo de módulos.',
     href: '/erp',
     icon: Database,
     status: 'en-desarrollo',
@@ -82,14 +82,14 @@ const initiatives: InitiativeConfig[] = [
     id: 'procesos',
     title: 'Procesos Críticos',
     subtitle: 'Comodatos, Activos, Servicio',
-    description: 'Análisis de fugas operacionales en procesos clave más allá de facturación. Metodología estandarizada.',
+    description: 'Diagnóstico de activos en comodato con datos reales de NAF6. Visibilidad sobre 9,354 activos y brechas de registro.',
     href: '/procesos',
     icon: Cog,
-    status: 'planificado',
+    status: 'activo',
     metrics: [
-      { label: 'Procesos identificados', value: '4' },
-      { label: 'Fricciones', value: 'Por mapear' },
-      { label: 'Impacto', value: 'Por cuantificar' },
+      { label: 'Activos analizados', value: '9,354' },
+      { label: 'Sin contrato', value: '5,674' },
+      { label: 'En riesgo', value: '$570M' },
     ],
     color: {
       bg: 'from-violet-50 to-purple-100 dark:from-violet-950 dark:to-purple-900',
@@ -123,7 +123,7 @@ const getStatusBadge = (status: InitiativeConfig['status']) => {
 // Resumen ejecutivo global
 const executiveSummary = {
   totalInitiatives: 3,
-  activeProjects: 0,
+  activeProjects: 1,
   estimatedSavings: 'Por cuantificar',
   timeline: '2026',
 };
@@ -143,10 +143,10 @@ export default function Home() {
               <img src="/logo-promed.webp" alt="Promed" className="h-14 object-contain" />
               <div className="border-l pl-4">
                 <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                  Consultoría Estratégica
+                  Alteridad Consultoría
                 </p>
                 <h1 className="text-lg font-bold text-foreground">
-                  Iniciativas de Transformación 2026
+                  Diagnóstico Operativo 2026
                 </h1>
               </div>
             </div>
@@ -208,9 +208,9 @@ export default function Home() {
         {/* Initiatives Grid */}
         <section className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Portafolio de Iniciativas</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-1">Áreas de Diagnóstico</h2>
             <p className="text-sm text-muted-foreground">
-              Proyectos de mejora continua enfocados en eficiencia operacional y reducción de costos
+              Análisis basado en datos de los sistemas actuales de PROMED
             </p>
           </div>
 
@@ -273,11 +273,10 @@ export default function Home() {
           <CardContent className="pt-5">
             <div className="flex flex-col md:flex-row md:items-start gap-4">
               <div className="flex-1 space-y-2">
-                <h3 className="font-semibold text-foreground">Contexto del Portafolio</h3>
+                <h3 className="font-semibold text-foreground">Metodología</h3>
                 <p className="text-sm text-muted-foreground">
-                  Estas iniciativas surgen del análisis preliminar realizado durante 2025. Cada proyecto 
-                  sigue una metodología consistente: diagnóstico del estado actual, cuantificación del 
-                  impacto financiero, y propuesta de solución con ROI estimado.
+                  Cada análisis parte de los datos reales de PROMED: consultas directas a NAF6, Redshift 
+                  y los sistemas operativos. Los hallazgos se presentan con evidencia verificable.
                 </p>
               </div>
               <div className="flex flex-col gap-2 md:w-48">
@@ -306,7 +305,7 @@ export default function Home() {
             </div>
             <div className="text-xs text-muted-foreground md:text-right">
               <p>Preparado para <strong className="text-foreground">Promed, S.A.</strong></p>
-              <p className="mt-1">Noviembre 2025 • Portal v5.1</p>
+              <p className="mt-1">Febrero 2026 • Portal v6.0</p>
             </div>
           </div>
         </footer>

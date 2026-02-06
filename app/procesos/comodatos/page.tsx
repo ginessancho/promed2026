@@ -1490,7 +1490,7 @@ export default function ComodatosDashboard() {
                     <p className="text-sm font-medium text-emerald-700">Recomendación</p>
                     <p className="text-xs text-muted-foreground">
                       Priorizar la corrección del workflow de alta de contratos antes de migrar a un nuevo ERP.
-                      Migrar datos sucios a Oracle NetSuite perpetuaría el problema.
+                      Migrar datos sucios a un nuevo ERP perpetuaría el problema.
                     </p>
                   </div>
                 </div>

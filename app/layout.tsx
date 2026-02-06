@@ -3,8 +3,8 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Proyecto de Integración de Facturación en Odoo",
-  description: "Portal de Consultoría Estratégica para Promed 2026 - Iniciativas de Transformación Digital",
+  title: "Diagnóstico Operativo PROMED 2026",
+  description: "Visibilidad sobre procesos, activos y sistemas — Alteridad Consultoría",
   icons: {
     icon: "/logo-alteridad.png",
     apple: "/logo-alteridad.png",

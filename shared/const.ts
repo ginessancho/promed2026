@@ -4,9 +4,9 @@ export const AXIOS_TIMEOUT_MS = 30_000;
 export const UNAUTHED_ERR_MSG = 'Please login (10001)';
 export const NOT_ADMIN_ERR_MSG = 'You do not have required permission (10002)';
 
-export const APP_TITLE = "Proyecto de Integración de Facturación en Odoo";
+export const APP_TITLE = "Diagnóstico Operativo PROMED 2026";
 export const APP_LOGO = "/logo-alteridad.png";
-export const PROJECT_STATUS = "Portafolio de iniciativas de transformación 2026";
+export const PROJECT_STATUS = "Visibilidad sobre procesos, activos y sistemas";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PRECIOS NETSUITE CONFIRMADOS
