@@ -579,6 +579,99 @@ export async function getCohortesEdad(): Promise<CohorteEdad[]> {
   }));
 }
 
+// ─── Orphan Recovery Cross-Reference (ARAFMA orphans × BASE_INSTALADA) ────────
+
+export interface OrphanRecoverySummary {
+  rastreo: string;
+  depreciation_band: string;
+  count: number;
+  valor_original: number;
+  valor_neto: number;
+}
+
+export interface OrphanRecoveryClient {
+  nombre_cliente: string;
+  count: number;
+  valor_original: number;
+  valor_neto: number;
+}
+
+export interface OrphanRecoveryData {
+  summary: OrphanRecoverySummary[];
+  topClients: OrphanRecoveryClient[];
+}
+
+export async function getOrphanRecovery(): Promise<OrphanRecoveryData> {
+  const [summary, topClients] = await Promise.all([
+    // 1. Orphans × visibility level × depreciation band
+    queryRedshift<{
+      rastreo: string;
+      depreciation_band: string;
+      count: string;
+      valor_original: string;
+      valor_neto: string;
+    }>(`
+      SELECT
+        CASE WHEN b.sys_id IS NOT NULL THEN 'Rastreo parcial' ELSE 'Fantasma' END as rastreo,
+        CASE
+          WHEN a.val_original IS NULL OR a.val_original <= 0 THEN 'Sin valor registrado'
+          WHEN (a.val_original - COALESCE(a.depacum_valorig, 0)) <= 0 THEN 'Totalmente depreciado'
+          WHEN COALESCE(a.depacum_valorig, 0) / a.val_original > 0.9 THEN '90-99% depreciado'
+          WHEN COALESCE(a.depacum_valorig, 0) / a.val_original > 0.5 THEN '50-90% depreciado'
+          WHEN COALESCE(a.depacum_valorig, 0) / a.val_original > 0.0 THEN '1-50% depreciado'
+          ELSE 'Sin depreciación (0%)'
+        END as depreciation_band,
+        COUNT(*) as count,
+        COALESCE(SUM(a.val_original), 0) as valor_original,
+        COALESCE(SUM(a.val_original - COALESCE(a.depacum_valorig, 0)), 0) as valor_neto
+      FROM naf6.arafma a
+      LEFT JOIN inventario.base_instalada_promed b
+        ON a.contrato_sysid = b.sys_id AND b.tipo_contrato = 'COMODATO'
+      WHERE a.indcomodato = 'S'
+        AND NOT EXISTS (SELECT 1 FROM naf6.arafcom c WHERE c.no_cia = a.no_cia AND c.equipo_activo = a.no_acti)
+      GROUP BY 1, 2
+      ORDER BY COUNT(*) DESC
+    `),
+    // 2. For orphans with BASE_INSTALADA match: top clients
+    queryRedshift<{
+      nombre_cliente: string;
+      count: string;
+      valor_original: string;
+      valor_neto: string;
+    }>(`
+      SELECT
+        COALESCE(b.nombre_cliente, 'Sin nombre') as nombre_cliente,
+        COUNT(*) as count,
+        COALESCE(SUM(a.val_original), 0) as valor_original,
+        COALESCE(SUM(a.val_original - COALESCE(a.depacum_valorig, 0)), 0) as valor_neto
+      FROM naf6.arafma a
+      JOIN inventario.base_instalada_promed b
+        ON a.contrato_sysid = b.sys_id AND b.tipo_contrato = 'COMODATO'
+      WHERE a.indcomodato = 'S'
+        AND NOT EXISTS (SELECT 1 FROM naf6.arafcom c WHERE c.no_cia = a.no_cia AND c.equipo_activo = a.no_acti)
+      GROUP BY 1
+      ORDER BY COUNT(*) DESC
+      LIMIT 30
+    `),
+  ]);
+
+  return {
+    summary: summary.map(r => ({
+      rastreo: r.rastreo,
+      depreciation_band: r.depreciation_band,
+      count: parseInt(r.count),
+      valor_original: parseFloat(r.valor_original),
+      valor_neto: parseFloat(r.valor_neto),
+    })),
+    topClients: topClients.map(r => ({
+      nombre_cliente: r.nombre_cliente,
+      count: parseInt(r.count),
+      valor_original: parseFloat(r.valor_original),
+      valor_neto: parseFloat(r.valor_neto),
+    })),
+  };
+}
+
 // ─── Three-Way Trazabilidad (ARAFMA × ARAFCOM × BASE_INSTALADA) ──────────────
 
 export async function getTrazabilidad(): Promise<TrazabilidadSegment[]> {

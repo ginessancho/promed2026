@@ -13,6 +13,7 @@ import {
   getCohortesEdad,
   getTrazabilidad,
   getStatusDetallado,
+  getOrphanRecovery,
   type ComodatoSummary,
   type ComodatoPorCompania,
   type ComodatoPorEstado,
@@ -23,6 +24,7 @@ import {
   type CohorteEdad,
   type TrazabilidadSegment,
   type StatusDetallado,
+  type OrphanRecoveryData,
 } from "./comodatos";
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -114,6 +116,10 @@ export async function getCachedStatusDetallado(): Promise<{ data: StatusDetallad
   return readCache<StatusDetallado[]>("statusDetallado");
 }
 
+export async function getCachedOrphanRecovery(): Promise<{ data: OrphanRecoveryData; updatedAt: Date } | null> {
+  return readCache<OrphanRecoveryData>("orphanRecovery");
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // Cache Metadata — check freshness
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -183,6 +189,10 @@ export async function refreshAllCaches(): Promise<{ results: { key: string; rowC
   await refreshOne("cohortes", getCohortesEdad, (d) => (d as unknown[]).length);
   await refreshOne("trazabilidad", getTrazabilidad, (d) => (d as unknown[]).length);
   await refreshOne("statusDetallado", getStatusDetallado, (d) => (d as unknown[]).length);
+  await refreshOne("orphanRecovery", getOrphanRecovery, (d) => {
+    const r = d as OrphanRecoveryData;
+    return r.summary.length + r.topClients.length;
+  });
 
   return { results, totalMs: Date.now() - startTotal };
 }

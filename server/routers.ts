@@ -12,13 +12,14 @@ import {
   getComodatoSummary, getActivosComodato, getComodatosPorCompania,
   getComodatosPorEstado, getActivosHuerfanos, getBaseInstaladaComodatos,
   getBaseInstaladaSinActivo, getDepreciacionDistribucion, getCohortesEdad,
-  getTrazabilidad, getStatusDetallado,
+  getTrazabilidad, getStatusDetallado, getOrphanRecovery,
 } from "./comodatos";
 import {
   getCachedSummary, getCachedPorCompania, getCachedPorEstado,
   getCachedHuerfanos, getCachedActivos, getCachedBaseInstalada,
   getCachedBaseInstaladaSinActivo, getCachedDepreciacion, getCachedCohortes,
-  getCachedTrazabilidad, getCachedStatusDetallado, getCacheStatus, refreshAllCaches,
+  getCachedTrazabilidad, getCachedStatusDetallado, getCachedOrphanRecovery,
+  getCacheStatus, refreshAllCaches,
 } from "./comodatos-cache";
 import { z } from "zod";
 
@@ -306,6 +307,10 @@ export const appRouter = router({
     }),
     statusDetallado: publicProcedure.query(async () => {
       const result = await withCacheFallback(getStatusDetallado, getCachedStatusDetallado);
+      return result.data;
+    }),
+    orphanRecovery: publicProcedure.query(async () => {
+      const result = await withCacheFallback(getOrphanRecovery, getCachedOrphanRecovery);
       return result.data;
     }),
 

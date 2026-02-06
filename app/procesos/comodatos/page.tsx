@@ -149,6 +149,7 @@ export default function ComodatosDashboard() {
   const cohortes = trpc.comodatos.cohortes.useQuery(undefined, { staleTime: 60_000 });
   const trazabilidad = trpc.comodatos.trazabilidad.useQuery(undefined, { staleTime: 60_000 });
   const statusDetallado = trpc.comodatos.statusDetallado.useQuery(undefined, { staleTime: 60_000 });
+  const orphanRecovery = trpc.comodatos.orphanRecovery.useQuery(undefined, { staleTime: 60_000 });
   const refreshMutation = trpc.comodatos.refresh.useMutation();
 
   const s = summary.data;
@@ -167,6 +168,7 @@ export default function ComodatosDashboard() {
     cohortes.refetch();
     trazabilidad.refetch();
     statusDetallado.refetch();
+    orphanRecovery.refetch();
   }, []);
 
   const handleRefreshFromRedshift = useCallback(async () => {
@@ -1316,6 +1318,126 @@ export default function ComodatosDashboard() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Orphan Recovery Cross-Reference */}
+            {orphanRecovery.data && (
+              <>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Ghost className="w-4 h-4" />
+                      Recuperación de Huérfanos: ¿Dónde están los $570M?
+                    </CardTitle>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Cruce de huérfanos (ARAFMA sin ARAFCOM) contra BASE_INSTALADA vía <code className="text-[10px] bg-muted px-1 rounded">contrato_sysid = sys_id</code>.
+                      Los de &quot;Rastreo parcial&quot; tienen cliente y ubicación recuperable. Los &quot;Fantasma&quot; no están en ningún otro sistema.
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    {(() => {
+                      const data = orphanRecovery.data.summary;
+                      const parcial = data.filter(r => r.rastreo === 'Rastreo parcial');
+                      const fantasma = data.filter(r => r.rastreo === 'Fantasma');
+                      const totalParcial = parcial.reduce((s, r) => s + r.count, 0);
+                      const totalFantasma = fantasma.reduce((s, r) => s + r.count, 0);
+                      const valorParcial = parcial.reduce((s, r) => s + r.valor_original, 0);
+                      const valorFantasma = fantasma.reduce((s, r) => s + r.valor_original, 0);
+
+                      return (
+                        <div className="space-y-4">
+                          {/* Summary cards */}
+                          <div className="grid gap-3 md:grid-cols-2">
+                            <div className="p-4 rounded-lg border border-amber-200 bg-amber-50/50">
+                              <p className="text-xs font-medium text-amber-700 uppercase tracking-wide">Rastreo Parcial</p>
+                              <p className="text-2xl font-bold mt-1">{formatNumber(totalParcial)}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatMoney(valorParcial)} valor · cliente recuperable vía BASE_INSTALADA
+                              </p>
+                            </div>
+                            <div className="p-4 rounded-lg border border-rose-200 bg-rose-50/50">
+                              <p className="text-xs font-medium text-rose-700 uppercase tracking-wide">Fantasma</p>
+                              <p className="text-2xl font-bold mt-1">{formatNumber(totalFantasma)}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatMoney(valorFantasma)} valor · sin rastro en ningún sistema
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Breakdown table */}
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Nivel de Rastreo</TableHead>
+                                <TableHead>Depreciación</TableHead>
+                                <TableHead className="text-right">Activos</TableHead>
+                                <TableHead className="text-right">Valor Original</TableHead>
+                                <TableHead className="text-right">Valor Neto</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {data.map((row, idx) => {
+                                const isFantasma = row.rastreo === 'Fantasma';
+                                return (
+                                  <TableRow key={`${row.rastreo}-${row.depreciation_band}-${idx}`} className={isFantasma ? "bg-rose-50/30" : ""}>
+                                    <TableCell>
+                                      <span className={`text-sm font-medium ${isFantasma ? "text-rose-700" : "text-amber-700"}`}>
+                                        {row.rastreo}
+                                      </span>
+                                    </TableCell>
+                                    <TableCell className="text-sm">{row.depreciation_band}</TableCell>
+                                    <TableCell className="text-right font-medium">{formatNumber(row.count)}</TableCell>
+                                    <TableCell className="text-right text-sm">{formatMoney(row.valor_original)}</TableCell>
+                                    <TableCell className="text-right text-sm">{formatMoney(row.valor_neto)}</TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      );
+                    })()}
+                  </CardContent>
+                </Card>
+
+                {/* Top Clients with orphan assets */}
+                {orphanRecovery.data.topClients.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Clientes con más activos huérfanos (recuperables)
+                      </CardTitle>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Estos clientes tienen equipos PROMED instalados (según BASE_INSTALADA) pero sin contrato formal en ARAFCOM.
+                        Son los candidatos principales para regularización de contratos.
+                      </p>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Cliente</TableHead>
+                            <TableHead className="text-right">Equipos</TableHead>
+                            <TableHead className="text-right">Valor Original</TableHead>
+                            <TableHead className="text-right">Valor Neto</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {orphanRecovery.data.topClients.map((row, idx) => (
+                            <TableRow key={`client-${idx}`}>
+                              <TableCell className="text-sm font-medium max-w-[300px] truncate">{row.nombre_cliente}</TableCell>
+                              <TableCell className="text-right font-medium">{formatNumber(row.count)}</TableCell>
+                              <TableCell className="text-right text-sm">{formatMoney(row.valor_original)}</TableCell>
+                              <TableCell className="text-right text-sm">{formatMoney(row.valor_neto)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
+            )}
 
             {/* Depreciation Distribution */}
             <Card>
